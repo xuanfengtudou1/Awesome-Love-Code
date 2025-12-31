@@ -3,13 +3,24 @@
   window.webkitRequestAnimationFrame || window.msRequestAnimationFrame
 
   const FRAME_RATE = 60
-  const PARTICLE_NUM = 2000
+  const PARTICLE_NUM = 2200
   const RADIUS = Math.PI * 2
-  const CANVASWIDTH = 500
-  const CANVASHEIGHT = 150
+  const CANVASWIDTH = 600
+  const CANVASHEIGHT = 200
   const CANVASID = 'canvas'
 
-  let texts = ['MY DEAR', 'LOOK UP AT THE', 'STARRY SKY', 'ARE YOU', 'LOOKING AT THE', 'SAME STAR', 'WITH ME ?', 'HAPPY', 'CHINESE', 'VALENTINE\'S', 'DAY', 'I MISS YOU']
+  // 修改后的跨年文案
+  let texts = [
+    'BYE 2025', 
+    'HELLO 2026', 
+    'HAPPY', 
+    'NEW YEAR', 
+    'WISH YOU', 
+    'ALL THE BEST', 
+    'STAY SWEET', 
+    'IN 2026',
+    'GO FOR IT'
+  ]
 
   let canvas,
     ctx,
@@ -17,7 +28,7 @@
     quiver = true,
     text = texts[0],
     textIndex = 0,
-    textSize = 70
+    textSize = 65 // 略微调小字体以适应长单词
 
   function draw () {
     ctx.clearRect(0, 0, CANVASWIDTH, CANVASHEIGHT)
@@ -28,7 +39,6 @@
     ctx.fillText(text, (CANVASWIDTH - ctx.measureText(text).width) * 0.5, CANVASHEIGHT * 0.5)
 
     let imgData = ctx.getImageData(0, 0, CANVASWIDTH, CANVASHEIGHT)
-
     ctx.clearRect(0, 0, CANVASWIDTH, CANVASHEIGHT)
 
     for (let i = 0, l = particles.length; i < l; i++) {
@@ -36,12 +46,10 @@
       p.inText = false
     }
     particleText(imgData)
-
     window.requestAnimationFrame(draw)
   }
 
   function particleText (imgData) {
-    // 点坐标获取
     var pxls = []
     for (var w = CANVASWIDTH; w > 0; w -= 3) {
       for (var h = 0; h < CANVASHEIGHT; h += 3) {
@@ -52,19 +60,15 @@
       }
     }
 
-    var count = pxls.length
     var j = parseInt((particles.length - pxls.length) / 2, 10)
     j = j < 0 ? 0 : j
 
     for (var i = 0; i < pxls.length && j < particles.length; i++, j++) {
       try {
-        var p = particles[j],
-          X,
-          Y
-
+        var p = particles[j], X, Y
         if (quiver) {
-          X = (pxls[i - 1][0]) - (p.px + Math.random() * 10)
-          Y = (pxls[i - 1][1]) - (p.py + Math.random() * 10)
+          X = (pxls[i - 1][0]) - (p.px + Math.random() * 5)
+          Y = (pxls[i - 1][1]) - (p.py + Math.random() * 5)
         } else {
           X = (pxls[i - 1][0]) - p.px
           Y = (pxls[i - 1][1]) - p.py
@@ -86,19 +90,16 @@
       var p = particles[i]
       if (!p.inText) {
         p.fadeOut()
-
         var X = p.mx - p.px
         var Y = p.my - p.py
         var T = Math.sqrt(X * X + Y * Y)
         var A = Math.atan2(Y, X)
         var C = Math.cos(A)
         var S = Math.sin(A)
-
         p.x = p.px + C * T * p.delta / 2
         p.y = p.py + S * T * p.delta / 2
         p.px = p.x
         p.py = p.y
-
         p.draw(ctx)
       }
     }
@@ -108,72 +109,35 @@
     canvas.width = CANVASWIDTH
     canvas.height = CANVASHEIGHT
     canvas.style.position = 'absolute'
-    canvas.style.left = '0%'
-    canvas.style.top = '0%'
-    canvas.style.bottom = '0%'
-    canvas.style.right = '0%'
-    canvas.style.marginTop = window.innerHeight * .15 + 'px'
+    canvas.style.left = '50%'
+    canvas.style.marginLeft = -(CANVASWIDTH/2) + 'px'
+    canvas.style.top = '30%'
   }
 
   function event () {
-    document.addEventListener('click', function (e) {
+    const changeText = function () {
       textIndex++
       if (textIndex >= texts.length) {
-        textIndex--
-        return
+        textIndex = 0
       }
       text = texts[textIndex]
-      console.log(textIndex)
-    }, false)
-
-    document.addEventListener('touchstart', function (e) {
-      textIndex++
-      if (textIndex >= texts.length) {
-        textIndex--
-        return
-      }
-      text = texts[textIndex]
-      console.log(textIndex)
-    }, false)
-  }
-
-  function init () {
-    canvas = document.getElementById(CANVASID)
-    if (canvas === null || !canvas.getContext) {
-      return
     }
-    ctx = canvas.getContext('2d')
-    setDimensions()
-    event()
-
-    for (var i = 0; i < PARTICLE_NUM; i++) {
-      particles[i] = new Particle(canvas)
-    }
-
-    draw()
+    document.addEventListener('click', changeText, false)
+    document.addEventListener('touchstart', changeText, false)
   }
 
   class Particle {
     constructor (canvas) {
       let spread = canvas.height
-      let size = Math.random() * 1.2
-      // 速度
       this.delta = 0.06
-      // 现在的位置
       this.x = 0
       this.y = 0
-      // 上次的位置
       this.px = Math.random() * canvas.width
       this.py = (canvas.height * 0.5) + ((Math.random() - 0.5) * spread)
-      // 记录点最初的位置
       this.mx = this.px
       this.my = this.py
-      // 点的大小
-      this.size = size
-      // this.origSize = size
-      // 是否用来显示字
+      this.size = Math.random() * 1.5
       this.inText = false
-      // 透明度相关
       this.opacity = 0
       this.fadeInRate = 0.005
       this.fadeOutRate = 0.03
@@ -183,22 +147,14 @@
     }
     fadeIn () {
       this.fadingIn = this.opacity > this.opacityTresh ? false : true
-      if (this.fadingIn) {
-        this.opacity += this.fadeInRate
-      }else {
-        this.opacity = 1
-      }
+      if (this.fadingIn) { this.opacity += this.fadeInRate } else { this.opacity = 1 }
     }
     fadeOut () {
       this.fadingOut = this.opacity < 0 ? false : true
       if (this.fadingOut) {
         this.opacity -= this.fadeOutRate
-        if (this.opacity < 0) {
-          this.opacity = 0
-        }
-      }else {
-        this.opacity = 0
-      }
+        if (this.opacity < 0) this.opacity = 0
+      } else { this.opacity = 0 }
     }
     draw (ctx) {
       ctx.fillStyle = 'rgba(226,225,142, ' + this.opacity + ')'
@@ -208,14 +164,18 @@
       ctx.fill()
     }
   }
-  
-  var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-    if(!isChrome){
-      $('#iframeAudio').remove()
+
+  function init () {
+    canvas = document.getElementById(CANVASID)
+    if (!canvas || !canvas.getContext) return
+    ctx = canvas.getContext('2d')
+    setDimensions()
+    event()
+    for (var i = 0; i < PARTICLE_NUM; i++) {
+      particles[i] = new Particle(canvas)
+    }
+    draw()
   }
-  
-  // setTimeout(() => {
-    init()  
-  // }, 4000);
-  // mp3.play()
+
+  init()
 })(window)
