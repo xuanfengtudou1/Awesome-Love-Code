@@ -13,13 +13,11 @@
   let texts = [
     'BYE 2025', 
     'HELLO 2026', 
-    'HAPPY', 
-    'NEW YEAR', 
-    'WISH YOU', 
-    'ALL THE BEST', 
+    'HAPPYNEW YEAR', 
+    'WISH YOU ALL THE BEST', 
     'STAY SWEET', 
     'IN 2026',
-    'GO FOR IT'
+    'GO FOR IT ！'
   ]
 
   let canvas,
