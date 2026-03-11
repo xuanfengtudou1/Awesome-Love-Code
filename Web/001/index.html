@@ -1,121 +1,673 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>小孙同学</title>
-    <meta name="language" content="zh-CN">
-    <meta name="title" content="小孙同学">
-    <meta name="github" content="https://github.com/sun0225SUN/Awesome-Love-Code">
-    <meta name="describe" content="收集不易，您的star是我坚持的动力，同时也欢迎各位PR哦! ">
-    <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/sun0225SUN/photos/img/20210715233345.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>闽港科创一体化服务平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            padding: 0;
-            margin: 0;
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+        
+        :root {
+            --primary: #2563eb; /* 科技蓝 */
+            --secondary: #f97316; /* 活力橙 */
+            --ai-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); /* AI 专属渐变色 */
+            --bg-color: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-main: #1e293b;
+            --text-sub: #64748b;
         }
 
-        body {
-            background-color: pink;
-
+        body { 
+            font-family: 'Noto Sans SC', sans-serif; 
+            background: #e2e8f0;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh;
+            padding: 20px 0;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        #frame {
+        .iphone-pro {
+            width: 375px; 
+            height: 812px; 
+            background: var(--bg-color); 
+            border-radius: 50px;
+            border: 12px solid #1e293b; 
+            position: relative; 
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .dynamic-island {
+            width: 120px; height: 35px; background: #000; border-radius: 20px;
+            position: absolute; top: 15px; left: 50%; transform: translateX(-50%); z-index: 100;
+        }
+
+        .status-bar {
+            position: absolute; top: 0; left: 0; right: 0; height: 50px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 24px; color: #000; font-size: 14px; font-weight: 600; z-index: 90;
+            pointer-events: none;
+        }
+
+        .page-node { 
+            height: 100%; overflow-y: auto; display: none; 
+            padding-bottom: 90px; scrollbar-width: none; 
+            scroll-behavior: smooth;
+        }
+        .page-node::-webkit-scrollbar { display: none; }
+        .page-node.active { display: block; animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 卡片样式 */
+        .biz-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            transition: all 0.2s;
+        }
+        .biz-card:active { transform: scale(0.98); }
+
+        /* 按钮渐变 */
+        .btn-gradient {
+            background: linear-gradient(135deg, var(--primary) 0%, #1d4ed8 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+        .btn-orange {
+            background: linear-gradient(135deg, var(--secondary) 0%, #ea580c 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+        }
+
+        /* 底部导航增强 */
+        .nav-item {
+            color: #94a3b8;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
-            width: 400px;
-            height: 300px;
-            margin: 250px auto;
+        }
+        .nav-active {
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+        .nav-active i {
+            filter: drop-shadow(0 2px 4px rgba(37, 99, 235, 0.4));
+        }
+        /* AI Tab 特殊高亮 */
+        .nav-item[data-nav-id="ai-nav"].nav-active {
+            color: #8b5cf6;
+        }
+        .nav-item[data-nav-id="ai-nav"].nav-active i {
+            filter: drop-shadow(0 2px 6px rgba(139, 92, 246, 0.5));
+            animation: pulse-ai 2s infinite;
+        }
+        @keyframes pulse-ai {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
 
-        .left,
-        .right {
-            top: 0;
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
+        /* 标签徽章 */
+        .badge-hk { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+        .badge-vip { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+        .badge-ai { background: #f5f3ff; color: #7c3aed; border: 1px solid #ddd6fe; }
+
+        /* AI 页面特有样式 */
+        .ai-bubble {
+            background: white;
+            border-radius: 12px 12px 12px 0;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-
-        .left {
-            left: 35px;
-
-        }
-
-        .right {
-            right: 35px;
-            z-index: -1;
-        }
-
-        .bottom {
-            bottom: 36px;
-            left: 100px;
-            width: 200px;
-            height: 200px;
-            transform: rotate(45deg);
-            z-index: -1;
-
-        }
-
-        .heart {
-            position: absolute;
-            box-shadow: 0 0 40px #d5093c;
-            animation: beat .4s ease infinite normal;
-            background: linear-gradient(-90deg, #F50A45 0%, #d5093c 40%);
-        }
-
-        @keyframes beat {
-            0% {
-                transform: scale(1) rotate(225deg);
-                box-shadow: 0 0 40px #d5093c;
-            }
-
-            50% {
-                transform: scale(1.1) rotate(225deg);
-                box-shadow: 0 0 70px #d5093c;
-            }
-
-            100% {
-                transform: scale(1) rotate(225deg);
-                box-shadow: 0 0 40px #d5093c;
-                ;
-            }
-        }
-
-        .word {
-            position: absolute;
-            width: 50%;
-            top: 75%;
-            left: 25%;
-            text-align: center;
-            transform: translateY(-50%);
-            font-family: 'Love Ya Like A Sister', cursive;
-            font-size: 40px;
-            color: #c70012;
-            padding: 0 20px;
+        .model-tag {
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: #f1f5f9;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
         }
     </style>
 </head>
-
 <body>
 
-    <div id="frame">
-        <div class="heart left"></div>
-        <div class="heart right"></div>
-        <div class="heart bottom"></div>
+<div class="iphone-pro">
+    <div class="dynamic-island"></div>
+    
+    <!-- 状态栏 -->
+    <div class="status-bar bg-white/80 backdrop-blur">
+        <span id="clock">09:58</span>
+        <div class="flex items-center gap-1.5">
+            <i class="fa-solid fa-signal text-xs"></i>
+            <i class="fa-solid fa-wifi text-xs"></i>
+            <i class="fa-solid fa-battery-full text-xs"></i>
+        </div>
     </div>
 
-    <b class="word">每次遇见你都心跳加速!</b>
+    <!-- ================= 首页 (Home) ================= -->
+    <div id="home" class="page-node active pt-[50px]">
+        <!-- 顶部品牌区 -->
+        <div class="px-5 mb-4">
+            <div class="flex justify-between items-center mb-2">
+                <div>
+                    <h1 class="text-xl font-black text-slate-800 tracking-tight">闽港科创<span class="text-blue-600">一体化</span></h1>
+                    <p class="text-[10px] text-slate-500 font-medium">香港科技青年联合会 · 官方平台</p>
+                </div>
+                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xs shadow-sm">HK</div>
+            </div>
+            
+            <!-- 搜索框 -->
+            <div class="relative mt-3">
+                <input type="text" placeholder="搜索政策、人才、园区..." class="w-full py-2.5 pl-10 pr-4 rounded-xl bg-white border border-slate-200 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 shadow-sm transition-all">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+            </div>
+        </div>
 
-    <audio autoplay="autopaly" loop="loop" id="audios" preload="auto">
-        <source src="http://music.163.com/song/media/outer/url?id=526464145.mp3" />
-    </audio>
+        <!-- 核心 Banner -->
+        <div class="px-5 mb-6">
+            <div class="rounded-2xl overflow-hidden relative h-40 shadow-lg group">
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                <div class="absolute inset-0 bg-gradient-to-r from-blue-900/90 to-transparent flex flex-col justify-center p-5">
+                    <span class="bg-orange-500 text-white text-[10px] font-bold px-2 py-0.5 rounded w-fit mb-2 shadow-sm">2026 数字中国峰会</span>
+                    <h2 class="text-white text-lg font-bold mb-1 leading-tight">闽港科创对接会</h2>
+                    <p class="text-blue-100 text-xs mb-3 line-clamp-1">园区入驻绿色通道 · 政策专属扶持</p>
+                    <button class="bg-white/20 backdrop-blur text-white text-xs px-4 py-1.5 rounded-full w-fit border border-white/30 hover:bg-white/30 transition">立即报名</button>
+                </div>
+            </div>
+        </div>
 
-    <script>
-        var b = document.body;
-        var c = document.getElementsByTagName('canvas')[0];
-        var a = c.getContext('2d');
-        document.body.clientWidth;
-        with (m = Math) C = cos, S = sin, P = pow, R = random; c.width = c.height = f = 600; h = -250; function p(a, b, c) { if (c > 60) return [S(a * 7) * (13 + 5 / (.2 + P(b * 4, 4))) - S(b) * 50, b * f + 50, 625 + C(a * 7) * (13 + 5 / (.2 + P(b * 4, 4))) + b * 400, a * 1 - b / 2, a]; A = a * 2 - 1; B = b * 2 - 1; if (A * A + B * B < 1) { if (c > 37) { n = (j = c & 1) ? 6 : 4; o = .5 / (a + .01) + C(b * 125) * 3 - a * 300; w = b * h; return [o * C(n) + w * S(n) + j * 610 - 390, o * S(n) - w * C(n) + 550 - j * 350, 1180 + C(B + A) * 99 - j * 300, .4 - a * .1 + P(1 - B * B, -h * 6) * .15 - a * b * .4 + C(a + b) / 5 + P(C((o * (a + 1) + (B > 0 ? w : -w)) / 25), 30) * .1 * (1 - B * B), o / 1e3 + .7 - o * w * 3e-6] } if (c > 32) { c = c * 1.16 - .15; o = a * 45 - 20; w = b * b * h; z = o * S(c) + w * C(c) + 620; return [o * C(c) - w * S(c), 28 + C(B * .5) * 99 - b * b * b * 60 - z / 2 - h, z, (b * b * .3 + P((1 - (A * A)), 7) * .15 + .3) * b, b * .7] } o = A * (2 - b) * (80 - c * 2); w = 99 - C(A) * 120 - C(b) * (-h - c * 4.9) + C(P(1 - b, 7)) * 50 + c * 2; z = o * S(c) + w * C(c) + 700; return [o * C(c) - w * S(c), B * 99 - C(P(b, 7)) * 50 - c / 3 - z / 1.35 + 450, z, (1 - b / 1.2) * .9 + a * .1, P((1 - b), 20) / 4 + .05] } } setInterval('for(i=0;i<1e4;i++)if(s=p(R(),R(),i%46/.74)){z=s[2];x=~~(s[0]*f/z-h);y=~~(s[1]*f/z-h);if(!m[q=y*f+x]|m[q]>z)m[q]=z,a.fillStyle="rgb("+~(s[3]*h)+","+~(s[4]*h)+","+~(s[3]*s[3]*-80)+")",a.fillRect(x,y,1,1)}', 0)
-    </script>
+        <!-- 金刚区 (核心入口) - 产业园入口保留在此 -->
+        <div class="px-5 grid grid-cols-4 gap-4 mb-6">
+            <div class="flex flex-col items-center gap-2" onclick="switchPage('federation')">
+                <div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 shadow-sm active:scale-95 transition">
+                    <i class="fa-solid fa-id-card text-lg"></i>
+                </div>
+                <span class="text-[11px] font-medium text-slate-700">在线入会</span>
+            </div>
+            <div class="flex flex-col items-center gap-2" onclick="scrollToPark()">
+                <div class="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center text-orange-600 shadow-sm active:scale-95 transition">
+                    <i class="fa-solid fa-building text-lg"></i>
+                </div>
+                <span class="text-[11px] font-medium text-slate-700">园区招商</span>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-12 h-12 rounded-2xl bg-green-50 flex items-center justify-center text-green-600 shadow-sm active:scale-95 transition">
+                    <i class="fa-solid fa-user-tie text-lg"></i>
+                </div>
+                <span class="text-[11px] font-medium text-slate-700">人才服务</span>
+            </div>
+            <div class="flex flex-col items-center gap-2" onclick="switchPage('mall')">
+                <div class="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center text-purple-600 shadow-sm active:scale-95 transition">
+                    <i class="fa-solid fa-briefcase text-lg"></i>
+                </div>
+                <span class="text-[11px] font-medium text-slate-700">企业对接</span>
+            </div>
+        </div>
+
+        <!-- 核心业务推荐 -->
+        <div class="px-5 space-y-4 pb-4">
+            <div class="flex justify-between items-end mb-1">
+                <h3 class="font-bold text-slate-800 text-sm">独家特色服务</h3>
+                <span class="text-[10px] text-slate-400 flex items-center gap-1">查看全部 <i class="fa-solid fa-chevron-right text-[8px]"></i></span>
+            </div>
+
+            <!-- 特色产品卡片 1 -->
+            <div class="biz-card p-4 flex gap-4 active:scale-[0.98] transition-transform" onclick="switchPage('mall')">
+                <div class="w-20 h-20 rounded-lg bg-slate-100 flex-shrink-0 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="badge-hk text-[10px] px-1.5 py-0.5 rounded font-bold">香港人才办背书</span>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm leading-snug">内地人才留港工作推荐</h4>
+                        <p class="text-[10px] text-slate-500 mt-1 line-clamp-2">工签指导 · 岗位匹配 · 面试辅导</p>
+                    </div>
+                    <div class="flex justify-between items-center mt-2">
+                        <span class="text-orange-600 font-bold text-sm">¥1980<span class="text-[10px] font-normal text-slate-400">起</span></span>
+                        <button class="bg-blue-600 text-white text-[10px] px-3 py-1 rounded-full shadow-md shadow-blue-200">查看详情</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 特色产品卡片 2 -->
+            <div class="biz-card p-4 flex gap-4 active:scale-[0.98] transition-transform" onclick="switchPage('mall')">
+                <div class="w-20 h-20 rounded-lg bg-slate-100 flex-shrink-0 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="badge-vip text-[10px] px-1.5 py-0.5 rounded font-bold">一站式托管</span>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm leading-snug">在港企业服务包</h4>
+                        <p class="text-[10px] text-slate-500 mt-1 line-clamp-2">公司注册 · 财税申报 · 知识产权</p>
+                    </div>
+                    <div class="flex justify-between items-center mt-2">
+                        <span class="text-orange-600 font-bold text-sm">¥5980<span class="text-[10px] font-normal text-slate-400">/启航</span></span>
+                        <button class="bg-blue-600 text-white text-[10px] px-3 py-1 rounded-full shadow-md shadow-blue-200">立即订购</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= AI 助手 (AI Assistant) - 新增页面 ================= -->
+    <div id="ai-assistant" class="page-node bg-slate-50 pt-[50px] relative">
+        <!-- 顶部装饰背景 -->
+        <div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-indigo-50 to-transparent -z-10"></div>
+        
+        <div class="px-5 mb-6 text-center relative z-10">
+            <!-- 3D 形象区域 -->
+            <div class="w-24 h-24 mx-auto mb-3 relative">
+                <div class="absolute inset-0 bg-purple-200 rounded-full blur-xl opacity-50 animate-pulse"></div>
+                <img src="https://cdni.iconscout.com/illustration/premium/thumb/3d-character-with-laptop-4530895-3780688.png" alt="AI Avatar" class="w-full h-full object-contain drop-shadow-lg">
+            </div>
+            
+            <h1 class="text-2xl font-black text-slate-800 mb-1 tracking-tight">HI! 你好 <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">我是小博~</span></h1>
+            <p class="text-xs text-slate-500 mb-4">您的闽港科创智能业务顾问</p>
+            
+            <!-- 模型标签 -->
+            <div class="flex justify-center gap-2 mb-6">
+                <span class="badge-ai flex items-center gap-1"><i class="fa-solid fa-bolt text-[10px]"></i> 豆包 Pro</span>
+                <span class="badge-ai flex items-center gap-1"><i class="fa-solid fa-brain text-[10px]"></i> 通义千问</span>
+                <span class="badge-ai flex items-center gap-1"><i class="fa-solid fa-rocket text-[10px]"></i> DeepSeek</span>
+            </div>
+        </div>
+
+        <!-- 对话区域 -->
+        <div class="px-5 space-y-4 mb-20">
+            <!-- 系统欢迎语 -->
+            <div class="flex gap-3">
+                <div class="w-8 h-8 rounded-full bg-indigo-100 flex-shrink-0 flex items-center justify-center text-indigo-600 text-xs">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+                <div class="ai-bubble p-3 max-w-[85%]">
+                    <p class="text-sm text-slate-700 leading-relaxed">您好！我可以帮您解答关于<strong>联合会入会</strong>、<strong>留港签证</strong>、<strong>园区政策</strong>等问题。请问今天有什么可以帮您？</p>
+                </div>
+            </div>
+
+            <!-- 大家都在问 (业务强相关) -->
+            <div class="mt-6">
+                <h3 class="text-xs font-bold text-slate-400 mb-3 uppercase tracking-wider">大家都在问</h3>
+                <div class="space-y-2">
+                    <div class="biz-card p-3 flex items-center gap-3 active:scale-[0.98] transition cursor-pointer" onclick="simulateChat('如何申请加入联合会？')">
+                        <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 flex-shrink-0">
+                            <i class="fa-solid fa-file-signature text-sm"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-slate-700">如何申请加入联合会？</p>
+                            <p class="text-[10px] text-slate-400">个人/企业会员流程详解</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+                    </div>
+
+                    <div class="biz-card p-3 flex items-center gap-3 active:scale-[0.98] transition cursor-pointer" onclick="simulateChat('留港工作签证怎么办？')">
+                        <div class="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center text-orange-600 flex-shrink-0">
+                            <i class="fa-solid fa-passport text-sm"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-slate-700">留港工作签证怎么办？</p>
+                            <p class="text-[10px] text-slate-400">IANG 签证最新政策解读</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+                    </div>
+
+                    <div class="biz-card p-3 flex items-center gap-3 active:scale-[0.98] transition cursor-pointer" onclick="simulateChat('福州新区产业园有什么补贴？')">
+                        <div class="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center text-green-600 flex-shrink-0">
+                            <i class="fa-solid fa-coins text-sm"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-slate-700">福州新区产业园有什么补贴？</p>
+                            <p class="text-[10px] text-slate-400">税收减免与租金优惠详情</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+                    </div>
+                    
+                    <div class="biz-card p-3 flex items-center gap-3 active:scale-[0.98] transition cursor-pointer" onclick="simulateChat('如何对接香港创投机构？')">
+                        <div class="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center text-purple-600 flex-shrink-0">
+                            <i class="fa-solid fa-handshake text-sm"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-slate-700">如何对接香港创投机构？</p>
+                            <p class="text-[10px] text-slate-400">BP 投递与路演安排</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部输入框 (固定) -->
+        <div class="absolute bottom-0 w-full bg-white/90 backdrop-blur-md border-t border-slate-200 p-4 pb-6 z-20">
+            <div class="flex items-center gap-2 bg-slate-100 rounded-full px-4 py-2.5 border border-slate-200 focus-within:border-indigo-400 focus-within:ring-2 focus-within:ring-indigo-100 transition-all">
+                <input type="text" placeholder="输入您的问题，例如：入会条件..." class="flex-1 bg-transparent text-sm outline-none text-slate-700 placeholder-slate-400">
+                <button class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-md active:scale-95 transition">
+                    <i class="fa-solid fa-paper-plane text-xs"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 联合会专区 (Federation) ================= -->
+    <div id="federation" class="page-node bg-white pt-[50px]">
+        <div class="px-5 py-3 border-b border-slate-100 sticky top-0 bg-white/95 backdrop-blur z-40">
+            <h2 class="text-lg font-bold text-slate-800">联合会专区</h2>
+            <p class="text-[10px] text-slate-500">资源中枢 · 权益落地 · 双向桥梁</p>
+        </div>
+
+        <div class="px-5 mt-5 space-y-5">
+            <!-- 会员权益卡片 -->
+            <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-5 text-white shadow-xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-10 -mt-10 blur-2xl"></div>
+                <div class="relative z-10">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="font-bold text-lg">加入联合会</h3>
+                            <p class="text-xs text-slate-300 mt-1">链接香港八大高校 · 对接创投机构</p>
+                        </div>
+                        <i class="fa-solid fa-crown text-yellow-400 text-2xl"></i>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 mb-4">
+                        <div class="bg-white/10 rounded-lg p-2 text-center backdrop-blur-sm">
+                            <p class="text-[10px] text-slate-300">个人会员</p>
+                            <p class="text-sm font-bold">¥300<span class="text-[10px] font-normal">/年</span></p>
+                        </div>
+                        <div class="bg-white/10 rounded-lg p-2 text-center backdrop-blur-sm">
+                            <p class="text-[10px] text-slate-300">小微企业</p>
+                            <p class="text-sm font-bold">¥1980<span class="text-[10px] font-normal">/年</span></p>
+                        </div>
+                        <div class="bg-white/10 rounded-lg p-2 text-center backdrop-blur-sm">
+                            <p class="text-[10px] text-slate-300">中大型企业</p>
+                            <p class="text-sm font-bold">¥5980<span class="text-[10px] font-normal">/年</span></p>
+                        </div>
+                    </div>
+                    <button class="w-full py-2.5 bg-white text-slate-900 rounded-xl text-sm font-bold hover:bg-slate-100 transition shadow-lg">立即申请入会</button>
+                </div>
+            </div>
+
+            <!-- 资源库入口 -->
+            <div class="biz-card p-4">
+                <div class="flex items-center justify-between mb-3">
+                    <h4 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-database text-blue-500 mr-2"></i>香港资源库</h4>
+                    <span class="text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full">会员可见</span>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <p class="text-xs font-bold text-slate-700">科创人才库</p>
+                        <p class="text-[10px] text-slate-400 mt-1">港校毕业生/高端技术</p>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <p class="text-xs font-bold text-slate-700">创投机构库</p>
+                        <p class="text-[10px] text-slate-400 mt-1">本土 VC/行业协会</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 合作成果 -->
+            <div class="biz-card p-4">
+                <h4 class="font-bold text-slate-800 text-sm mb-3">闽港合作成果</h4>
+                <div class="space-y-3">
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 flex-shrink-0">
+                            <i class="fa-solid fa-check text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-slate-700">福州新区产业园</p>
+                            <p class="text-[10px] text-slate-500">已入驻闽港科创企业 50+ 家</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0">
+                            <i class="fa-solid fa-handshake text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-slate-700">产学研对接</p>
+                            <p class="text-[10px] text-slate-500">促成港校与内地企业合作 20+ 项</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 商城 (Mall) ================= -->
+    <div id="mall" class="page-node bg-white pt-[50px]">
+        <div class="px-5 py-3 border-b border-slate-100 sticky top-0 bg-white/95 backdrop-blur z-40 flex justify-between items-center">
+            <h2 class="text-lg font-bold text-slate-800">科创服务商城</h2>
+            <div class="text-[10px] bg-slate-100 px-2 py-1 rounded text-slate-500">
+                <i class="fa-solid fa-tag text-orange-500 mr-1"></i>峰会特惠
+            </div>
+        </div>
+
+        <!-- 分类 Tab -->
+        <div class="px-5 py-3 flex gap-4 overflow-x-auto hide-scroll border-b border-slate-50">
+            <span class="text-sm font-bold text-blue-600 border-b-2 border-blue-600 pb-1 whitespace-nowrap">全部</span>
+            <span class="text-sm text-slate-500 whitespace-nowrap">留港就业</span>
+            <span class="text-sm text-slate-500 whitespace-nowrap">在港企业服务</span>
+            <span class="text-sm text-slate-500 whitespace-nowrap">资源对接</span>
+        </div>
+
+        <div class="px-5 mt-4 space-y-4">
+            <!-- 商品 1 -->
+            <div class="biz-card p-4 flex gap-4">
+                <div class="w-24 h-24 rounded-lg bg-slate-100 flex-shrink-0 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover">
+                    <span class="absolute top-1 left-1 bg-red-500 text-white text-[9px] px-1.5 py-0.5 rounded">热销</span>
+                </div>
+                <div class="flex-1 flex flex-col justify-between">
+                    <div>
+                        <h4 class="font-bold text-slate-800 text-sm">留港工作推荐服务 (基础版)</h4>
+                        <p class="text-[10px] text-slate-500 mt-1">岗位匹配 3 家 + 工签指导</p>
+                        <div class="mt-2 flex items-center gap-1">
+                            <i class="fa-solid fa-shield-halved text-blue-500 text-[10px]"></i>
+                            <span class="text-[10px] text-blue-600">人才办备案</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <span class="text-orange-600 font-bold text-base">¥1980</span>
+                            <span class="text-[10px] text-slate-400 line-through ml-1">¥2500</span>
+                        </div>
+                        <button class="bg-blue-600 text-white text-[10px] px-3 py-1.5 rounded-lg font-medium">购买</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 商品 2 -->
+            <div class="biz-card p-4 flex gap-4">
+                <div class="w-24 h-24 rounded-lg bg-slate-100 flex-shrink-0 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1 flex flex-col justify-between">
+                    <div>
+                        <h4 class="font-bold text-slate-800 text-sm">香港初创企业启航包</h4>
+                        <p class="text-[10px] text-slate-500 mt-1">注册 +3 月财税 +1 项知产</p>
+                        <div class="mt-2 flex items-center gap-1">
+                            <i class="fa-solid fa-check-circle text-green-500 text-[10px]"></i>
+                            <span class="text-[10px] text-green-600">性价比首选</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <span class="text-orange-600 font-bold text-base">¥5980</span>
+                        </div>
+                        <button class="bg-blue-600 text-white text-[10px] px-3 py-1.5 rounded-lg font-medium">购买</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 我的 (Profile) ================= -->
+    <div id="profile" class="page-node bg-slate-50 pt-[50px]">
+        <div class="px-5 pt-5 pb-10 bg-white rounded-b-3xl shadow-sm mb-5">
+            <div class="flex items-center gap-4">
+                <div class="w-16 h-16 rounded-full bg-slate-200 overflow-hidden border-2 border-white shadow-md">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=User" class="w-full h-full">
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold text-slate-800">张先生</h2>
+                    <div class="flex items-center gap-2 mt-1">
+                        <span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded">普通会员</span>
+                        <span class="text-[10px] text-slate-400">ID: 8829301</span>
+                    </div>
+                </div>
+                <i class="fa-solid fa-gear text-slate-300 ml-auto"></i>
+            </div>
+            
+            <div class="grid grid-cols-3 gap-4 mt-6 text-center">
+                <div>
+                    <p class="text-lg font-bold text-slate-800">0</p>
+                    <p class="text-[10px] text-slate-400">我的订单</p>
+                </div>
+                <div>
+                    <p class="text-lg font-bold text-slate-800">0</p>
+                    <p class="text-[10px] text-slate-400">优惠券</p>
+                </div>
+                <div>
+                    <p class="text-lg font-bold text-slate-800">0</p>
+                    <p class="text-[10px] text-slate-400">积分</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="px-5 space-y-3">
+            <div class="biz-card p-4 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-file-contract text-blue-500 w-5 text-center"></i>
+                    <span class="text-sm text-slate-700">入驻申请记录</span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+            </div>
+            <div class="biz-card p-4 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-users text-orange-500 w-5 text-center"></i>
+                    <span class="text-sm text-slate-700">我的家庭/企业成员</span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+            </div>
+            <div class="biz-card p-4 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-headset text-green-500 w-5 text-center"></i>
+                    <span class="text-sm text-slate-700">联系客服</span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航 (重构版) -->
+    <nav class="absolute bottom-0 w-full h-[80px] bg-white/95 backdrop-blur-xl border-t border-slate-200 px-2 flex justify-between items-center z-50 pb-2 shadow-[0_-5px_20px_rgba(0,0,0,0.03)]">
+        <div data-nav-id="home-nav" onclick="switchPage('home', this)" class="nav-item nav-active flex flex-col items-center gap-1 cursor-pointer flex-1">
+            <i class="fa-solid fa-house text-xl"></i>
+            <span class="text-[10px] font-medium">首页</span>
+        </div>
+        
+        <!-- 新增 AI 助手 Tab (位置 2) -->
+        <div data-nav-id="ai-nav" onclick="switchPage('ai-assistant', this)" class="nav-item flex flex-col items-center gap-1 cursor-pointer flex-1">
+            <i class="fa-solid fa-robot text-xl"></i>
+            <span class="text-[10px] font-medium">AI 助手</span>
+        </div>
+        
+        <div data-nav-id="federation-nav" onclick="switchPage('federation', this)" class="nav-item flex flex-col items-center gap-1 cursor-pointer flex-1">
+            <i class="fa-solid fa-flag text-xl"></i>
+            <span class="text-[10px] font-medium">联合会</span>
+        </div>
+        
+        <div data-nav-id="mall-nav" onclick="switchPage('mall', this)" class="nav-item flex flex-col items-center gap-1 cursor-pointer flex-1">
+            <i class="fa-solid fa-bag-shopping text-xl"></i>
+            <span class="text-[10px] font-medium">商城</span>
+        </div>
+        
+        <div data-nav-id="profile-nav" onclick="switchPage('profile', this)" class="nav-item flex flex-col items-center gap-1 cursor-pointer flex-1">
+            <i class="fa-solid fa-user text-xl"></i>
+            <span class="text-[10px] font-medium">我的</span>
+        </div>
+    </nav>
+</div>
+
+<script>
+    // 更新时间
+    function updateTime() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        document.getElementById('clock').textContent = `${hours}:${minutes}`;
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    const pageNodes = document.querySelectorAll('.page-node');
+    const navItems = document.querySelectorAll('nav div');
+    
+    function switchPage(pageId, navTarget) {
+        // 隐藏所有页面
+        pageNodes.forEach(p => {
+            p.classList.remove('active');
+            // 强制重绘以触发动画
+            void p.offsetWidth; 
+        });
+        
+        // 显示选中页面
+        const targetPage = document.getElementById(pageId);
+        if (targetPage) {
+            targetPage.classList.add('active');
+            targetPage.scrollTop = 0;
+        }
+        
+        // 更新导航高亮状态
+        navItems.forEach(navItem => {
+            navItem.classList.remove('nav-active');
+            // 移除所有可能的颜色类，恢复默认
+            navItem.style.color = ''; 
+            navItem.querySelector('i').style.filter = '';
+        });
+        
+        let targetNavItem;
+        if (typeof navTarget === 'string') {
+            targetNavItem = document.querySelector(`[data-nav-id="${navTarget}"]`);
+        } else if (navTarget) {
+            targetNavItem = navTarget;
+        }
+        
+        if (targetNavItem) {
+            targetNavItem.classList.add('nav-active');
+        }
+    }
+
+    // 模拟滚动到首页的园区部分
+    function scrollToPark() {
+        switchPage('home', document.querySelector('[data-nav-id="home-nav"]'));
+        // 这里可以添加逻辑滚动到金刚区下方的园区内容，简化处理直接回首页
+        setTimeout(() => {
+            const homePage = document.getElementById('home');
+            homePage.scrollTo({ top: 300, behavior: 'smooth' });
+        }, 100);
+    }
+
+    // 模拟 AI 对话交互
+    function simulateChat(question) {
+        const aiPage = document.getElementById('ai-assistant');
+        const inputField = aiPage.querySelector('input[type="text"]');
+        inputField.value = question;
+        inputField.focus();
+        
+        // 简单的视觉反馈
+        const btn = aiPage.querySelector('button.bg-indigo-600');
+        btn.classList.add('scale-90');
+        setTimeout(() => btn.classList.remove('scale-90'), 150);
+        
+        alert(`小博正在思考："${question}"\n(实际开发中将调用后端 API 返回业务解答)`);
+    }
+</script>
+
 </body>
-
 </html>
