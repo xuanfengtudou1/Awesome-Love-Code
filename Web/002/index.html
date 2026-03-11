@@ -1,121 +1,1076 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>小孙同学</title>
-    <meta name="language" content="zh-CN" />
-    <meta name="title" content="小孙同学" />
-    <meta
-      name="github"
-      content="https://github.com/sun0225SUN/Awesome-Love-Code"
-    />
-    <meta
-      name="describe"
-      content="收集不易，您的star是我坚持的动力，同时也欢迎各位PR哦! "
-    />
-    <link
-      rel="icon"
-      type="image/x-icon"
-      href="https://cdn.jsdelivr.net/gh/sun0225SUN/photos/img/20210715233345.png"
-    />
-    <style>
-      body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        background: rgb(255, 192, 203);
-      }
-
-      .container {
-        color: white;
-        text-align: center;
-        width: 500px;
-        height: 600px;
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="container">
-      <canvas id="c"></canvas>
-      <script>
-        var b = document.body;
-        var c = document.getElementsByTagName("canvas")[0];
-        var a = c.getContext("2d");
-        document.body.clientWidth;
-      </script>
-      <script>
-        with ((m = Math)) (C = cos), (S = sin), (P = pow), (R = random);
-        c.width = c.height = f = 600;
-        h = -250;
-        function p(a, b, c) {
-          if (c > 60)
-            return [
-              S(a * 7) * (13 + 5 / (0.2 + P(b * 4, 4))) - S(b) * 50,
-              b * f + 50,
-              625 + C(a * 7) * (13 + 5 / (0.2 + P(b * 4, 4))) + b * 400,
-              a * 1 - b / 2,
-              a,
-            ];
-          A = a * 2 - 1;
-          B = b * 2 - 1;
-          if (A * A + B * B < 1) {
-            if (c > 37) {
-              n = (j = c & 1) ? 6 : 4;
-              o = 0.5 / (a + 0.01) + C(b * 125) * 3 - a * 300;
-              w = b * h;
-              return [
-                o * C(n) + w * S(n) + j * 610 - 390,
-                o * S(n) - w * C(n) + 550 - j * 350,
-                1180 + C(B + A) * 99 - j * 300,
-                0.4 -
-                  a * 0.1 +
-                  P(1 - B * B, -h * 6) * 0.15 -
-                  a * b * 0.4 +
-                  C(a + b) / 5 +
-                  P(C((o * (a + 1) + (B > 0 ? w : -w)) / 25), 30) *
-                    0.1 *
-                    (1 - B * B),
-                o / 1e3 + 0.7 - o * w * 3e-6,
-              ];
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="description" content="闽港科创一体化服务平台 - 连接福建与香港的科技创新桥梁">
+    <title>闽港科创一体化服务平台</title>
+    
+    <!-- 预加载关键资源 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Noto Sans SC', 'sans-serif'] },
+                    colors: {
+                        primary: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 900: '#1e3a8a' },
+                        secondary: { 50: '#fff7ed', 500: '#f97316', 600: '#ea580c', 700: '#c2410c' },
+                        ai: { 50: '#f5f3ff', 500: '#8b5cf6', 600: '#7c3aed' }
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'float': '0 10px 25px -5px rgba(37, 99, 235, 0.15)',
+                        'glow': '0 0 15px rgba(124, 58, 237, 0.3)'
+                    }
+                }
             }
-            if (c > 32) {
-              c = c * 1.16 - 0.15;
-              o = a * 45 - 20;
-              w = b * b * h;
-              z = o * S(c) + w * C(c) + 620;
-              return [
-                o * C(c) - w * S(c),
-                28 + C(B * 0.5) * 99 - b * b * b * 60 - z / 2 - h,
-                z,
-                (b * b * 0.3 + P(1 - A * A, 7) * 0.15 + 0.3) * b,
-                b * 0.7,
-              ];
-            }
-            o = A * (2 - b) * (80 - c * 2);
-            w =
-              99 -
-              C(A) * 120 -
-              C(b) * (-h - c * 4.9) +
-              C(P(1 - b, 7)) * 50 +
-              c * 2;
-            z = o * S(c) + w * C(c) + 700;
-            return [
-              o * C(c) - w * S(c),
-              B * 99 - C(P(b, 7)) * 50 - c / 3 - z / 1.35 + 450,
-              z,
-              (1 - b / 1.2) * 0.9 + a * 0.1,
-              P(1 - b, 20) / 4 + 0.05,
-            ];
-          }
         }
-        setInterval(
-          'for(i=0;i<1e4;i++)if(s=p(R(),R(),i%46/.74)){z=s[2];x=~~(s[0]*f/z-h);y=~~(s[1]*f/z-h);if(!m[q=y*f+x]|m[q]>z)m[q]=z,a.fillStyle="rgb("+~(s[3]*h)+","+~(s[4]*h)+","+~(s[3]*s[3]*-80)+")",a.fillRect(x,y,1,1)}',
-          0
-        );
-      </script>
-    </div>
-  </body>
+    </script>
+
+    <style>
+        :root {
+            --safe-area-top: env(safe-area-inset-top, 20px);
+            --safe-area-bottom: env(safe-area-inset-bottom, 20px);
+        }
+
+        body { 
+            background: #f1f5f9; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh;
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 手机容器 */
+        .device-frame {
+            width: 100%;
+            max-width: 390px;
+            height: 844px;
+            max-height: 95vh;
+            background: #ffffff;
+            border-radius: 40px;
+            border: 8px solid #0f172a;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (max-width: 420px) {
+            .device-frame { border-width: 0; border-radius: 0; max-height: 100vh; height: 100vh; }
+        }
+
+        /* 动态岛 */
+        .dynamic-island {
+            width: 120px; height: 35px; background: #000; border-radius: 20px;
+            position: absolute; top: 12px; left: 50%; transform: translateX(-50%); z-index: 100;
+        }
+
+        /* 页面容器 */
+        .page-container {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            padding-top: calc(var(--safe-area-top) + 50px);
+            padding-bottom: 100px;
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .page-container.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .page-container::-webkit-scrollbar { display: none; }
+        .page-container { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* 卡片通用样式 */
+        .card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card:active { transform: scale(0.98); }
+
+        /* 按钮渐变 */
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+        .btn-ai {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+        }
+
+        /* 底部导航 */
+        .tab-bar {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: calc(80px + var(--safe-area-bottom));
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(226, 232, 240, 0.8);
+            display: flex;
+            justify-content: space-around;
+            padding-bottom: var(--safe-area-bottom);
+            z-index: 50;
+        }
+
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            color: #94a3b8;
+            font-size: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 20%;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .tab-item i { font-size: 20px; transition: transform 0.2s; }
+        
+        .tab-item.active { color: #2563eb; }
+        .tab-item.active i {
+            transform: translateY(-2px);
+            filter: drop-shadow(0 2px 4px rgba(37, 99, 235, 0.3));
+        }
+        
+        .tab-item[data-target="ai-assistant"].active { color: #7c3aed; }
+        .tab-item[data-target="ai-assistant"].active i { animation: pulse-ai 2s infinite; }
+
+        @keyframes pulse-ai {
+            0%, 100% { transform: translateY(-2px) scale(1); }
+            50% { transform: translateY(-2px) scale(1.15); }
+        }
+
+        /* 辅助类 */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 99px;
+            font-size: 10px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        .badge-hk { background: #eff6ff; color: #1d4ed8; }
+        .badge-vip { background: #fff7ed; color: #c2410c; }
+        .badge-ai { background: #f5f3ff; color: #7c3aed; }
+
+        .chat-bubble {
+            background: white;
+            border-radius: 16px 16px 16px 4px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        /* ========== 轮播图格式修复专用样式 ========== */
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 24px;
+            /* 【修复】强制固定高度，防止塌陷 */
+            height: 176px; 
+            width: 100%;
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.15);
+            background: #e2e8f0; /* 加载占位色 */
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 100%;
+            width: 100%;
+            will-change: transform;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            position: relative;
+            flex-shrink: 0;
+            height: 100%;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            /* 【修复】确保图片覆盖整个区域且不变形 */
+            object-fit: cover; 
+            object-position: center;
+            display: block; /* 消除图片底部默认间隙 */
+            transition: transform 0.7s ease;
+        }
+
+        /* 悬停时图片微放大 */
+        @media (hover: hover) {
+            .carousel-container:hover .carousel-slide img {
+                transform: scale(1.05);
+            }
+        }
+
+        .carousel-overlay {
+            position: absolute;
+            inset: 0;
+            /* 【修复】增强渐变对比度，确保文字在任何图片上都清晰 */
+            background: linear-gradient(to right, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.7) 50%, rgba(15, 23, 42, 0.2) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 20px 24px;
+            color: white;
+            z-index: 2; /* 确保在图片之上 */
+        }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            z-index: 10; /* 最高层级 */
+            padding: 4px 8px;
+            background: rgba(0,0,0,0.2); /* 轻微背景防止指示器在白色图片上看不清 */
+            border-radius: 20px;
+            backdrop-filter: blur(2px);
+        }
+
+        .indicator {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .indicator.active {
+            background: white;
+            width: 18px;
+            border-radius: 3px;
+            transform: scaleY(1.2);
+        }
+
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 10;
+            user-select: none;
+        }
+
+        /* 仅在非触摸设备或悬停时显示箭头，避免移动端误触 */
+        @media (hover: hover) {
+            .carousel-container:hover .carousel-arrow {
+                opacity: 1;
+            }
+        }
+        /* 移动端始终显示半透明箭头以防万一，或者完全隐藏依赖滑动 */
+        @media (hover: none) {
+            .carousel-arrow {
+                opacity: 0; 
+                pointer-events: none;
+            }
+        }
+
+        .carousel-arrow:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-arrow.prev { left: 10px; }
+        .carousel-arrow.next { right: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="device-frame" role="application" aria-label="闽港科创服务平台移动端">
+    <!-- 动态岛 -->
+    <div class="dynamic-island" aria-hidden="true"></div>
+    
+    <!-- 状态栏 -->
+    <header class="absolute top-0 w-full h-[50px] flex justify-between items-end pb-2 px-6 z-50 pointer-events-none bg-gradient-to-b from-white/90 to-transparent">
+        <time id="clock" datetime="" class="text-sm font-semibold text-slate-800">09:41</time>
+        <div class="flex items-center gap-1.5 text-slate-800">
+            <i class="fa-solid fa-signal text-xs"></i>
+            <i class="fa-solid fa-wifi text-xs"></i>
+            <i class="fa-solid fa-battery-full text-xs"></i>
+        </div>
+    </header>
+
+    <!-- ================= 首页 ================= -->
+    <main id="home" class="page-container active" aria-label="首页内容">
+        <div class="px-5 mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <h1 class="text-xl font-bold text-slate-900 tracking-tight">闽港科创<span class="text-primary-600">一体化</span></h1>
+                    <p class="text-xs text-slate-500 font-medium mt-0.5">香港科技青年联合会 · 官方平台</p>
+                </div>
+                <button class="w-9 h-9 rounded-full bg-primary-50 flex items-center justify-center text-primary-600 font-bold text-xs shadow-sm hover:bg-primary-100 transition" aria-label="用户中心">
+                    HK
+                </button>
+            </div>
+            
+            <div class="relative group">
+                <label for="search-input" class="sr-only">搜索政策、人才、园区</label>
+                <input type="text" id="search-input" placeholder="搜索政策、人才、园区..." 
+                    class="w-full py-3 pl-11 pr-4 rounded-2xl bg-white border border-slate-200 text-sm focus:outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-50 shadow-soft transition-all">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+            </div>
+        </div>
+
+        <!-- Banner 轮播图 (格式修复版) -->
+        <section class="px-5 mb-8" aria-label="焦点图轮播">
+            <div class="carousel-container" id="banner-carousel">
+                <div class="carousel-track" id="carousel-track">
+                    <!-- Slide 1 -->
+                    <div class="carousel-slide">
+                        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="2026 数字中国峰会现场" loading="lazy">
+                        <div class="carousel-overlay">
+                            <span class="bg-secondary-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full w-fit mb-3 shadow-md">2026 数字中国峰会</span>
+                            <h2 class="text-white text-lg font-bold mb-1 leading-snug drop-shadow-md">闽港科创对接会</h2>
+                            <p class="text-slate-100 text-xs mb-4 line-clamp-1 opacity-95 drop-shadow-sm">园区入驻绿色通道 · 政策专属扶持</p>
+                            <button class="bg-white/20 backdrop-blur-md text-white text-xs font-semibold px-5 py-2 rounded-full w-fit border border-white/30 hover:bg-white/30 transition active:scale-95">立即报名</button>
+                        </div>
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="carousel-slide">
+                        <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="科技创新论坛" loading="lazy">
+                        <div class="carousel-overlay">
+                            <span class="bg-primary-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full w-fit mb-3 shadow-md">全球创新大赛</span>
+                            <h2 class="text-white text-lg font-bold mb-1 leading-snug drop-shadow-md">闽港青年创业大赛</h2>
+                            <p class="text-slate-100 text-xs mb-4 line-clamp-1 opacity-95 drop-shadow-sm">百万奖金池 · 顶级导师辅导 · 投资机会</p>
+                            <button class="bg-white/20 backdrop-blur-md text-white text-xs font-semibold px-5 py-2 rounded-full w-fit border border-white/30 hover:bg-white/30 transition active:scale-95">立即参赛</button>
+                        </div>
+                    </div>
+                    <!-- Slide 3 -->
+                    <div class="carousel-slide">
+                        <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="人才交流活动" loading="lazy">
+                        <div class="carousel-overlay">
+                            <span class="bg-emerald-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full w-fit mb-3 shadow-md">高端人才计划</span>
+                            <h2 class="text-white text-lg font-bold mb-1 leading-snug drop-shadow-md">闽港精英面对面</h2>
+                            <p class="text-slate-100 text-xs mb-4 line-clamp-1 opacity-95 drop-shadow-sm">行业大咖分享 · 资源精准对接 · 职业发展指导</p>
+                            <button class="bg-white/20 backdrop-blur-md text-white text-xs font-semibold px-5 py-2 rounded-full w-fit border border-white/30 hover:bg-white/30 transition active:scale-95">预约席位</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 导航箭头 -->
+                <button class="carousel-arrow prev" id="prev-btn" aria-label="上一张">
+                    <i class="fa-solid fa-chevron-left text-xs"></i>
+                </button>
+                <button class="carousel-arrow next" id="next-btn" aria-label="下一张">
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </button>
+                
+                <!-- 指示器 -->
+                <div class="carousel-indicators" id="indicators">
+                    <div class="indicator active" data-index="0"></div>
+                    <div class="indicator" data-index="1"></div>
+                    <div class="indicator" data-index="2"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 金刚区 (快捷入口) -->
+        <nav class="px-5 grid grid-cols-4 gap-y-6 gap-x-2 mb-8" aria-label="快捷服务">
+            <button data-action="navigate" data-target="federation" class="flex flex-col items-center gap-2 group">
+                <div class="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-primary-600 shadow-sm group-active:scale-95 transition-transform">
+                    <i class="fa-solid fa-id-card text-lg"></i>
+                </div>
+                <span class="text-[11px] font-medium text-slate-700">在线入会</span>
+            </button>
+            <button data-action="scroll-park" class="flex flex-col items-center gap-2 group">
+                <div class="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center text-secondary-600 shadow-sm group-active:scale-95 transition-transform">
+                    <i class="fa-solid fa-building text-lg"></i>
+                </div>
+                <span class="text-[11px] font-medium text-slate-700">园区招商</span>
+            </button>
+            <button class="flex flex-col items-center gap-2 group">
+                <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600 shadow-sm group-active:scale-95 transition-transform">
+                    <i class="fa-solid fa-user-tie text-lg"></i>
+                </div>
+                <span class="text-[11px] font-medium text-slate-700">人才服务</span>
+            </button>
+            <button data-action="navigate" data-target="mall" class="flex flex-col items-center gap-2 group">
+                <div class="w-14 h-14 rounded-2xl bg-purple-50 flex items-center justify-center text-purple-600 shadow-sm group-active:scale-95 transition-transform">
+                    <i class="fa-solid fa-briefcase text-lg"></i>
+                </div>
+                <span class="text-[11px] font-medium text-slate-700">企业对接</span>
+            </button>
+        </nav>
+
+        <!-- 推荐服务 -->
+        <section class="px-5 pb-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-slate-800 text-base">独家特色服务</h3>
+                <button class="text-[11px] text-slate-400 flex items-center gap-1 hover:text-primary-600 transition">
+                    查看全部 <i class="fa-solid fa-chevron-right text-[8px]"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <!-- 卡片 1 -->
+                <article class="card p-4 flex gap-4 cursor-pointer" data-action="navigate" data-target="mall" tabindex="0">
+                    <div class="w-20 h-20 rounded-xl bg-slate-100 flex-shrink-0 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&q=80&w=200" 
+                             alt="人才服务示意图" class="w-full h-full object-cover" loading="lazy">
+                    </div>
+                    <div class="flex-1 flex flex-col justify-between py-0.5">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1.5">
+                                <span class="badge badge-hk">香港人才办背书</span>
+                            </div>
+                            <h4 class="font-bold text-slate-800 text-sm leading-snug">内地人才留港工作推荐</h4>
+                            <p class="text-[11px] text-slate-500 mt-1.5 line-clamp-2">工签指导 · 岗位匹配 · 面试辅导</p>
+                        </div>
+                        <div class="flex justify-between items-center mt-2">
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-secondary-600 font-bold text-base">¥1980</span>
+                                <span class="text-[10px] text-slate-400">起</span>
+                            </div>
+                            <span class="text-primary-600 text-[11px] font-semibold border border-primary-100 px-3 py-1 rounded-full bg-primary-50">查看详情</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 卡片 2 -->
+                <article class="card p-4 flex gap-4 cursor-pointer" data-action="navigate" data-target="mall" tabindex="0">
+                    <div class="w-20 h-20 rounded-xl bg-slate-100 flex-shrink-0 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=200" 
+                             alt="企业服务示意图" class="w-full h-full object-cover" loading="lazy">
+                    </div>
+                    <div class="flex-1 flex flex-col justify-between py-0.5">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1.5">
+                                <span class="badge badge-vip">一站式托管</span>
+                            </div>
+                            <h4 class="font-bold text-slate-800 text-sm leading-snug">在港企业服务包</h4>
+                            <p class="text-[11px] text-slate-500 mt-1.5 line-clamp-2">公司注册 · 财税申报 · 知识产权</p>
+                        </div>
+                        <div class="flex justify-between items-center mt-2">
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-secondary-600 font-bold text-base">¥5980</span>
+                                <span class="text-[10px] text-slate-400">/启航</span>
+                            </div>
+                            <span class="text-primary-600 text-[11px] font-semibold border border-primary-100 px-3 py-1 rounded-full bg-primary-50">立即订购</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <!-- ================= AI 助手 ================= -->
+    <main id="ai-assistant" class="page-container bg-slate-50" aria-label="AI 智能助手">
+        <div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-indigo-50 to-transparent -z-10"></div>
+        
+        <div class="px-6 mb-8 text-center relative z-10 pt-4">
+            <div class="w-24 h-24 mx-auto mb-4 relative">
+                <div class="absolute inset-0 bg-purple-300 rounded-full blur-2xl opacity-40 animate-pulse"></div>
+                <img src="https://cdni.iconscout.com/illustration/premium/thumb/3d-character-with-laptop-4530895-3780688.png" 
+                     alt="AI 助手小博" class="w-full h-full object-contain drop-shadow-xl relative z-10" loading="lazy">
+            </div>
+            
+            <h1 class="text-2xl font-black text-slate-800 mb-1 tracking-tight">HI! 你好<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">我是小博~</span></h1>
+            <p class="text-sm text-slate-500 mb-6 font-medium">您的闽港科创智能业务顾问</p>
+            
+            <div class="flex justify-center gap-2 mb-2 flex-wrap">
+                <span class="badge badge-ai"><i class="fa-solid fa-bolt text-[9px] mr-1"></i>豆包 Pro</span>
+                <span class="badge badge-ai"><i class="fa-solid fa-brain text-[9px] mr-1"></i>通义千问</span>
+                <span class="badge badge-ai"><i class="fa-solid fa-rocket text-[9px] mr-1"></i>DeepSeek</span>
+            </div>
+        </div>
+
+        <div class="px-5 space-y-6 mb-24">
+            <!-- 欢迎语 -->
+            <div class="flex gap-3 items-start">
+                <div class="w-8 h-8 rounded-full bg-indigo-100 flex-shrink-0 flex items-center justify-center text-indigo-600 text-xs shadow-sm">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+                <div class="chat-bubble p-4 max-w-[85%]">
+                    <p class="text-sm text-slate-700 leading-relaxed">您好！我可以帮您解答关于<strong>联合会入会</strong>、<strong>留港签证</strong>、<strong>园区政策</strong>等问题。请问今天有什么可以帮您？</p>
+                </div>
+            </div>
+
+            <!-- 猜你想问 -->
+            <div>
+                <h3 class="text-[11px] font-bold text-slate-400 mb-3 uppercase tracking-wider pl-1">大家都在问</h3>
+                <div class="space-y-2">
+                    <button class="card w-full p-3 flex items-center gap-3 text-left hover:bg-slate-50 transition" 
+                            data-action="chat" data-question="如何申请加入联合会？">
+                        <div class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center text-primary-600 flex-shrink-0">
+                            <i class="fa-solid fa-file-signature text-sm"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-semibold text-slate-700">如何申请加入联合会？</p>
+                            <p class="text-[10px] text-slate-400">个人/企业会员流程详解</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+                    </button>
+
+                    <button class="card w-full p-3 flex items-center gap-3 text-left hover:bg-slate-50 transition" 
+                            data-action="chat" data-question="留港工作签证怎么办？">
+                        <div class="w-9 h-9 rounded-lg bg-orange-50 flex items-center justify-center text-secondary-600 flex-shrink-0">
+                            <i class="fa-solid fa-passport text-sm"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-semibold text-slate-700">留港工作签证怎么办？</p>
+                            <p class="text-[10px] text-slate-400">IANG 签证最新政策解读</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+                    </button>
+
+                    <button class="card w-full p-3 flex items-center gap-3 text-left hover:bg-slate-50 transition" 
+                            data-action="chat" data-question="福州新区产业园有什么补贴？">
+                        <div class="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 flex-shrink-0">
+                            <i class="fa-solid fa-coins text-sm"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-semibold text-slate-700">福州新区产业园有什么补贴？</p>
+                            <p class="text-[10px] text-slate-400">税收减免与租金优惠详情</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+                    </button>
+                    
+                    <button class="card w-full p-3 flex items-center gap-3 text-left hover:bg-slate-50 transition" 
+                            data-action="chat" data-question="如何对接香港创投机构？">
+                        <div class="w-9 h-9 rounded-lg bg-purple-50 flex items-center justify-center text-purple-600 flex-shrink-0">
+                            <i class="fa-solid fa-handshake text-sm"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-semibold text-slate-700">如何对接香港创投机构？</p>
+                            <p class="text-[10px] text-slate-400">BP 投递与路演安排</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 输入区域 -->
+        <div class="fixed bottom-[80px] left-0 w-full max-w-[390px] mx-auto right-0 px-5 z-40 pointer-events-none">
+            <form id="chat-form" class="pointer-events-auto flex items-center gap-2 bg-white/90 backdrop-blur-md rounded-full px-2 py-2 border border-slate-200 shadow-lg shadow-slate-200/50">
+                <label for="ai-input" class="sr-only">输入问题</label>
+                <input type="text" id="ai-input" placeholder="输入您的问题..." 
+                    class="flex-1 bg-transparent text-sm outline-none text-slate-700 placeholder-slate-400 px-3 py-2" autocomplete="off">
+                <button type="submit" class="w-10 h-10 rounded-full btn-ai flex items-center justify-center shadow-md active:scale-95 transition">
+                    <i class="fa-solid fa-paper-plane text-xs"></i>
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <!-- ================= 联合会专区 ================= -->
+    <main id="federation" class="page-container bg-white" aria-label="联合会专区">
+        <div class="sticky top-0 bg-white/95 backdrop-blur-md z-40 border-b border-slate-100 px-5 py-4">
+            <h2 class="text-lg font-bold text-slate-900">联合会专区</h2>
+            <p class="text-[11px] text-slate-500">资源中枢 · 权益落地 · 双向桥梁</p>
+        </div>
+
+        <div class="px-5 py-6 space-y-6">
+            <!-- 会员卡片 -->
+            <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-10 -mt-10 blur-2xl"></div>
+                <div class="relative z-10">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <h3 class="font-bold text-xl">加入联合会</h3>
+                            <p class="text-xs text-slate-300 mt-1.5 opacity-80">链接香港八大高校 · 对接创投机构</p>
+                        </div>
+                        <i class="fa-solid fa-crown text-yellow-400 text-2xl drop-shadow-md"></i>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3 mb-6">
+                        <div class="bg-white/10 rounded-xl p-3 text-center backdrop-blur-sm border border-white/5">
+                            <p class="text-[10px] text-slate-300 mb-1">个人会员</p>
+                            <p class="text-sm font-bold">¥300<span class="text-[10px] font-normal opacity-70">/年</span></p>
+                        </div>
+                        <div class="bg-white/10 rounded-xl p-3 text-center backdrop-blur-sm border border-white/5">
+                            <p class="text-[10px] text-slate-300 mb-1">小微企业</p>
+                            <p class="text-sm font-bold">¥1980<span class="text-[10px] font-normal opacity-70">/年</span></p>
+                        </div>
+                        <div class="bg-white/10 rounded-xl p-3 text-center backdrop-blur-sm border border-white/5">
+                            <p class="text-[10px] text-slate-300 mb-1">中大型企业</p>
+                            <p class="text-sm font-bold">¥5980<span class="text-[10px] font-normal opacity-70">/年</span></p>
+                        </div>
+                    </div>
+                    <button class="w-full py-3 bg-white text-slate-900 rounded-xl text-sm font-bold hover:bg-slate-50 transition shadow-lg active:scale-[0.98]">立即申请入会</button>
+                </div>
+            </div>
+
+            <!-- 资源库 -->
+            <div class="card p-5">
+                <div class="flex items-center justify-between mb-4">
+                    <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-database text-primary-500"></i> 香港资源库
+                    </h4>
+                    <span class="text-[10px] bg-primary-50 text-primary-600 px-2 py-1 rounded-full font-medium">会员可见</span>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 hover:border-primary-200 transition cursor-pointer">
+                        <p class="text-xs font-bold text-slate-700">科创人才库</p>
+                        <p class="text-[10px] text-slate-400 mt-1.5">港校毕业生/高端技术</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 hover:border-primary-200 transition cursor-pointer">
+                        <p class="text-xs font-bold text-slate-700">创投机构库</p>
+                        <p class="text-[10px] text-slate-400 mt-1.5">本土 VC/行业协会</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 成果展示 -->
+            <div class="card p-5">
+                <h4 class="font-bold text-slate-800 text-sm mb-4">闽港合作成果</h4>
+                <div class="space-y-4">
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 flex-shrink-0">
+                            <i class="fa-solid fa-check text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-slate-700">福州新区产业园</p>
+                            <p class="text-[11px] text-slate-500 mt-0.5">已入驻闽港科创企业 50+ 家</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 flex-shrink-0">
+                            <i class="fa-solid fa-handshake text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-slate-700">产学研对接</p>
+                            <p class="text-[11px] text-slate-500 mt-0.5">促成港校与内地企业合作 20+ 项</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ================= 商城 ================= -->
+    <main id="mall" class="page-container bg-white" aria-label="服务商城">
+        <div class="sticky top-0 bg-white/95 backdrop-blur-md z-40 border-b border-slate-100 px-5 py-4 flex justify-between items-center">
+            <h2 class="text-lg font-bold text-slate-900">科创服务商城</h2>
+            <div class="text-[10px] bg-orange-50 text-secondary-600 px-2 py-1 rounded font-bold flex items-center gap-1">
+                <i class="fa-solid fa-tag"></i> 峰会特惠
+            </div>
+        </div>
+
+        <!-- 分类 Tab -->
+        <div class="px-5 py-3 flex gap-6 overflow-x-auto border-b border-slate-50 no-scrollbar">
+            <button class="text-sm font-bold text-primary-600 border-b-2 border-primary-600 pb-1 whitespace-nowrap">全部</button>
+            <button class="text-sm text-slate-500 whitespace-nowrap hover:text-slate-800 transition">留港就业</button>
+            <button class="text-sm text-slate-500 whitespace-nowrap hover:text-slate-800 transition">在港企业服务</button>
+            <button class="text-sm text-slate-500 whitespace-nowrap hover:text-slate-800 transition">资源对接</button>
+            <button class="text-sm text-slate-500 whitespace-nowrap hover:text-slate-800 transition">创投对接</button>
+        </div>
+
+        <div class="px-5 py-5 space-y-4">
+            <!-- 商品 1 -->
+            <article class="card p-4 flex gap-4">
+                <div class="w-24 h-24 rounded-xl bg-slate-100 flex-shrink-0 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&q=80&w=200" alt="留港服务" class="w-full h-full object-cover" loading="lazy">
+                    <span class="absolute top-2 left-2 bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">热销</span>
+                </div>
+                <div class="flex-1 flex flex-col justify-between py-0.5">
+                    <div>
+                        <h4 class="font-bold text-slate-800 text-sm">留港工作推荐服务 (基础版)</h4>
+                        <p class="text-[11px] text-slate-500 mt-1.5">岗位匹配 3 家 + 工签指导</p>
+                        <div class="mt-2 flex items-center gap-1.5">
+                            <i class="fa-solid fa-shield-halved text-primary-500 text-[10px]"></i>
+                            <span class="text-[10px] text-primary-600 font-medium">人才办备案</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <span class="text-secondary-600 font-bold text-lg">¥1980</span>
+                            <span class="text-[10px] text-slate-400 line-through ml-1">¥2500</span>
+                        </div>
+                        <button class="btn-primary text-[11px] px-4 py-2 rounded-lg font-medium active:scale-95 transition">购买</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 商品 2 -->
+            <article class="card p-4 flex gap-4">
+                <div class="w-24 h-24 rounded-xl bg-slate-100 flex-shrink-0 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=200" alt="初创服务" class="w-full h-full object-cover" loading="lazy">
+                </div>
+                <div class="flex-1 flex flex-col justify-between py-0.5">
+                    <div>
+                        <h4 class="font-bold text-slate-800 text-sm">香港初创企业启航包</h4>
+                        <p class="text-[11px] text-slate-500 mt-1.5">注册 +3 月财税 +1 项知产</p>
+                        <div class="mt-2 flex items-center gap-1.5">
+                            <i class="fa-solid fa-check-circle text-emerald-500 text-[10px]"></i>
+                            <span class="text-[10px] text-emerald-600 font-medium">性价比首选</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <span class="text-secondary-600 font-bold text-lg">¥5980</span>
+                        </div>
+                        <button class="btn-primary text-[11px] px-4 py-2 rounded-lg font-medium active:scale-95 transition">购买</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 商品 3 -->
+            <article class="card p-4 flex gap-4">
+                <div class="w-24 h-24 rounded-xl bg-slate-100 flex-shrink-0 overflow-hidden relative shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=200" alt="创投对接" class="w-full h-full object-cover" loading="lazy">
+                    <span class="absolute top-2 left-2 bg-purple-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">专享</span>
+                </div>
+                <div class="flex-1 flex flex-col justify-between py-0.5">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1.5 flex-wrap">
+                            <span class="badge badge-ai"><i class="fa-solid fa-rocket text-[8px] mr-0.5"></i> 创投直连</span>
+                            <span class="bg-purple-50 text-purple-700 text-[10px] px-1.5 py-0.5 rounded border border-purple-200 font-medium">BP 优化</span>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm leading-snug">创投机构对接包</h4>
+                        <p class="text-[11px] text-slate-500 mt-1.5 line-clamp-2">BP 优化指导 + 精准匹配 3 家 VC + 路演模拟</p>
+                        <div class="mt-2 flex items-center gap-1.5">
+                            <i class="fa-solid fa-handshake text-amber-500 text-[10px]"></i>
+                            <span class="text-[10px] text-amber-600 font-medium">10+ 合作机构·隐名直推</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-end mt-2">
+                        <div>
+                            <span class="text-purple-700 font-bold text-lg">询价</span>
+                            <span class="text-[9px] text-slate-400 ml-1.5">¥3000 起</span>
+                        </div>
+                        <button class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-[11px] px-4 py-2 rounded-lg font-medium shadow-md shadow-purple-200 active:scale-95 transition flex items-center gap-1">
+                            <i class="fa-regular fa-message text-[9px]"></i> 咨询
+                        </button>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <!-- ================= 我的 ================= -->
+    <main id="profile" class="page-container bg-slate-50" aria-label="个人中心">
+        <div class="px-6 pt-8 pb-12 bg-white rounded-b-[32px] shadow-sm mb-6">
+            <div class="flex items-center gap-5">
+                <div class="w-20 h-20 rounded-full bg-slate-100 overflow-hidden border-4 border-white shadow-md">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=User&backgroundColor=b6e3f4" alt="用户头像" class="w-full h-full">
+                </div>
+                <div class="flex-1">
+                    <h2 class="text-xl font-bold text-slate-900">张先生</h2>
+                    <div class="flex items-center gap-2 mt-2">
+                        <span class="text-[10px] bg-slate-100 text-slate-500 px-2.5 py-1 rounded-md font-medium">普通会员</span>
+                        <span class="text-[10px] text-slate-400">ID: 8829301</span>
+                    </div>
+                </div>
+                <button class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition" aria-label="设置">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-3 gap-4 mt-8 text-center divide-x divide-slate-100">
+                <div class="cursor-pointer hover:bg-slate-50 rounded-lg py-2 transition">
+                    <p class="text-lg font-bold text-slate-800">0</p>
+                    <p class="text-[11px] text-slate-400 mt-1">我的订单</p>
+                </div>
+                <div class="cursor-pointer hover:bg-slate-50 rounded-lg py-2 transition">
+                    <p class="text-lg font-bold text-slate-800">0</p>
+                    <p class="text-[11px] text-slate-400 mt-1">优惠券</p>
+                </div>
+                <div class="cursor-pointer hover:bg-slate-50 rounded-lg py-2 transition">
+                    <p class="text-lg font-bold text-slate-800">0</p>
+                    <p class="text-[11px] text-slate-400 mt-1">积分</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="px-5 space-y-3 pb-6">
+            <button class="card w-full p-4 flex justify-between items-center hover:bg-slate-50 transition">
+                <div class="flex items-center gap-4">
+                    <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-primary-500">
+                        <i class="fa-solid fa-file-contract text-sm"></i>
+                    </div>
+                    <span class="text-sm font-medium text-slate-700">入驻申请记录</span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+            </button>
+            
+            <button class="card w-full p-4 flex justify-between items-center hover:bg-slate-50 transition">
+                <div class="flex items-center gap-4">
+                    <div class="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center text-secondary-500">
+                        <i class="fa-solid fa-users text-sm"></i>
+                    </div>
+                    <span class="text-sm font-medium text-slate-700">我的家庭/企业成员</span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+            </button>
+            
+            <button class="card w-full p-4 flex justify-between items-center hover:bg-slate-50 transition">
+                <div class="flex items-center gap-4">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-500">
+                        <i class="fa-solid fa-headset text-sm"></i>
+                    </div>
+                    <span class="text-sm font-medium text-slate-700">联系客服</span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+            </button>
+        </div>
+    </main>
+
+    <!-- 底部导航栏 -->
+    <nav class="tab-bar" role="navigation" aria-label="主导航">
+        <button class="tab-item active" data-target="home" aria-label="首页" aria-current="page">
+            <i class="fa-solid fa-house"></i>
+            <span>首页</span>
+        </button>
+        <button class="tab-item" data-target="ai-assistant" aria-label="AI 助手">
+            <i class="fa-solid fa-robot"></i>
+            <span>AI 助手</span>
+        </button>
+        <button class="tab-item" data-target="federation" aria-label="联合会">
+            <i class="fa-solid fa-flag"></i>
+            <span>联合会</span>
+        </button>
+        <button class="tab-item" data-target="mall" aria-label="商城">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <span>商城</span>
+        </button>
+        <button class="tab-item" data-target="profile" aria-label="我的">
+            <i class="fa-solid fa-user"></i>
+            <span>我的</span>
+        </button>
+    </nav>
+</div>
+
+<script>
+    // 1. 时间更新逻辑
+    function updateTime() {
+        const clock = document.getElementById('clock');
+        if (!clock) return;
+        const now = new Date();
+        clock.textContent = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+        clock.setAttribute('datetime', now.toISOString());
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    // 2. 轮播图逻辑 (原生高性能实现 - 格式修复版)
+    class Carousel {
+        constructor() {
+            this.track = document.getElementById('carousel-track');
+            this.slides = document.querySelectorAll('.carousel-slide');
+            this.indicators = document.querySelectorAll('.indicator');
+            this.prevBtn = document.getElementById('prev-btn');
+            this.nextBtn = document.getElementById('next-btn');
+            
+            this.currentIndex = 0;
+            this.totalSlides = this.slides.length;
+            this.autoPlayInterval = null;
+            this.autoPlayDelay = 5000; // 5 秒自动切换
+            
+            this.init();
+        }
+        
+        init() {
+            // 绑定事件
+            this.prevBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // 防止冒泡
+                this.prev();
+                this.resetAutoPlay();
+            });
+            this.nextBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.next();
+                this.resetAutoPlay();
+            });
+            
+            this.indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.goToSlide(index);
+                    this.resetAutoPlay();
+                });
+            });
+            
+            // 键盘支持
+            document.addEventListener('keydown', (e) => {
+                if (document.getElementById('home').classList.contains('active')) {
+                    if (e.key === 'ArrowLeft') { this.prev(); this.resetAutoPlay(); }
+                    if (e.key === 'ArrowRight') { this.next(); this.resetAutoPlay(); }
+                }
+            });
+            
+            // 启动自动播放
+            this.startAutoPlay();
+            
+            // 鼠标悬停暂停
+            const container = document.getElementById('banner-carousel');
+            container.addEventListener('mouseenter', () => this.stopAutoPlay());
+            container.addEventListener('mouseleave', () => this.startAutoPlay());
+        }
+        
+        updateCarousel() {
+            // 移动轨道
+            this.track.style.transform = `translateX(-${this.currentIndex * 100}%)`;
+            
+            // 更新指示器
+            this.indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === this.currentIndex);
+            });
+        }
+        
+        next() {
+            this.currentIndex = (this.currentIndex + 1) % this.totalSlides;
+            this.updateCarousel();
+        }
+        
+        prev() {
+            this.currentIndex = (this.currentIndex - 1 + this.totalSlides) % this.totalSlides;
+            this.updateCarousel();
+        }
+        
+        goToSlide(index) {
+            this.currentIndex = index;
+            this.updateCarousel();
+        }
+        
+        startAutoPlay() {
+            this.stopAutoPlay(); // 清除现有定时器
+            this.autoPlayInterval = setInterval(() => this.next(), this.autoPlayDelay);
+        }
+        
+        stopAutoPlay() {
+            if (this.autoPlayInterval) {
+                clearInterval(this.autoPlayInterval);
+                this.autoPlayInterval = null;
+            }
+        }
+        
+        resetAutoPlay() {
+            this.startAutoPlay();
+        }
+    }
+
+    // 初始化轮播图
+    document.addEventListener('DOMContentLoaded', () => {
+        new Carousel();
+    });
+
+    // 3. 路由与导航逻辑 (事件委托)
+    const pages = document.querySelectorAll('.page-container');
+    const tabs = document.querySelectorAll('.tab-item');
+    const deviceFrame = document.querySelector('.device-frame');
+
+    function switchPage(targetId) {
+        // 更新页面显示
+        pages.forEach(page => {
+            if (page.id === targetId) {
+                page.classList.add('active');
+                page.scrollTop = 0;
+            } else {
+                page.classList.remove('active');
+            }
+        });
+
+        // 更新 Tab 状态
+        tabs.forEach(tab => {
+            const isActive = tab.dataset.target === targetId;
+            tab.classList.toggle('active', isActive);
+            tab.setAttribute('aria-current', isActive ? 'page' : 'false');
+        });
+    }
+
+    // 监听 Tab 点击
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => switchPage(tab.dataset.target));
+    });
+
+    // 4. 全局动作处理 (事件委托)
+    deviceFrame.addEventListener('click', (e) => {
+        const target = e.target.closest('[data-action]');
+        if (!target) return;
+
+        const action = target.dataset.action;
+        
+        if (action === 'navigate') {
+            switchPage(target.dataset.target);
+        } else if (action === 'scroll-park') {
+            switchPage('home');
+            setTimeout(() => {
+                document.getElementById('home').scrollTo({ top: 350, behavior: 'smooth' });
+            }, 100);
+        } else if (action === 'chat') {
+            handleChatInput(target.dataset.question);
+        }
+    });
+
+    // 5. AI 聊天逻辑
+    const chatForm = document.getElementById('chat-form');
+    const aiInput = document.getElementById('ai-input');
+
+    function handleChatInput(text) {
+        if (!text) return;
+        aiInput.value = text;
+        simulateSend();
+    }
+
+    chatForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const text = aiInput.value.trim();
+        if (text) simulateSend();
+    });
+
+    function simulateSend() {
+        const question = aiInput.value;
+        aiInput.value = '';
+        const aiPage = document.getElementById('ai-assistant');
+        const bubble = document.createElement('div');
+        bubble.className = 'flex gap-3 items-start mb-4 animate-[fadeIn_0.3s_ease-out]';
+        bubble.innerHTML = `
+            <div class="w-8 h-8 rounded-full bg-indigo-100 flex-shrink-0 flex items-center justify-center text-indigo-600 text-xs"><i class="fa-solid fa-robot"></i></div>
+            <div class="chat-bubble p-4 max-w-[85%]">
+                <p class="text-sm text-slate-700">收到问题："${question}"。<br>正在为您查询相关政策库...</p>
+            </div>
+        `;
+        const container = aiPage.querySelector('.space-y-6');
+        container.appendChild(bubble);
+        aiPage.scrollTo({ top: aiPage.scrollHeight, behavior: 'smooth' });
+    }
+</script>
+</body>
 </html>
