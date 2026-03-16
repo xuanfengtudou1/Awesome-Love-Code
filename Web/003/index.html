@@ -107,7 +107,6 @@
             -webkit-overflow-scrolling: touch;
         }
         
-        /* 详情页特殊处理：不需要底部留白给输入框，但需要给导航栏留白 */
         #company-detail.page-container {
             padding-bottom: calc(var(--nav-height) + 20px);
         }
@@ -344,7 +343,6 @@
             40% { transform: scale(1); }
         }
 
-        /* 详情页特有样式 */
         .detail-header-img {
             height: 200px;
             width: 100%;
@@ -369,7 +367,6 @@
             cursor: pointer;
         }
 
-        /* 视频卡片样式 */
         .video-card {
             background: #ffffff;
             border-radius: 16px;
@@ -403,7 +400,6 @@
             backdrop-filter: blur(2px);
         }
 
-        /* 分类标签样式 */
         .category-tab {
             padding: 6px 16px;
             border-radius: 30px;
@@ -425,13 +421,88 @@
             transform: scale(0.95);
         }
 
-        /* 视频卡片渐显动画 */
         .video-card {
             animation: fadeIn 0.3s ease forwards;
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========== 极致简洁的浮层（透明小卡片，几乎不挡视频） ========== */
+        .video-splash {
+            position: absolute;
+            inset: 0;
+            background: transparent;  /* 完全透明背景，不遮挡视频 */
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .video-splash.show {
+            pointer-events: auto;
+            opacity: 1;
+        }
+        .splash-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        /* 极简小卡片：半透明磨砂，极小尺寸，位于底部中央 */
+        .splash-mini-card {
+            position: relative;
+            z-index: 10;
+            background: rgba(20, 30, 40, 0.65);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 60px;
+            padding: 8px 18px 8px 22px;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            color: white;
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+            max-width: 280px;
+            margin-bottom: 40px;
+            align-self: flex-end;
+            margin-bottom: 80px;
+        }
+        .splash-mini-card .separator {
+            width: 1px;
+            height: 18px;
+            background: rgba(255,255,255,0.3);
+            margin: 0 4px;
+        }
+        .splash-mini-card .skip-btn {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.4);
+            color: white;
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            line-height: 1;
+        }
+        .splash-mini-card .skip-btn i { font-size: 11px; }
+        .splash-mini-card .skip-btn:active {
+            background: white;
+            color: #1e293b;
+            transform: scale(0.96);
         }
     </style>
 </head>
@@ -449,7 +520,7 @@
             <i class="fa-solid fa-battery-full text-xs"></i>
         </div>
     </header>
-
+    
     <!-- ================= 1. 首页（视频分类区） ================= -->
     <main id="home" class="page-container active" aria-label="首页">
         <div class="px-5 mb-6">
@@ -472,7 +543,6 @@
         <section class="px-5 mb-6">
             <div class="carousel-container" id="banner-carousel">
                 <div class="carousel-track" id="carousel-track">
-                    <!-- 新增：已入驻园区宣传幻灯片 - 跳转目标改为 park (产业园) -->
                     <div class="carousel-slide">
                         <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="福州新区产业园">
                         <div class="carousel-overlay">
@@ -482,7 +552,6 @@
                             <button class="bg-white/20 backdrop-blur-md text-white text-xs font-semibold px-4 py-1.5 rounded-full w-fit border border-white/30" data-action="navigate" data-target="park">查看入驻企业</button>
                         </div>
                     </div>
-                    <!-- 原有幻灯片1 -->
                     <div class="carousel-slide">
                         <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="数字中国峰会">
                         <div class="carousel-overlay">
@@ -492,7 +561,6 @@
                             <button class="bg-white/20 backdrop-blur-md text-white text-xs font-semibold px-4 py-1.5 rounded-full w-fit border border-white/30" data-action="navigate" data-target="federation">峰会招商专区</button>
                         </div>
                     </div>
-                    <!-- 原有幻灯片2 -->
                     <div class="carousel-slide">
                         <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="未来香港大赛">
                         <div class="carousel-overlay">
@@ -511,7 +579,6 @@
             </div>
         </section>
 
-        <!-- 快捷入口（保持不变） -->
         <nav class="px-5 grid grid-cols-4 gap-y-6 gap-x-2 mb-8">
             <button data-action="navigate" data-target="ai-assistant" class="flex flex-col items-center gap-2 group">
                 <div class="w-14 h-14 rounded-2xl bg-purple-50 flex items-center justify-center text-hk-500 shadow-sm group-active:scale-95 transition-transform">
@@ -525,13 +592,15 @@
                 </div>
                 <span class="text-[11px] font-medium text-slate-700">产业园</span>
             </button>
-            <button data-action="navigate" data-target="mall" class="flex flex-col items-center gap-2 group">
+            <!-- 在线入会 -> 跳转到联合会 -->
+            <button data-action="navigate" data-target="federation" class="flex flex-col items-center gap-2 group">
                 <div class="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-primary-600 shadow-sm group-active:scale-95 transition-transform">
                     <i class="fa-solid fa-id-card text-lg"></i>
                 </div>
                 <span class="text-[11px] font-medium text-slate-700">在线入会</span>
             </button>
-            <button data-action="navigate" data-target="profile" class="flex flex-col items-center gap-2 group">
+            <!-- 特色商城 -> 跳转到商城 -->
+            <button data-action="navigate" data-target="mall" class="flex flex-col items-center gap-2 group">
                 <div class="w-14 h-14 rounded-2xl bg-red-50 flex items-center justify-center text-red-500 shadow-sm group-active:scale-95 transition-transform">
                     <i class="fa-solid fa-bag-shopping text-lg"></i>
                 </div>
@@ -539,14 +608,12 @@
             </button>
         </nav>
 
-        <!-- 视频分类区（分类标签点击筛选，不生硬跳转） -->
         <section class="px-5 pb-6">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="font-bold text-slate-800 text-base">📹 视频专区</h3>
                 <span class="text-[11px] text-slate-400">闽港科创 · 精彩瞬间</span>
             </div>
             
-            <!-- 分类标签：点击切换筛选，不生硬跳转 -->
             <div class="flex gap-2 mb-4 overflow-x-auto pb-1 scrollbar-hide" style="-webkit-overflow-scrolling: touch; scrollbar-width: none;">
                 <button class="category-tab active" data-category="all">全部</button>
                 <button class="category-tab" data-category="park">园区</button>
@@ -555,9 +622,8 @@
                 <button class="category-tab" data-category="more">更多</button>
             </div>
 
-            <!-- 视频卡片容器 -->
             <div class="grid grid-cols-2 gap-3" id="video-container">
-                <!-- 视频卡片 1 (园区类) -->
+                <!-- 视频卡片内容保持不变 -->
                 <div class="video-card cursor-pointer" data-category="park">
                     <div class="video-thumb">
                         <img src="https://images.unsplash.com/photo-1588702547923-7093a6c3ba33?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="视频封面" class="w-full h-full object-cover">
@@ -568,7 +634,6 @@
                         <p class="text-[9px] text-slate-400 mt-1">园区 · 2026</p>
                     </div>
                 </div>
-                <!-- 视频卡片 2 (港区类) -->
                 <div class="video-card cursor-pointer" data-category="hk">
                     <div class="video-thumb">
                         <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="视频封面" class="w-full h-full object-cover">
@@ -579,7 +644,6 @@
                         <p class="text-[9px] text-slate-400 mt-1">港区 · 探访闽港园</p>
                     </div>
                 </div>
-                <!-- 视频卡片 3 (数字峰会类) -->
                 <div class="video-card cursor-pointer" data-category="summit">
                     <div class="video-thumb">
                         <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="视频封面" class="w-full h-full object-cover">
@@ -590,7 +654,6 @@
                         <p class="text-[9px] text-slate-400 mt-1">峰会 · 2026</p>
                     </div>
                 </div>
-                <!-- 视频卡片 4 (更多类) -->
                 <div class="video-card cursor-pointer" data-category="more">
                     <div class="video-thumb">
                         <img src="https://images.unsplash.com/photo-1560523160-754a9e25c68f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="视频封面" class="w-full h-full object-cover">
@@ -601,7 +664,6 @@
                         <p class="text-[9px] text-slate-400 mt-1">更多 · 福州新区专场</p>
                     </div>
                 </div>
-                <!-- 新增更多视频卡片，丰富各分类内容 -->
                 <div class="video-card cursor-pointer" data-category="park">
                     <div class="video-thumb">
                         <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="视频封面" class="w-full h-full object-cover">
@@ -652,17 +714,14 @@
     </main>
 
     <!-- ================= 2. AI 助手 ================= -->
-    <!-- 修复：移除多余重复标签，精简结构，确保移动端正常显示 -->
     <main id="ai-assistant" class="page-container bg-slate-50" aria-label="AI 智能助手">
         <div class="absolute top-0 left-0 w-full h-80 bg-gradient-to-b from-indigo-50 via-purple-50/30 to-transparent -z-10 pointer-events-none"></div>
         <div class="px-6 mb-6 text-center relative z-10 pt-6">
-            <!-- 标题 + 图片并排（flex 确保在一行内） -->
             <div class="flex items-center justify-center gap-3 mb-4">
                 <h1 class="text-2xl font-black text-slate-800 tracking-tight text-left whitespace-nowrap">
                     HI！你好<br>
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">我是小博~</span>
                 </h1>
-                <!-- 图片设置为固定宽高，避免挤压 -->
                 <img 
                     src="https://github.com/xuanfengtudou1/Awesome-Love-Code/blob/main/Web/003/%E8%82%96%E5%83%8F%E9%BE%99.jpg?raw=true" 
                     alt="小博形象" 
@@ -740,7 +799,7 @@
         </div>
     </main>
 
-    <!-- ================= 3. 产业园专区 (id="park") ================= -->
+    <!-- ================= 3. 产业园专区 ================= -->
     <main id="park" class="page-container bg-slate-50" aria-label="产业园专区">
         <div class="sticky top-0 bg-white/95 backdrop-blur-md z-40 border-b border-slate-100 px-5 py-4">
             <h2 class="text-lg font-bold text-slate-900">闽港科创产业园</h2>
@@ -766,11 +825,9 @@
                 </div>
             </div>
             
-            <!-- 已入驻企业案例 (可点击) -->
             <div class="card p-5">
                 <h4 class="font-bold text-slate-800 text-sm mb-3">已入驻企业案例</h4>
                 <div class="space-y-3">
-                    <!-- 企业 1 -->
                     <div class="flex items-center gap-3 pb-3 border-b border-slate-50 cursor-pointer group" 
                          data-action="show-company" data-id="hk-ai-tech">
                         <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500 group-hover:bg-primary-50 group-hover:text-primary-600 transition-colors">HK</div>
@@ -780,7 +837,6 @@
                         </div>
                         <i class="fa-solid fa-chevron-right text-slate-300 text-xs group-hover:translate-x-1 transition-transform"></i>
                     </div>
-                    <!-- 企业 2 -->
                     <div class="flex items-center gap-3 cursor-pointer group" 
                          data-action="show-company" data-id="fz-bio-tech">
                         <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500 group-hover:bg-primary-50 group-hover:text-primary-600 transition-colors">FZ</div>
@@ -855,7 +911,7 @@
             <h3 class="font-bold text-slate-800 text-sm mb-3 flex items-center gap-2"><i class="fa-solid fa-star text-yellow-500"></i> 联合会独家支撑</h3>
             <div class="space-y-4">
                 <article class="card p-4 border-l-4 border-l-hk-500">
-                    <div class="flex justify-between items-start mb-2"><h4 class="font-bold text-slate-800 text-sm">个人留港工作推荐</h4><span class="badge badge-hk">人才办背书</span></div>
+                    <div class="flex justify-between items-start mb-2"><h4 class="font-bold text-slate-800 text-sm">留港工作推荐</h4><span class="badge badge-hk">人才办背书</span></div>
                     <p class="text-[11px] text-slate-500 mb-3">专为内地科创人才打造，岗位匹配 + 工签指导 + 生活配套</p>
                     <div class="flex gap-2 mb-3">
                         <div class="flex-1 bg-slate-50 p-2 rounded-lg border border-slate-100"><p class="text-[10px] font-bold text-slate-600">基础版</p><p class="text-xs font-bold text-secondary-600">¥1980</p></div>
@@ -871,6 +927,24 @@
                         <div class="flex-1 bg-primary-50 p-2 rounded-lg border border-primary-100"><p class="text-[10px] font-bold text-primary-700">进阶包</p><p class="text-xs font-bold text-secondary-600">¥9800</p></div>
                     </div>
                     <button class="w-full py-2 btn-primary text-xs font-bold rounded-lg">查看详情</button>
+                </article>
+                <article class="card p-4 border-l-4 border-l-emerald-500">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-bold text-slate-800 text-sm">跨境高管体检服务</h4>
+                        <span class="badge badge-industry">联合会定点</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mb-3">联合香港顶尖医疗机构，专为跨境人才提供深度筛查、报告解读及就医绿色通道。</p>
+                    <div class="flex gap-2 mb-3">
+                        <div class="flex-1 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                            <p class="text-[10px] font-bold text-slate-600">标准版</p>
+                            <p class="text-xs font-bold text-secondary-600">¥2980</p>
+                        </div>
+                        <div class="flex-1 bg-emerald-50 p-2 rounded-lg border border-emerald-100">
+                            <p class="text-[10px] font-bold text-emerald-700">定制版</p>
+                            <p class="text-xs font-bold text-secondary-600">¥6800</p>
+                        </div>
+                    </div>
+                    <button class="w-full py-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-xs font-bold rounded-lg shadow-md active:scale-95 transition-transform">查看套餐详情</button>
                 </article>
             </div>
         </div>
@@ -915,19 +989,14 @@
 
     <!-- ================= 7. 企业详情页 ================= -->
     <main id="company-detail" class="page-container bg-white" aria-label="企业详情">
-        <!-- 返回按钮 -->
         <div class="back-btn" data-action="navigate" data-target="park">
             <i class="fa-solid fa-arrow-left text-slate-700"></i>
         </div>
-
-        <!-- 头部图片 -->
         <div class="relative">
             <img id="detail-img" src="" alt="企业封面" class="detail-header-img">
             <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-white to-transparent"></div>
         </div>
-
         <div class="px-6 -mt-10 relative z-10">
-            <!-- 企业标题卡片 -->
             <div class="bg-white rounded-2xl shadow-lg p-5 mb-6 border border-slate-100">
                 <div class="flex justify-between items-start mb-2">
                     <h1 id="detail-name" class="text-xl font-bold text-slate-900 leading-tight">企业名称</h1>
@@ -941,8 +1010,6 @@
                     <i class="fa-solid fa-handshake mr-2"></i>联系合作
                 </button>
             </div>
-
-            <!-- 企业简介 -->
             <div class="mb-6">
                 <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
                     <i class="fa-solid fa-align-left text-primary-500"></i> 企业简介
@@ -953,18 +1020,13 @@
                     </p>
                 </div>
             </div>
-
-            <!-- 核心产品/服务 -->
             <div class="mb-6">
                 <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
                     <i class="fa-solid fa-box-open text-primary-500"></i> 核心产品与服务
                 </h3>
                 <div id="detail-products" class="space-y-2">
-                    <!-- 动态填充 -->
                 </div>
             </div>
-
-            <!-- 荣誉资质 -->
             <div class="mb-8">
                 <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
                     <i class="fa-solid fa-medal text-primary-500"></i> 荣誉资质
@@ -1001,10 +1063,25 @@
             <span>我的</span>
         </button>
     </nav>
+
+    <!-- ========== 极致简洁的浮层（半透明小卡片，不挡视频）- 现在用于联合会 ========== -->
+    <div id="video-splash" class="video-splash">
+        <video id="splash-video" class="splash-video" muted playsinline>
+            <source src="logo/logo.mp4" type="video/mp4">
+        </video>
+        <!-- 极简小卡片：仅显示简短文案+倒计时+跳过，位于底部中央 -->
+        <div class="splash-mini-card">
+            <span>✨ 联合会 · 精彩预告</span>
+            <span class="separator"></span>
+            <span>6s</span>
+            <button id="skip-splash" class="skip-btn">跳过 <i class="fa-solid fa-forward"></i></button>
+        </div>
+    </div>
 </div>
 
 <script>
-    // 1. 时间更新
+(function() {
+    // 时间更新
     function updateTime() {
         const clock = document.getElementById('clock');
         if (!clock) return;
@@ -1014,7 +1091,7 @@
     setInterval(updateTime, 1000);
     updateTime();
 
-    // 2. 轮播图逻辑
+    // 轮播图
     class Carousel {
         constructor() {
             this.track = document.getElementById('carousel-track');
@@ -1043,31 +1120,25 @@
         start() { this.timer = setInterval(() => this.next(), 5000); }
         reset() { clearInterval(this.timer); this.start(); }
     }
-    document.addEventListener('DOMContentLoaded', () => new Carousel());
+    new Carousel();
 
-    // 3. 企业数据模拟
+    // 企业数据
     const companyData = {
         'hk-ai-tech': {
-            name: '香港易健康 科技有限公司',
-            industry: '人工智能',
-            location: '福州新区 · 闽港园 A 栋',
-            date: '2025.11 入驻',
+            name: '香港易健康 科技有限公司', industry: '人工智能', location: '福州新区 · 闽港园 A 栋', date: '2025.11 入驻',
             image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
             desc: '香港易健康 科技是一家专注于计算机视觉与自然语言处理的初创企业，由香港科技大学博士团队创立。作为数字中国峰会首批入驻企业，公司致力于将香港的国际科研资源与内地的应用场景相结合，打造领先的 AI 解决方案。\n\n公司已获得多项专利授权，并在智慧医疗、智能制造领域落地多个标杆项目。',
             products: ['AI 医学影像分析系统', '工业缺陷检测平台', '多语言智能客服机器人']
         },
         'fz-bio-tech': {
-            name: '福州 XX 生物科技',
-            industry: '生物医药',
-            location: '福州新区 · 闽港园 B 栋',
-            date: '2025.08 入驻',
+            name: '福州 XX 生物科技', industry: '生物医药', location: '福州新区 · 闽港园 B 栋', date: '2025.08 入驻',
             image: 'https://images.unsplash.com/photo-1579165466741-7f35a4755657?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
             desc: '福州 XX 生物科技是闽港合作示范单位，依托香港大学医学院的技术支持，专注于创新药物研发与生物标志物检测。\n\n公司建立了符合 GMP 标准的研发中心，并与多家三甲医院建立临床试验合作，加速科研成果转化。',
             products: ['肿瘤早筛试剂盒', '新型抗体药物研发', '基因测序数据分析服务']
         }
     };
 
-    // 4. 路由切换
+    // 页面切换
     const pages = document.querySelectorAll('.page-container');
     const tabs = document.querySelectorAll('.tab-item');
 
@@ -1083,66 +1154,137 @@
             else p.classList.remove('active');
         });
         tabs.forEach(t => {
-            const isActive = t.dataset.target === targetId;
-            t.classList.toggle('active', isActive);
+            t.classList.toggle('active', t.dataset.target === targetId);
         });
     }
 
-    // 5. 显示企业详情
     function showCompanyDetail(companyId) {
         const data = companyData[companyId];
         if (!data) return;
-
         document.getElementById('detail-name').textContent = data.name;
         document.getElementById('detail-badge').textContent = data.industry;
         document.getElementById('detail-location').textContent = data.location;
         document.getElementById('detail-date').textContent = data.date;
         document.getElementById('detail-img').src = data.image;
         document.getElementById('detail-desc').textContent = data.desc;
-
         const productsContainer = document.getElementById('detail-products');
         productsContainer.innerHTML = '';
         data.products.forEach(prod => {
             const div = document.createElement('div');
             div.className = 'flex items-center gap-3 p-3 bg-white border border-slate-100 rounded-xl shadow-sm';
-            div.innerHTML = `
-                <div class="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center text-primary-600 flex-shrink-0">
-                    <i class="fa-solid fa-cube text-xs"></i>
-                </div>
-                <span class="text-sm font-medium text-slate-700">${prod}</span>
-            `;
+            div.innerHTML = `<div class="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center text-primary-600 flex-shrink-0"><i class="fa-solid fa-cube text-xs"></i></div><span class="text-sm font-medium text-slate-700">${prod}</span>`;
             productsContainer.appendChild(div);
         });
-
         switchPage('company-detail');
     }
 
-    tabs.forEach(tab => tab.addEventListener('click', () => switchPage(tab.dataset.target)));
+    // ---- 视频过渡逻辑（仅首次进入联合会） ----
+    const videoSplash = document.getElementById('video-splash');
+    const splashVideo = document.getElementById('splash-video');
+    const skipBtn = document.getElementById('skip-splash');
+    let hasShownSplash = false;  // 记录联合会视频是否已播放
 
-    // 6. 全局动作委托
+    function showVideoSplash(callback) {
+        if (!videoSplash) return;
+        videoSplash.style.display = 'flex';
+        videoSplash.offsetHeight;
+        videoSplash.classList.add('show');
+        splashVideo.currentTime = 0;
+        splashVideo.play().catch(() => {});
+        
+        let countdown = 6;  // 6秒倒计时
+        const countdownSpan = document.querySelector('.splash-mini-card span:nth-child(3)');
+        
+        const countdownInterval = setInterval(() => {
+            countdown--;
+            if (countdown > 0) {
+                countdownSpan.innerText = countdown + 's';
+            } else {
+                countdownSpan.innerText = '0s';
+                clearInterval(countdownInterval);
+            }
+        }, 1000);
+
+        let finished = false;
+        function finishAndGo() {
+            if (finished) return;
+            finished = true;
+            clearInterval(countdownInterval);
+            splashVideo.pause();
+            videoSplash.classList.remove('show');
+            setTimeout(() => {
+                videoSplash.style.display = 'none';
+            }, 300);
+            if (callback) callback();
+        }
+
+        splashVideo.addEventListener('ended', finishAndGo, { once: true });
+        splashVideo.addEventListener('error', finishAndGo, { once: true });
+
+        const autoTimer = setTimeout(finishAndGo, 6000);
+
+        skipBtn.addEventListener('click', function skipHandler() {
+            clearTimeout(autoTimer);
+            finishAndGo();
+        }, { once: true });
+    }
+
+    // 拦截所有指向联合会（federation）的导航（包括底部tab和快捷按钮）
+    document.querySelector('.device-frame').addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-action="navigate"], .tab-item');
+        if (!btn) return;
+        
+        let target = null;
+        if (btn.classList.contains('tab-item')) {
+            target = btn.dataset.target;
+        } else if (btn.dataset.action === 'navigate') {
+            target = btn.dataset.target;
+        }
+        
+        if (target === 'federation') {
+            e.preventDefault();
+            
+            if (!hasShownSplash) {
+                hasShownSplash = true;
+                showVideoSplash(() => {
+                    switchPage('federation');
+                });
+            } else {
+                switchPage('federation');
+            }
+            return;
+        }
+        
+        if (target) {
+            e.preventDefault();
+            switchPage(target);
+        }
+    });
+
+    // chat / show-company 保持不变
     document.querySelector('.device-frame').addEventListener('click', (e) => {
         const btn = e.target.closest('[data-action]');
         if (!btn) return;
-        
-        if (btn.dataset.action === 'navigate') {
-            switchPage(btn.dataset.target);
-        } else if (btn.dataset.action === 'chat') {
+        const action = btn.dataset.action;
+        if (action === 'chat') {
+            e.preventDefault();
             handleChatInput(btn.dataset.question);
-        } else if (btn.dataset.action === 'show-company') {
+        } else if (action === 'show-company') {
+            e.preventDefault();
             showCompanyDetail(btn.dataset.id);
         }
     });
 
-    // 7. AI 聊天逻辑
+    // AI聊天逻辑
     const chatForm = document.getElementById('chat-form');
     const aiInput = document.getElementById('ai-input');
     const chatContent = document.getElementById('chat-content');
 
-    function handleChatInput(text) {
+    window.handleChatInput = function(text) {
         if (!text) return;
         aiInput.value = text;
         simulateSend();
-    }
+    };
 
     chatForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -1215,31 +1357,27 @@
         });
     }
 
-    // 8. 视频分类筛选功能
-    document.addEventListener('DOMContentLoaded', function() {
-        const categoryTabs = document.querySelectorAll('.category-tab');
-        const videoCards = document.querySelectorAll('.video-card');
-        
-        categoryTabs.forEach(tab => {
-            tab.addEventListener('click', function() {
-                categoryTabs.forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                
-                const selectedCategory = this.dataset.category;
-                
-                videoCards.forEach(card => {
-                    if (selectedCategory === 'all' || card.dataset.category === selectedCategory) {
-                        card.style.display = 'block';
-                        card.style.animation = 'none';
-                        card.offsetHeight;
-                        card.style.animation = 'fadeIn 0.3s ease forwards';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
+    // 视频分类筛选
+    const categoryTabs = document.querySelectorAll('.category-tab');
+    const videoCards = document.querySelectorAll('.video-card');
+    categoryTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            categoryTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            const selectedCategory = this.dataset.category;
+            videoCards.forEach(card => {
+                if (selectedCategory === 'all' || card.dataset.category === selectedCategory) {
+                    card.style.display = 'block';
+                    card.style.animation = 'none';
+                    card.offsetHeight;
+                    card.style.animation = 'fadeIn 0.3s ease forwards';
+                } else {
+                    card.style.display = 'none';
+                }
             });
         });
     });
+})();
 </script>
 </body>
 </html>
