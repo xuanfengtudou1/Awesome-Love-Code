@@ -196,6 +196,7 @@
         .badge-ai { background: #f5f3ff; color: #7c3aed; border: 1px solid #e9d5ff; }
         .badge-industry { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
 
+        /* ========== 轮播区域样式 ========== */
         .carousel-container {
             position: relative;
             overflow: hidden;
@@ -204,18 +205,25 @@
             width: 100%;
             box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.15);
             background: #e2e8f0;
+            touch-action: pan-y pinch-zoom; /* 优化触摸滑动 */
         }
         .carousel-track {
             display: flex;
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             height: 100%;
             width: 100%;
+            cursor: grab;
+        }
+        .carousel-track:active {
+            cursor: grabbing;
         }
         .carousel-slide {
             min-width: 100%;
             position: relative;
             flex-shrink: 0;
             height: 100%;
+            user-select: none;
+            -webkit-user-drag: element; /* 允许拖动但被JS接管 */
         }
         .carousel-slide img {
             width: 100%;
@@ -223,6 +231,7 @@
             object-fit: cover; 
             object-position: center;
             display: block;
+            pointer-events: none; /* 避免拖拽时选中图片 */
         }
         .carousel-overlay {
             position: absolute;
@@ -234,6 +243,10 @@
             padding: 20px 24px;
             color: white;
             z-index: 2;
+            pointer-events: none;
+        }
+        .carousel-overlay button {
+            pointer-events: auto; /* 按钮仍可点击 */
         }
         .carousel-indicators {
             position: absolute;
@@ -429,11 +442,11 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ========== 极致简洁的浮层（透明小卡片，几乎不挡视频） ========== */
+        /* 浮层样式 */
         .video-splash {
             position: absolute;
             inset: 0;
-            background: transparent;  /* 完全透明背景，不遮挡视频 */
+            background: transparent;
             z-index: 9999;
             display: flex;
             align-items: center;
@@ -454,7 +467,6 @@
             top: 0;
             left: 0;
         }
-        /* 极简小卡片：半透明磨砂，极小尺寸，位于底部中央 */
         .splash-mini-card {
             position: relative;
             z-index: 10;
@@ -521,7 +533,7 @@
         </div>
     </header>
     
-    <!-- ================= 1. 首页（视频分类区） ================= -->
+    <!-- 首页（视频分类区） -->
     <main id="home" class="page-container active" aria-label="首页">
         <div class="px-5 mb-6">
             <div class="flex justify-between items-center mb-4">
@@ -540,11 +552,12 @@
             </div>
         </div>
 
+        <!-- 轮播区域（支持触摸滑动） -->
         <section class="px-5 mb-6">
             <div class="carousel-container" id="banner-carousel">
                 <div class="carousel-track" id="carousel-track">
                     <div class="carousel-slide">
-                        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="福州新区产业园">
+                        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="福州新区产业园" draggable="false">
                         <div class="carousel-overlay">
                             <span class="bg-emerald-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full w-fit mb-2">🏢 已入驻园区</span>
                             <h2 class="text-white text-lg font-bold mb-1">福州新区闽港产业园</h2>
@@ -553,7 +566,7 @@
                         </div>
                     </div>
                     <div class="carousel-slide">
-                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="数字中国峰会">
+                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="数字中国峰会" draggable="false">
                         <div class="carousel-overlay">
                             <span class="bg-secondary-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full w-fit mb-2">2026 数字中国峰会</span>
                             <h2 class="text-white text-lg font-bold mb-1">闽港科创对接会</h2>
@@ -562,7 +575,7 @@
                         </div>
                     </div>
                     <div class="carousel-slide">
-                        <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="未来香港大赛">
+                        <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="未来香港大赛" draggable="false">
                         <div class="carousel-overlay">
                             <span class="bg-hk-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full w-fit mb-2">品牌 IP 活动</span>
                             <h2 class="text-white text-lg font-bold mb-1">未来香港科创大赛</h2>
@@ -579,6 +592,7 @@
             </div>
         </section>
 
+        <!-- 快捷导航卡片 -->
         <nav class="px-5 grid grid-cols-4 gap-y-6 gap-x-2 mb-8">
             <button data-action="navigate" data-target="ai-assistant" class="flex flex-col items-center gap-2 group">
                 <div class="w-14 h-14 rounded-2xl bg-purple-50 flex items-center justify-center text-hk-500 shadow-sm group-active:scale-95 transition-transform">
@@ -592,14 +606,12 @@
                 </div>
                 <span class="text-[11px] font-medium text-slate-700">园区入驻</span>
             </button>
-            <!-- 在线入会 -> 跳转到联合会 -->
             <button data-action="navigate" data-target="federation" class="flex flex-col items-center gap-2 group">
                 <div class="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-primary-600 shadow-sm group-active:scale-95 transition-transform">
                     <i class="fa-solid fa-id-card text-lg"></i>
                 </div>
                 <span class="text-[11px] font-medium text-slate-700">数字峰会</span>
             </button>
-            <!-- 特色商城 -> 跳转到商城 -->
             <button data-action="navigate" data-target="mall" class="flex flex-col items-center gap-2 group">
                 <div class="w-14 h-14 rounded-2xl bg-red-50 flex items-center justify-center text-red-500 shadow-sm group-active:scale-95 transition-transform">
                     <i class="fa-solid fa-bag-shopping text-lg"></i>
@@ -608,12 +620,12 @@
             </button>
         </nav>
 
+        <!-- 视频专区部分 -->
         <section class="px-5 pb-6">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="font-bold text-slate-800 text-base">📹 视频专区</h3>
                 <span class="text-[11px] text-slate-400">闽港科创 · 精彩瞬间</span>
             </div>
-            
             <div class="flex gap-2 mb-4 overflow-x-auto pb-1 scrollbar-hide" style="-webkit-overflow-scrolling: touch; scrollbar-width: none;">
                 <button class="category-tab active" data-category="all">全部</button>
                 <button class="category-tab" data-category="park">园区</button>
@@ -621,9 +633,8 @@
                 <button class="category-tab" data-category="summit">数字峰会</button>
                 <button class="category-tab" data-category="more">更多</button>
             </div>
-
             <div class="grid grid-cols-2 gap-3" id="video-container">
-                <!-- 视频卡片内容保持不变 -->
+                <!-- 视频卡片内容 -->
                 <div class="video-card cursor-pointer" data-category="park">
                     <div class="video-thumb">
                         <img src="https://images.unsplash.com/photo-1588702547923-7093a6c3ba33?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="视频封面" class="w-full h-full object-cover">
@@ -1091,54 +1102,114 @@
     setInterval(updateTime, 1000);
     updateTime();
 
-    // 轮播图
-    class Carousel {
-        constructor() {
-            this.track = document.getElementById('carousel-track');
-            this.slides = document.querySelectorAll('.carousel-slide');
-            this.indicators = document.querySelectorAll('.indicator');
-            this.currentIndex = 0;
-            this.totalSlides = this.slides.length;
-            this.timer = null;
-            this.init();
-        }
-        init() {
-            this.indicators.forEach((ind, idx) => {
-                ind.addEventListener('click', () => { this.goTo(idx); this.reset(); });
-            });
-            this.start();
-            const container = document.getElementById('banner-carousel');
-            container.addEventListener('mouseenter', () => clearInterval(this.timer));
-            container.addEventListener('mouseleave', () => this.start());
-        }
-        update() {
-            this.track.style.transform = `translateX(-${this.currentIndex * 100}%)`;
-            this.indicators.forEach((ind, idx) => ind.classList.toggle('active', idx === this.currentIndex));
-        }
-        next() { this.currentIndex = (this.currentIndex + 1) % this.totalSlides; this.update(); }
-        goTo(idx) { this.currentIndex = idx; this.update(); }
-        start() { this.timer = setInterval(() => this.next(), 5000); }
-        reset() { clearInterval(this.timer); this.start(); }
+    // ========== 轮播图：支持触摸滑动 + 自动轮播 ==========
+    const track = document.getElementById('carousel-track');
+    const slides = document.querySelectorAll('.carousel-slide');
+    const indicators = document.querySelectorAll('.indicator');
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+    let startX = 0, currentX = 0, isDragging = false;
+    let autoTimer = null;
+
+    function updateCarousel(index, animate = true) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        currentIndex = index;
+        if (!animate) track.style.transition = 'none';
+        else track.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+        indicators.forEach((ind, idx) => ind.classList.toggle('active', idx === currentIndex));
+        // 强制重绘后恢复transition（避免下次无动画）
+        setTimeout(() => { if (animate) track.style.transition = ''; }, 50);
     }
-    new Carousel();
 
-    // 企业数据
-    const companyData = {
-        'hk-ai-tech': {
-            name: '香港易健康 科技有限公司', industry: '人工智能', location: '福州新区 · 闽港园 A 栋', date: '2025.11 入驻',
-            image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            desc: '香港易健康 科技是一家专注于计算机视觉与自然语言处理的初创企业，由香港科技大学博士团队创立。作为数字中国峰会首批入驻企业，公司致力于将香港的国际科研资源与内地的应用场景相结合，打造领先的 AI 解决方案。\n\n公司已获得多项专利授权，并在智慧医疗、智能制造领域落地多个标杆项目。',
-            products: ['AI 医学影像分析系统', '工业缺陷检测平台', '多语言智能客服机器人']
-        },
-        'fz-bio-tech': {
-            name: '福州 XX 生物科技', industry: '生物医药', location: '福州新区 · 闽港园 B 栋', date: '2025.08 入驻',
-            image: 'https://images.unsplash.com/photo-1579165466741-7f35a4755657?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            desc: '福州 XX 生物科技是闽港合作示范单位，依托香港大学医学院的技术支持，专注于创新药物研发与生物标志物检测。\n\n公司建立了符合 GMP 标准的研发中心，并与多家三甲医院建立临床试验合作，加速科研成果转化。',
-            products: ['肿瘤早筛试剂盒', '新型抗体药物研发', '基因测序数据分析服务']
+    function nextSlide() { updateCarousel((currentIndex + 1) % totalSlides); }
+    function startAutoPlay() { if (autoTimer) clearInterval(autoTimer); autoTimer = setInterval(nextSlide, 5000); }
+    function stopAutoPlay() { clearInterval(autoTimer); autoTimer = null; }
+
+    // 触摸事件
+    track.addEventListener('touchstart', (e) => {
+        stopAutoPlay();
+        startX = e.touches[0].clientX;
+        currentX = startX;
+        isDragging = true;
+        track.style.transition = 'none';
+    }, { passive: true });
+
+    track.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        currentX = e.touches[0].clientX;
+        const diff = currentX - startX;
+        track.style.transform = `translateX(calc(-${currentIndex * 100}% + ${diff}px))`;
+    }, { passive: true });
+
+    track.addEventListener('touchend', (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        const diff = currentX - startX;
+        const threshold = 50; // 滑动阈值px
+        if (Math.abs(diff) > threshold) {
+            if (diff > 0) { // 右滑，上一张
+                updateCarousel(currentIndex - 1);
+            } else { // 左滑，下一张
+                updateCarousel(currentIndex + 1);
+            }
+        } else {
+            updateCarousel(currentIndex); // 回弹
         }
-    };
+        startAutoPlay();
+    });
 
-    // 页面切换
+    // 指示器点击
+    indicators.forEach((ind, idx) => {
+        ind.addEventListener('click', () => {
+            stopAutoPlay();
+            updateCarousel(idx);
+            startAutoPlay();
+        });
+    });
+
+    // 鼠标拖拽支持（可选，便于PC调试）
+    track.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        stopAutoPlay();
+        startX = e.clientX;
+        isDragging = true;
+        track.style.transition = 'none';
+        track.style.cursor = 'grabbing';
+    });
+    window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        currentX = e.clientX;
+        const diff = currentX - startX;
+        track.style.transform = `translateX(calc(-${currentIndex * 100}% + ${diff}px))`;
+    });
+    window.addEventListener('mouseup', () => {
+        if (!isDragging) return;
+        isDragging = false;
+        track.style.cursor = '';
+        const diff = currentX - startX;
+        const threshold = 50;
+        if (Math.abs(diff) > threshold) {
+            if (diff > 0) updateCarousel(currentIndex - 1);
+            else updateCarousel(currentIndex + 1);
+        } else {
+            updateCarousel(currentIndex);
+        }
+        startAutoPlay();
+    });
+
+    // 初始化并启动自动轮播
+    updateCarousel(0);
+    startAutoPlay();
+
+    // 鼠标移入暂停（针对容器）
+    const carouselContainer = document.getElementById('banner-carousel');
+    carouselContainer.addEventListener('mouseenter', stopAutoPlay);
+    carouselContainer.addEventListener('mouseleave', startAutoPlay);
+
+    // ========== 页面切换、聊天、浮层逻辑（复用原逻辑）==========
     const pages = document.querySelectorAll('.page-container');
     const tabs = document.querySelectorAll('.tab-item');
 
@@ -1157,6 +1228,22 @@
             t.classList.toggle('active', t.dataset.target === targetId);
         });
     }
+
+    // 企业数据
+    const companyData = {
+        'hk-ai-tech': {
+            name: '香港易健康 科技有限公司', industry: '人工智能', location: '福州新区 · 闽港园 A 栋', date: '2025.11 入驻',
+            image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            desc: '香港易健康 科技是一家专注于计算机视觉与自然语言处理的初创企业，由香港科技大学博士团队创立。作为数字中国峰会首批入驻企业，公司致力于将香港的国际科研资源与内地的应用场景相结合，打造领先的 AI 解决方案。\n\n公司已获得多项专利授权，并在智慧医疗、智能制造领域落地多个标杆项目。',
+            products: ['AI 医学影像分析系统', '工业缺陷检测平台', '多语言智能客服机器人']
+        },
+        'fz-bio-tech': {
+            name: '福州 XX 生物科技', industry: '生物医药', location: '福州新区 · 闽港园 B 栋', date: '2025.08 入驻',
+            image: 'https://images.unsplash.com/photo-1579165466741-7f35a4755657?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            desc: '福州 XX 生物科技是闽港合作示范单位，依托香港大学医学院的技术支持，专注于创新药物研发与生物标志物检测。\n\n公司建立了符合 GMP 标准的研发中心，并与多家三甲医院建立临床试验合作，加速科研成果转化。',
+            products: ['肿瘤早筛试剂盒', '新型抗体药物研发', '基因测序数据分析服务']
+        }
+    };
 
     function showCompanyDetail(companyId) {
         const data = companyData[companyId];
@@ -1178,11 +1265,11 @@
         switchPage('company-detail');
     }
 
-    // ---- 视频过渡逻辑（仅首次进入联合会） ----
+    // 浮层逻辑
     const videoSplash = document.getElementById('video-splash');
     const splashVideo = document.getElementById('splash-video');
     const skipBtn = document.getElementById('skip-splash');
-    let hasShownSplash = false;  // 记录联合会视频是否已播放
+    let hasShownSplash = false;
 
     function showVideoSplash(callback) {
         if (!videoSplash) return;
@@ -1192,7 +1279,7 @@
         splashVideo.currentTime = 0;
         splashVideo.play().catch(() => {});
         
-        let countdown = 6;  // 6秒倒计时
+        let countdown = 6;
         const countdownSpan = document.querySelector('.splash-mini-card span:nth-child(3)');
         
         const countdownInterval = setInterval(() => {
@@ -1229,21 +1316,14 @@
         }, { once: true });
     }
 
-    // 拦截所有指向联合会（federation）的导航（包括底部tab和快捷按钮）
+    // 事件代理：导航、聊天、企业详情
     document.querySelector('.device-frame').addEventListener('click', (e) => {
-        const btn = e.target.closest('[data-action="navigate"], .tab-item');
+        const btn = e.target.closest('[data-action="navigate"], .tab-item, [data-action="chat"], [data-action="show-company"]');
         if (!btn) return;
         
-        let target = null;
-        if (btn.classList.contains('tab-item')) {
-            target = btn.dataset.target;
-        } else if (btn.dataset.action === 'navigate') {
-            target = btn.dataset.target;
-        }
-        
-        if (target === 'federation') {
+        // 处理联合会特殊浮层
+        if (btn.classList.contains('tab-item') && btn.dataset.target === 'federation') {
             e.preventDefault();
-            
             if (!hasShownSplash) {
                 hasShownSplash = true;
                 showVideoSplash(() => {
@@ -1255,52 +1335,56 @@
             return;
         }
         
-        if (target) {
+        if (btn.dataset.action === 'navigate') {
             e.preventDefault();
-            switchPage(target);
-        }
-    });
-
-    // chat / show-company 保持不变
-    document.querySelector('.device-frame').addEventListener('click', (e) => {
-        const btn = e.target.closest('[data-action]');
-        if (!btn) return;
-        const action = btn.dataset.action;
-        if (action === 'chat') {
+            const target = btn.dataset.target;
+            if (target === 'federation' && !hasShownSplash) {
+                hasShownSplash = true;
+                showVideoSplash(() => switchPage('federation'));
+            } else {
+                switchPage(target);
+            }
+        } else if (btn.dataset.action === 'chat') {
             e.preventDefault();
-            handleChatInput(btn.dataset.question);
-        } else if (action === 'show-company') {
+            const question = btn.dataset.question;
+            document.getElementById('ai-input').value = question;
+            // 模拟发送（可复用原聊天逻辑，此处简单跳转并提示）
+            switchPage('ai-assistant');
+            setTimeout(() => {
+                const event = new Event('submit', { cancelable: true });
+                document.getElementById('chat-form').dispatchEvent(event);
+            }, 300);
+        } else if (btn.dataset.action === 'show-company') {
             e.preventDefault();
             showCompanyDetail(btn.dataset.id);
+        } else if (btn.classList.contains('tab-item')) {
+            e.preventDefault();
+            const target = btn.dataset.target;
+            if (target === 'federation' && !hasShownSplash) {
+                hasShownSplash = true;
+                showVideoSplash(() => switchPage('federation'));
+            } else {
+                switchPage(target);
+            }
         }
     });
 
-    // AI聊天逻辑
+    // 聊天表单提交
     const chatForm = document.getElementById('chat-form');
     const aiInput = document.getElementById('ai-input');
     const chatContent = document.getElementById('chat-content');
 
-    window.handleChatInput = function(text) {
-        if (!text) return;
-        aiInput.value = text;
-        simulateSend();
-    };
-
     chatForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const text = aiInput.value.trim();
-        if (text) simulateSend();
-    });
-
-    function simulateSend() {
-        const question = aiInput.value;
+        if (!text) return;
         aiInput.value = '';
-        
+
         const userBubble = document.createElement('div');
         userBubble.className = 'flex gap-3 items-start justify-end mb-6 animate-fade-in-up';
         userBubble.innerHTML = `
             <div class="chat-bubble p-4 max-w-[85%] bg-primary-600 text-white border-primary-600" style="border-radius: 16px 16px 4px 16px;">
-                <p class="text-sm leading-relaxed">${question}</p>
+                <p class="text-sm leading-relaxed">${text}</p>
             </div>
             <div class="w-8 h-8 rounded-full bg-primary-100 flex-shrink-0 flex items-center justify-center text-primary-600 text-xs shadow-sm mt-1">
                 <i class="fa-solid fa-user"></i>
@@ -1332,10 +1416,10 @@
 
             const replyBubble = document.createElement('div');
             replyBubble.className = 'flex gap-3 items-start mb-6 animate-fade-in-up';
-            let replyText = "收到您的问题：" + question + "。正在为您查询...";
-            if(question.includes("入会")) replyText = "加入联合会非常简单！\n1. 点击底部【联合会】标签。\n2. 选择会员类型（个人¥300/年，企业¥1980/年起）。\n3. 填写资料并提交审核。";
-            if(question.includes("签证") || question.includes("留港")) replyText = "关于留港签证（IANG）：\n内地人才可通过本平台的【留港工作推荐】服务获得支持。基础版仅需¥1980 起。";
-            if(question.includes("补贴") || question.includes("园区")) replyText = "福州新区产业园提供多重补贴：\n- 租金减免：最高免租 3 年\n- 税收优惠：企业所得税减免\n建议点击【产业园】标签查看。";
+            let replyText = "收到您的问题：" + text + "。正在为您查询...";
+            if(text.includes("入会")) replyText = "加入联合会非常简单！\n1. 点击底部【联合会】标签。\n2. 选择会员类型（个人¥300/年，企业¥1980/年起）。\n3. 填写资料并提交审核。";
+            if(text.includes("签证") || text.includes("留港")) replyText = "关于留港签证（IANG）：\n内地人才可通过本平台的【留港工作推荐】服务获得支持。基础版仅需¥1980 起。";
+            if(text.includes("补贴") || text.includes("园区")) replyText = "福州新区产业园提供多重补贴：\n- 租金减免：最高免租 3 年\n- 税收优惠：企业所得税减免\n建议点击【产业园】标签查看。";
 
             replyBubble.innerHTML = `
                 <div class="w-8 h-8 rounded-full bg-indigo-100 flex-shrink-0 flex items-center justify-center text-indigo-600 text-xs shadow-sm mt-1">
@@ -1348,7 +1432,7 @@
             chatContent.appendChild(replyBubble);
             scrollToBottom();
         }, 1500);
-    }
+    });
 
     function scrollToBottom() {
         const page = document.getElementById('ai-assistant');
@@ -1377,6 +1461,8 @@
             });
         });
     });
+
+    // 处理AI助手预置问题点击 (已由事件代理处理)
 })();
 </script>
 </body>
