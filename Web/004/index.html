@@ -1,369 +1,1538 @@
-﻿<!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <title>小孙同学</title>
-  <meta name="language" content="zh-CN">
-  <meta name="title" content="小孙同学">
-  <meta name="github" content="https://github.com/sun0225SUN/Awesome-Love-Code">
-  <meta name="describe" content="收集不易，您的star是我坚持的动力，同时也欢迎各位PR哦! ">
-  <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/sun0225SUN/photos/img/20210715233345.png">
-  <link type="text/css" rel="stylesheet" href="css/theme.css" />
-  <script src="js/jquery-2.0.3.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="description" content="闽港科创一体化服务平台 - 链接香港与内地科创资源">
+    <title>闽港科创一体化服务平台</title>
+    
+    <!-- 资源预加载 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Noto Sans SC', 'sans-serif'] },
+                    colors: {
+                        primary: { 50: '#eff6ff', 100: '#dbeafe', 500: '#2563eb', 600: '#1d4ed8', 700: '#1e40af', 900: '#1e3a8a' },
+                        secondary: { 50: '#fff7ed', 500: '#f97316', 600: '#ea580c', 700: '#c2410c' },
+                        hk: { 50: '#f5f3ff', 500: '#8b5cf6', 600: '#7c3aed' }
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'float': '0 10px 25px -5px rgba(37, 99, 235, 0.15)',
+                        'glow': '0 0 20px rgba(124, 58, 237, 0.4)'
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'slide-in-right': 'slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards'
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        slideInRight: {
+                            '0%': { opacity: '0', transform: 'translateX(20px)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --safe-area-top: env(safe-area-inset-top, 20px);
+            --safe-area-bottom: env(safe-area-inset-bottom, 20px);
+            --nav-height: calc(80px + var(--safe-area-bottom));
+            --ai-input-area-height: calc(52px + 10px); 
+        }
+
+        body { 
+            background: #f1f5f9; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh;
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+            overscroll-behavior-y: none;
+        }
+
+        .device-frame {
+            width: 100%;
+            max-width: 390px;
+            height: 844px;
+            max-height: 95vh;
+            background: #ffffff;
+            border-radius: 40px;
+            border: 8px solid #0f172a;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (max-width: 420px) {
+            .device-frame { border-width: 0; border-radius: 0; max-height: 100vh; height: 100vh; }
+        }
+
+        .dynamic-island {
+            width: 120px; height: 35px; background: #000; border-radius: 20px;
+            position: absolute; top: 12px; left: 50%; transform: translateX(-50%); z-index: 100;
+        }
+
+        .page-container {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            padding-top: calc(var(--safe-area-top) + 50px);
+            padding-bottom: calc(var(--nav-height) + var(--ai-input-area-height) + 20px);
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        #company-detail.page-container {
+            padding-bottom: calc(var(--nav-height) + 20px);
+        }
+
+        .page-container.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .page-container::-webkit-scrollbar { display: none; }
+        .page-container { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card:active { transform: scale(0.98); }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+        .btn-hk {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+        }
+
+        .tab-bar {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: var(--nav-height);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(226, 232, 240, 0.8);
+            display: flex;
+            justify-content: space-around;
+            padding-bottom: var(--safe-area-bottom);
+            z-index: 50;
+        }
+
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            color: #94a3b8;
+            font-size: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 20%;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .tab-item i { font-size: 20px; transition: transform 0.2s; }
+        .tab-item.active { color: #2563eb; }
+        .tab-item.active i { transform: translateY(-2px); filter: drop-shadow(0 2px 4px rgba(37, 99, 235, 0.3)); }
+        
+        .tab-item[data-target="ai-assistant"].active { color: #7c3aed; }
+        .tab-item[data-target="ai-assistant"].active i { 
+            transform: translateY(-2px) scale(1.1);
+            filter: drop-shadow(0 2px 4px rgba(124, 58, 237, 0.4)); 
+            animation: pulse-slow 2s infinite;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 99px;
+            font-size: 10px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        .badge-hk { background: #f5f3ff; color: #7c3aed; border: 1px solid #e9d5ff; }
+        .badge-summit { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+        .badge-vip { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+        .badge-ai { background: #f5f3ff; color: #7c3aed; border: 1px solid #e9d5ff; }
+        .badge-industry { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+
+        /* 轮播区域样式 */
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 24px;
+            height: 180px; 
+            width: 100%;
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.15);
+            background: #e2e8f0;
+            touch-action: pan-y pinch-zoom;
+        }
+        .carousel-track {
+            display: flex;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 100%;
+            width: 100%;
+            cursor: grab;
+        }
+        .carousel-track:active { cursor: grabbing; }
+        .carousel-slide {
+            min-width: 100%;
+            position: relative;
+            flex-shrink: 0;
+            height: 100%;
+            user-select: none;
+            -webkit-user-drag: element;
+        }
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            object-position: center;
+            display: block;
+            pointer-events: none;
+        }
+        .carousel-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.6) 60%, rgba(15, 23, 42, 0.1) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 20px 24px;
+            color: white;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .carousel-overlay button { pointer-events: auto; }
+        .carousel-indicators {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            z-index: 10;
+        }
+        .indicator {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .indicator.active { background: white; width: 18px; border-radius: 3px; }
+
+        .ai-input-wrapper {
+            position: absolute;
+            bottom: calc(var(--nav-height) + 10px);
+            left: 0;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+            z-index: 60;
+            pointer-events: none;
+        }
+
+        .ai-input-form {
+            pointer-events: auto;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 99px;
+            padding: 6px 6px 6px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .ai-input-form:focus-within {
+            box-shadow: 0 15px 35px -5px rgba(124, 58, 237, 0.25);
+            border-color: #a78bfa;
+            transform: translateY(-2px);
+        }
+        .ai-input-field {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 15px;
+            color: #334155;
+            height: 40px;
+            line-height: 40px;
+        }
+        .ai-input-field::placeholder { color: #94a3b8; }
+        .ai-send-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .ai-send-btn:active { transform: scale(0.95); }
+
+        .chat-bubble {
+            background: white;
+            border-radius: 16px 16px 16px 4px;
+            border: 1px solid #e2e8f0;
+            word-wrap: break-word;
+        }
+        
+        .typing-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: #94a3b8;
+            animation: typing 1.4s infinite ease-in-out both;
+            margin: 0 2px;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        .detail-header-img {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+            mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+        }
+        .back-btn {
+            position: absolute;
+            top: calc(var(--safe-area-top) + 10px);
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(4px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        .video-card {
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(226, 232, 240, 0.6);
+        }
+        .video-card:active { transform: scale(0.98); }
+        .video-thumb {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background-color: #e2e8f0;
+            position: relative;
+        }
+        .play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 36px;
+            height: 36px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2563eb;
+            font-size: 14px;
+        }
+
+        .category-tab {
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 500;
+            background: #f1f5f9;
+            color: #475569;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            cursor: pointer;
+            border: none;
+        }
+        .category-tab.active {
+            background: #2563eb;
+            color: white;
+            box-shadow: 0 4px 10px -2px rgba(37, 99, 235, 0.3);
+        }
+
+        /* 联合会一级分类样式 */
+        .primary-category-wrapper {
+            padding: 0 16px;
+            margin-bottom: 20px;
+        }
+        .primary-filter-group {
+            display: flex;
+            gap: 12px;
+            background: #ffffff;
+            border-radius: 60px;
+            padding: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .primary-filter-chip {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 600;
+            background: transparent;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .primary-filter-chip.active {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: white;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+        }
+        
+        /* 联合会二级分类滚动样式 */
+        .secondary-filter-wrapper {
+            position: relative;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+            white-space: nowrap;
+            padding: 0 16px;
+            margin-bottom: 20px;
+        }
+        .secondary-filter-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+        .secondary-filter-group {
+            display: inline-flex;
+            gap: 12px;
+            padding: 4px 0;
+        }
+        .secondary-filter-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+            background: #f1f5f9;
+            color: #475569;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            gap: 6px;
+        }
+        .secondary-filter-chip i { font-size: 11px; }
+        .secondary-filter-chip.active {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+        .secondary-filter-chip .count-badge {
+            background: rgba(0,0,0,0.1);
+            padding: 2px 6px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        .secondary-filter-chip.active .count-badge {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* 联合会美化头部样式 */
+        .federation-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #2d3a4f 100%);
+            border-radius: 28px;
+            padding: 24px 20px;
+            margin: 16px 16px 20px 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        .federation-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(139,92,246,0.3) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .federation-header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(37,99,235,0.25) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        
+        /* 联合会会员卡片样式 */
+        .member-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+        .member-card:active { transform: scale(0.98); }
+        .member-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .share-btn {
+            opacity: 0.5;
+            transition: all 0.2s;
+            padding: 8px;
+            border-radius: 50%;
+        }
+        .share-btn:active { 
+            opacity: 1; 
+            background: #f1f5f9;
+            transform: scale(0.9);
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 32px;
+            width: calc(100% - 48px);
+            max-width: 320px;
+            padding: 24px;
+        }
+
+        /* 浮层样式 - 倒计时卡片移至底部 */
+        .video-splash {
+            position: absolute;
+            inset: 0;
+            background: transparent;
+            z-index: 9999;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .video-splash.show {
+            pointer-events: auto;
+            opacity: 1;
+        }
+        .splash-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .splash-mini-card {
+            position: relative;
+            z-index: 10;
+            background: rgba(20, 30, 40, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 60px;
+            padding: 5px 5px;
+            border: 1px solid rgba(255,255,255,0.25);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            margin-bottom: 50px;
+        }
+        .splash-mini-card .separator {
+            width: 1px;
+            height: 18px;
+            background: rgba(255,255,255,0.4);
+            margin: 0 4px;
+        }
+        .splash-mini-card .skip-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.5);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .splash-mini-card .skip-btn i { font-size: 11px; }
+        .splash-mini-card .skip-btn:active {
+            background: white;
+            color: #1e293b;
+            transform: scale(0.96);
+        }
+    </style>
 </head>
-
 <body>
-  <div id="div_container">
-    <!-- 最外层div，用于居中兼容PC和移动 -->
-    <div id="div_start_bg"></div>
-    <div id="div_onlyyou">
-      <!-- 用于设置背景 -->
-      <div id="div_oy_inner">
-        <!-- 用于存放content -->
-        <div class="div_oy_text">
-          <h1></h1>
-          <img class="img_oy_text" src="" />
-          <p class="p_oy_text"></p>
-          <div></div>
 
-          <ul id="ul_oy_benefit">
-            <li class="li_oy_benefit"></li>
-            <li class="li_oy_benefit"></li>
-            <li class="li_oy_benefit"></li>
-            <li class="li_oy_benefit"></li>
-            <li class="li_oy_benefit"></li>
-            <li class="li_oy_benefit"></li>
-            <li class="li_oy_benefit"></li>
-            <li class="li_oy_benefit"></li>
-            <li class="li_oy_benefit"></li>
-            <li class="li_oy_benefit"></li>
-            <li class="li_oy_benefit"></li>
-            <li class="li_oy_benefit"></li>
-            <li class="li_oy_benefit"></li>
-            <li class="li_oy_benefit"></li>
-            <li class="li_oy_benefit"></li>
-            <li class="li_oy_benefit"></li>
-            <li class="li_oy_benefit"></li>
-            <li class="li_oy_benefit"></li>
-            <li class="li_oy_benefit"></li>
-            <li class="li_oy_benefit"></li>
-          </ul>
+<div class="device-frame" role="application" aria-label="闽港科创一体化服务平台">
+    <div class="dynamic-island"></div>
+    
+    <!-- 状态栏 -->
+    <header class="absolute top-0 w-full h-[50px] flex justify-between items-end pb-2 px-6 z-50 pointer-events-none bg-gradient-to-b from-white/90 to-transparent">
+        <time id="clock" class="text-sm font-semibold text-slate-800">09:41</time>
+        <div class="flex items-center gap-1.5 text-slate-800">
+            <i class="fa-solid fa-signal text-xs"></i>
+            <i class="fa-solid fa-wifi text-xs"></i>
+            <i class="fa-solid fa-battery-full text-xs"></i>
         </div>
-        <ul id="ul_oy_btn">
+    </header>
+    
+    <!-- 首页（视频分类区） -->
+    <main id="home" class="page-container active" aria-label="首页">
+        <div class="px-5 mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <h1 class="text-xl font-bold text-slate-900 tracking-tight">闽港科创<span class="text-primary-600">一体化</span></h1>
+                    <p class="text-xs text-slate-500 font-medium mt-0.5">香港科技青年联合会 · 官方平台</p>
+                </div>
+                <button class="w-9 h-9 rounded-full bg-primary-50 flex items-center justify-center text-primary-600 font-bold text-xs shadow-sm" data-action="navigate" data-target="profile">
+                    <i class="fa-solid fa-user"></i>
+                </button>
+            </div>
+            
+            <div class="relative">
+                <input type="text" placeholder="搜索政策、人才、园区..." class="w-full py-3 pl-11 pr-4 rounded-2xl bg-white border border-slate-200 text-sm focus:outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-50 shadow-soft">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+            </div>
+        </div>
 
-          <li onclick="oy_go_next()">Yes&nbsp;&nbsp;❤</li>
-          <li onclick="oy_show_benefit()">No&nbsp;&nbsp;✖</li>
-        </ul>
-        <div id="div_oy_note" onclick="oy_hide_note()">
-          <img src="images/emoji_kelian.jpg" alt="" /><br />请告诉我Yes！
-          <div id="div_oy_note_close">✖</div>
+        <!-- 轮播区域 -->
+        <section class="px-5 mb-6">
+            <div class="carousel-container" id="banner-carousel">
+                <div class="carousel-track" id="carousel-track">
+                    <div class="carousel-slide">
+                        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="福州新区产业园" draggable="false">
+                        <div class="carousel-overlay">
+                            <span class="bg-emerald-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full w-fit mb-2">🏢 已入驻园区</span>
+                            <h2 class="text-white text-lg font-bold mb-1">福州新区闽港产业园</h2>
+                            <p class="text-slate-100 text-xs mb-3">50+ 科创企业已入驻 · 享专属政策扶持</p>
+                            <button class="bg-white/20 backdrop-blur-md text-white text-xs font-semibold px-4 py-1.5 rounded-full w-fit border border-white/30" data-action="navigate" data-target="park">查看入驻企业</button>
+                        </div>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="数字中国峰会" draggable="false">
+                        <div class="carousel-overlay">
+                            <span class="bg-secondary-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full w-fit mb-2">2026 数字中国峰会</span>
+                            <h2 class="text-white text-lg font-bold mb-1">闽港科创对接会</h2>
+                            <p class="text-slate-100 text-xs mb-3">资源整合 · 服务落地 · 产业孵化</p>
+                            <button class="bg-white/20 backdrop-blur-md text-white text-xs font-semibold px-4 py-1.5 rounded-full w-fit border border-white/30" data-action="navigate" data-target="federation">峰会招商专区</button>
+                        </div>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="未来香港大赛" draggable="false">
+                        <div class="carousel-overlay">
+                            <span class="bg-hk-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full w-fit mb-2">品牌 IP 活动</span>
+                            <h2 class="text-white text-lg font-bold mb-1">未来香港科创大赛</h2>
+                            <p class="text-slate-100 text-xs mb-3">百万奖金池 · 顶级创投对接</p>
+                            <button class="bg-white/20 backdrop-blur-md text-white text-xs font-semibold px-4 py-1.5 rounded-full w-fit border border-white/30">立即报名</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-indicators" id="indicators">
+                    <div class="indicator active"></div>
+                    <div class="indicator"></div>
+                    <div class="indicator"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 快捷导航卡片 -->
+        <nav class="px-5 grid grid-cols-4 gap-y-6 gap-x-2 mb-8">
+            <a href="https://www.hkstyf.org/" class="flex flex-col items-center gap-2 group">
+                <div class="w-14 h-14 rounded-2xl bg-purple-50 flex items-center justify-center text-hk-500 shadow-sm group-active:scale-95 transition-transform">
+                    <i class="fa-solid fa-robot text-lg"></i>
+                </div>
+                <span class="text-[11px] font-medium text-slate-700">未来香港</span>
+            </a>
+            <button data-action="navigate" data-target="park" class="flex flex-col items-center gap-2 group">
+                <div class="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center text-secondary-600 shadow-sm group-active:scale-95 transition-transform">
+                    <i class="fa-solid fa-building text-lg"></i>
+                </div>
+                <span class="text-[11px] font-medium text-slate-700">园区入驻</span>
+            </button>
+            <button data-action="navigate" data-target="federation" class="flex flex-col items-center gap-2 group">
+                <div class="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-primary-600 shadow-sm group-active:scale-95 transition-transform">
+                    <i class="fa-solid fa-id-card text-lg"></i>
+                </div>
+                <span class="text-[11px] font-medium text-slate-700">数字峰会</span>
+            </button>
+            <button data-action="navigate" data-target="mall" class="flex flex-col items-center gap-2 group">
+                <div class="w-14 h-14 rounded-2xl bg-red-50 flex items-center justify-center text-red-500 shadow-sm group-active:scale-95 transition-transform">
+                    <i class="fa-solid fa-bag-shopping text-lg"></i>
+                </div>
+                <span class="text-[11px] font-medium text-slate-700">人才服务</span>
+            </button>
+        </nav>
+
+        <!-- 视频专区部分 -->
+        <section class="px-5 pb-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-slate-800 text-base">📹 视频专区</h3>
+                <span class="text-[11px] text-slate-400">闽港科创 · 精彩瞬间</span>
+            </div>
+            <div class="flex gap-2 mb-4 overflow-x-auto pb-1" style="-webkit-overflow-scrolling: touch; scrollbar-width: none;">
+                <button class="category-tab active" data-category="all">全部</button>
+                <button class="category-tab" data-category="park">园区</button>
+                <button class="category-tab" data-category="hk">港区</button>
+                <button class="category-tab" data-category="summit">数字峰会</button>
+                <button class="category-tab" data-category="more">更多</button>
+            </div>
+            <div class="grid grid-cols-2 gap-3" id="video-container">
+                <div class="video-card cursor-pointer" data-category="park">
+                    <div class="video-thumb">
+                        <img src="https://images.unsplash.com/photo-1588702547923-7093a6c3ba33?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover">
+                        <div class="play-icon"><i class="fa-solid fa-play"></i></div>
+                    </div>
+                    <div class="p-2"><p class="text-xs font-bold text-slate-800 truncate">福州新区产业园宣传片</p><p class="text-[9px] text-slate-400 mt-1">园区 · 2026</p></div>
+                </div>
+                <div class="video-card cursor-pointer" data-category="hk">
+                    <div class="video-thumb">
+                        <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover">
+                        <div class="play-icon"><i class="fa-solid fa-play"></i></div>
+                    </div>
+                    <div class="p-2"><p class="text-xs font-bold text-slate-800 truncate">香港青年内地科创行</p><p class="text-[9px] text-slate-400 mt-1">港区 · 探访闽港园</p></div>
+                </div>
+                <div class="video-card cursor-pointer" data-category="summit">
+                    <div class="video-thumb">
+                        <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover">
+                        <div class="play-icon"><i class="fa-solid fa-play"></i></div>
+                    </div>
+                    <div class="p-2"><p class="text-xs font-bold text-slate-800 truncate">数字中国峰会·闽港对接</p><p class="text-[9px] text-slate-400 mt-1">峰会 · 2026</p></div>
+                </div>
+                <div class="video-card cursor-pointer" data-category="more">
+                    <div class="video-thumb">
+                        <img src="https://images.unsplash.com/photo-1560523160-754a9e25c68f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover">
+                        <div class="play-icon"><i class="fa-solid fa-play"></i></div>
+                    </div>
+                    <div class="p-2"><p class="text-xs font-bold text-slate-800 truncate">入园政策解读会</p><p class="text-[9px] text-slate-400 mt-1">更多 · 福州新区专场</p></div>
+                </div>
+                <div class="video-card cursor-pointer" data-category="park">
+                    <div class="video-thumb">
+                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover">
+                        <div class="play-icon"><i class="fa-solid fa-play"></i></div>
+                    </div>
+                    <div class="p-2"><p class="text-xs font-bold text-slate-800 truncate">闽港园入驻企业访谈</p><p class="text-[9px] text-slate-400 mt-1">园区 · 易健康科技</p></div>
+                </div>
+                <div class="video-card cursor-pointer" data-category="hk">
+                    <div class="video-thumb">
+                        <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover">
+                        <div class="play-icon"><i class="fa-solid fa-play"></i></div>
+                    </div>
+                    <div class="p-2"><p class="text-xs font-bold text-slate-800 truncate">香港科创大赛回顾</p><p class="text-[9px] text-slate-400 mt-1">港区 · 2025</p></div>
+                </div>
+                <div class="video-card cursor-pointer" data-category="summit">
+                    <div class="video-thumb">
+                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover">
+                        <div class="play-icon"><i class="fa-solid fa-play"></i></div>
+                    </div>
+                    <div class="p-2"><p class="text-xs font-bold text-slate-800 truncate">峰会开幕式精彩集锦</p><p class="text-[9px] text-slate-400 mt-1">峰会 · 主论坛</p></div>
+                </div>
+                <div class="video-card cursor-pointer" data-category="more">
+                    <div class="video-thumb">
+                        <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover">
+                        <div class="play-icon"><i class="fa-solid fa-play"></i></div>
+                    </div>
+                    <div class="p-2"><p class="text-xs font-bold text-slate-800 truncate">科创企业融资指南</p><p class="text-[9px] text-slate-400 mt-1">更多 · 创投对接</p></div>
+                </div>
+            </div>
+            <div class="mt-4 text-center">
+                <button class="text-xs text-primary-600 font-medium bg-primary-50 px-5 py-2 rounded-full shadow-sm inline-flex items-center gap-1">查看更多视频 <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </section>
+    </main>
+
+    <!-- ================= 2. AI 助手 ================= -->
+    <main id="ai-assistant" class="page-container bg-slate-50" aria-label="AI 智能助手">
+        <div class="absolute top-0 left-0 w-full h-80 bg-gradient-to-b from-indigo-50 via-purple-50/30 to-transparent -z-10 pointer-events-none"></div>
+        <div class="px-6 mb-6 text-center relative z-10 pt-6">
+            <div class="flex items-center justify-center gap-3 mb-4">
+                <h1 class="text-2xl font-black text-slate-800 tracking-tight text-left whitespace-nowrap">
+                    HI！你好<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">我是小博~</span>
+                </h1>
+                <img 
+                    src="https://images.rescld.cn/mingangpark/8bcac4ecd0008205e335b7789a1d315d.jpg" 
+                    alt="小博形象" 
+                    class="w-20 h-20 object-contain drop-shadow-md flex-shrink-0"
+                    onerror="this.onerror=null; this.src='https://via.placeholder.com/80x80?text=小博';"
+                >
+            </div>
+            <p class="text-sm text-slate-500 mb-4 font-medium">您的闽港科创智能业务顾问</p>
+            <div class="flex justify-center gap-2 mb-2 flex-wrap">
+                <span class="badge badge-ai"><i class="fa-solid fa-bolt text-[9px] mr-1"></i>豆包 Pro</span>
+                <span class="badge badge-ai"><i class="fa-solid fa-brain text-[9px] mr-1"></i>通义千问</span>
+                <span class="badge badge-ai"><i class="fa-solid fa-rocket text-[9px] mr-1"></i>DeepSeek</span>
+            </div>
         </div>
-        <div id="div_oy_yes">
-          <img src="images/emoji_bixin.jpg" alt="" /><br />太好了！哈哈~
+
+        <div id="chat-content" class="px-5 space-y-6 pb-4">
+            <div class="flex gap-3 items-start animate-fade-in-up">
+                <div class="w-8 h-8 rounded-full bg-indigo-100 flex-shrink-0 flex items-center justify-center text-indigo-600 text-xs shadow-sm mt-1">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+                <div class="chat-bubble p-4 max-w-[85%]">
+                    <p class="text-sm text-slate-700 leading-relaxed">您好！我可以帮您解答关于<strong>联合会入会</strong>、<strong>留港签证</strong>、<strong>园区政策</strong>等问题。请问今天有什么可以帮您？</p>
+                </div>
+            </div>
+
+            <div class="animate-fade-in-up" style="animation-delay: 0.1s;">
+                <h3 class="text-[11px] font-bold text-slate-400 mb-3 uppercase tracking-wider pl-1">大家都在问</h3>
+                <div class="space-y-2">
+                    <button class="card w-full p-3 flex items-center gap-3 text-left hover:bg-slate-50 transition group" 
+                            data-action="chat" data-question="如何申请加入联合会？">
+                        <div class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center text-primary-600 flex-shrink-0 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-file-signature text-sm"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-semibold text-slate-700">如何申请加入联合会？</p>
+                            <p class="text-[10px] text-slate-400">个人/企业会员流程详解</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+                    </button>
+                    <button class="card w-full p-3 flex items-center gap-3 text-left hover:bg-slate-50 transition group" 
+                            data-action="chat" data-question="留港工作签证怎么办？">
+                        <div class="w-9 h-9 rounded-lg bg-orange-50 flex items-center justify-center text-secondary-600 flex-shrink-0 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-passport text-sm"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-semibold text-slate-700">留港工作签证怎么办？</p>
+                            <p class="text-[10px] text-slate-400">IANG 签证最新政策解读</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+                    </button>
+                    <button class="card w-full p-3 flex items-center gap-3 text-left hover:bg-slate-50 transition group" 
+                            data-action="chat" data-question="福州新区产业园有什么补贴？">
+                        <div class="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 flex-shrink-0 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-coins text-sm"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-semibold text-slate-700">福州新区产业园有什么补贴？</p>
+                            <p class="text-[10px] text-slate-400">税收减免与租金优惠详情</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
+
+        <div class="ai-input-wrapper">
+            <form id="chat-form" class="ai-input-form">
+                <label for="ai-input" class="sr-only">输入问题</label>
+                <input type="text" id="ai-input" placeholder="输入您的问题，例如：入会流程..." 
+                    class="ai-input-field" autocomplete="off" enterkeyhint="send">
+                <button type="submit" class="ai-send-btn" aria-label="发送">
+                    <i class="fa-solid fa-paper-plane text-sm"></i>
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <!-- ================= 3. 产业园专区 ================= -->
+    <main id="park" class="page-container bg-slate-50" aria-label="产业园专区">
+        <div class="sticky top-0 bg-white/95 backdrop-blur-md z-40 border-b border-slate-100 px-5 py-4">
+            <h2 class="text-lg font-bold text-slate-900">闽港科创产业园</h2>
+            <p class="text-[11px] text-slate-500">福州新区管委会 · 联动运营</p>
+        </div>
+        <div class="px-5 py-6 space-y-6">
+            <div class="bg-gradient-to-br from-orange-500 to-red-600 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-10 -mt-10 blur-2xl"></div>
+                <div class="relative z-10">
+                    <span class="bg-white/20 text-white text-[10px] font-bold px-2 py-1 rounded mb-3 inline-block">数字中国峰会专属</span>
+                    <h3 class="font-bold text-xl mb-2">园区入驻绿色通道</h3>
+                    <p class="text-xs text-orange-100 mb-4">峰会期间申请，享租金减免 + 政策优先申报</p>
+                    <button class="w-full py-3 bg-white text-orange-600 rounded-xl text-sm font-bold shadow-lg active:scale-95" id="submit-intention-btn">提交入驻意向</button>
+                </div>
+            </div>
+            <div class="card p-5">
+                <h4 class="font-bold text-slate-800 text-sm mb-3">园区核心优势</h4>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-slate-50 p-3 rounded-xl"><i class="fa-solid fa-location-dot text-primary-500 mb-2"></i><p class="text-xs font-bold text-slate-700">区位优势</p><p class="text-[10px] text-slate-500">福州新区核心地段</p></div>
+                    <div class="bg-slate-50 p-3 rounded-xl"><i class="fa-solid fa-handshake text-primary-500 mb-2"></i><p class="text-xs font-bold text-slate-700">闽港特色</p><p class="text-[10px] text-slate-500">专属港企服务区</p></div>
+                    <div class="bg-slate-50 p-3 rounded-xl"><i class="fa-solid fa-file-contract text-primary-500 mb-2"></i><p class="text-xs font-bold text-slate-700">政策扶持</p><p class="text-[10px] text-slate-500">税收减免 + 补贴</p></div>
+                    <div class="bg-slate-50 p-3 rounded-xl"><i class="fa-solid fa-users text-primary-500 mb-2"></i><p class="text-xs font-bold text-slate-700">产业聚集</p><p class="text-[10px] text-slate-500">50+ 闽港科创企业</p></div>
+                </div>
+            </div>
+            
+            <div class="card p-5">
+                <h4 class="font-bold text-slate-800 text-sm mb-3">已入驻企业案例</h4>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3 pb-3 border-b border-slate-50 cursor-pointer group" 
+                         data-action="show-company" data-id="hk-ai-tech">
+                        <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500 group-hover:bg-primary-50 group-hover:text-primary-600 transition-colors">HK</div>
+                        <div class="flex-1">
+                            <p class="text-xs font-bold text-slate-700 group-hover:text-primary-600 transition-colors">香港 易健康科技有限公司</p>
+                            <p class="text-[10px] text-slate-400">人工智能 · 峰会首批入驻</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                    <div class="flex items-center gap-3 cursor-pointer group" 
+                         data-action="show-company" data-id="fz-bio-tech">
+                        <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500 group-hover:bg-primary-50 group-hover:text-primary-600 transition-colors">FZ</div>
+                        <div class="flex-1">
+                            <p class="text-xs font-bold text-slate-700 group-hover:text-primary-600 transition-colors">福州 XX 生物科技</p>
+                            <p class="text-[10px] text-slate-400">生物医药 · 闽港合作示范</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ================= 4. 联合会专区（两级分类筛选） ================= -->
+    <main id="federation" class="page-container bg-slate-50" aria-label="联合会专区">
+        <!-- 顶部美化横幅 -->
+        <div class="federation-header">
+            <div class="relative z-10">
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <h2 class="text-xl font-bold text-white">香港科技青年联合会</h2>
+                        <p class="text-xs text-slate-300 mt-1">链接香港 · 服务内地 · 科创共赢</p>
+                    </div>
+                    <i class="fa-solid fa-building-columns text-3xl text-white/30"></i>
+                </div>
+                <div class="flex gap-2">
+                    <div class="bg-white/20 rounded-full px-3 py-1 text-xs text-white">会员单位 200+</div>
+                    <div class="bg-white/20 rounded-full px-3 py-1 text-xs text-white">港企服务 50+</div>
+                    <div class="bg-white/20 rounded-full px-3 py-1 text-xs text-white">创投机构 30+</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 一级分类：企业会员 / 在港央企 / 个人会员 -->
+        <div class="primary-category-wrapper">
+            <div class="primary-filter-group">
+                <div class="primary-filter-chip active" data-primary="enterprise">企业会员</div>
+                <div class="primary-filter-chip" data-primary="hk-corp">在港央企</div>
+                <div class="primary-filter-chip" data-primary="personal">个人会员</div>
+            </div>
+        </div>
+
+        <!-- 二级分类（可左右滑动） -->
+        <div class="secondary-filter-wrapper" id="secondary-scroll">
+            <div class="secondary-filter-group" id="secondary-group">
+                <!-- 二级分类动态生成 -->
+            </div>
+        </div>
+
+        <!-- 会员列表区域 -->
+        <div class="px-4 pb-6" id="member-container"></div>
+
+        <!-- 技术支持信息 -->
+        <div class="px-5 py-4 text-center border-t border-slate-100 mt-2">
+            <p class="text-[10px] text-slate-400">链接香港 · 服务内地 · 科创共赢</p>
+        </div>
+    </main>
+
+    <!-- ================= 5. 商城专区 ================= -->
+    <main id="mall" class="page-container bg-slate-50" aria-label="商城专区">
+        <div class="sticky top-0 bg-white/95 backdrop-blur-md z-40 border-b border-slate-100 px-5 py-4 flex justify-between items-center">
+            <h2 class="text-lg font-bold text-slate-900">科创服务商城</h2>
+            <div class="text-[10px] bg-red-50 text-red-600 px-2 py-1 rounded font-bold flex items-center gap-1"><i class="fa-solid fa-tag"></i> 峰会特惠</div>
+        </div>
+        <div class="px-5 pt-4">
+            <div class="bg-blue-50 border border-blue-100 rounded-xl p-3 flex items-center justify-between">
+                <div class="flex items-center gap-2"><i class="fa-solid fa-gem text-primary-600"></i><span class="text-xs font-medium text-primary-800">会员专享：个人 9 折 / 企业 8 折</span></div>
+                <button class="text-[10px] text-primary-600 font-bold underline" data-action="navigate" data-target="federation">立即入会</button>
+            </div>
+        </div>
+        <div class="px-5 py-4">
+            <h3 class="font-bold text-slate-800 text-sm mb-3 flex items-center gap-2"><i class="fa-solid fa-star text-yellow-500"></i> 联合会独家支撑</h3>
+            <div class="space-y-4">
+                <article class="card p-4 border-l-4 border-l-hk-500">
+                    <div class="flex justify-between items-start mb-2"><h4 class="font-bold text-slate-800 text-sm">留港工作推荐</h4><span class="badge badge-hk">人才办背书</span></div>
+                    <p class="text-[11px] text-slate-500 mb-3">专为内地科创人才打造，岗位匹配 + 工签指导 + 生活配套</p>
+                    <div class="flex gap-2 mb-3">
+                        <div class="flex-1 bg-slate-50 p-2 rounded-lg border border-slate-100"><p class="text-[10px] font-bold text-slate-600">基础版</p><p class="text-xs font-bold text-secondary-600">¥1980</p></div>
+                        <div class="flex-1 bg-hk-50 p-2 rounded-lg border border-hk-100"><p class="text-[10px] font-bold text-hk-700">尊享版</p><p class="text-xs font-bold text-secondary-600">¥5980</p></div>
+                    </div>
+                    <button class="w-full py-2 btn-hk text-xs font-bold rounded-lg">查看详情</button>
+                </article>
+                <article class="card p-4 border-l-4 border-l-primary-500">
+                    <div class="flex justify-between items-start mb-2"><h4 class="font-bold text-slate-800 text-sm">在港企业服务包</h4><span class="badge badge-vip">全流程托管</span></div>
+                    <p class="text-[11px] text-slate-500 mb-3">注册 · 财税 · 知识产权 · 法务，联合会在港监管</p>
+                    <div class="flex gap-2 mb-3">
+                        <div class="flex-1 bg-slate-50 p-2 rounded-lg border border-slate-100"><p class="text-[10px] font-bold text-slate-600">启航包</p><p class="text-xs font-bold text-secondary-600">¥5980</p></div>
+                        <div class="flex-1 bg-primary-50 p-2 rounded-lg border border-primary-100"><p class="text-[10px] font-bold text-primary-700">进阶包</p><p class="text-xs font-bold text-secondary-600">¥9800</p></div>
+                    </div>
+                    <button class="w-full py-2 btn-primary text-xs font-bold rounded-lg">查看详情</button>
+                </article>
+                <article class="card p-4 border-l-4 border-l-emerald-500">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-bold text-slate-800 text-sm">跨境高管体检服务</h4>
+                        <span class="badge badge-industry">联合会定点</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mb-3">联合香港顶尖医疗机构，专为跨境人才提供深度筛查、报告解读及就医绿色通道。</p>
+                    <div class="flex gap-2 mb-3">
+                        <div class="flex-1 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                            <p class="text-[10px] font-bold text-slate-600">标准版</p>
+                            <p class="text-xs font-bold text-secondary-600">¥2980</p>
+                        </div>
+                        <div class="flex-1 bg-emerald-50 p-2 rounded-lg border border-emerald-100">
+                            <p class="text-[10px] font-bold text-emerald-700">定制版</p>
+                            <p class="text-xs font-bold text-secondary-600">¥6800</p>
+                        </div>
+                    </div>
+                    <button class="w-full py-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-xs font-bold rounded-lg shadow-md active:scale-95 transition-transform">查看套餐详情</button>
+                </article>
+            </div>
+        </div>
+        <div class="px-5 py-2">
+            <h3 class="font-bold text-slate-800 text-sm mb-3">科创配套 & 资源对接</h3>
+            <div class="grid grid-cols-2 gap-3">
+                <div class="card p-3"><div class="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center text-secondary-600 mb-2"><i class="fa-solid fa-handshake"></i></div><p class="text-xs font-bold text-slate-700">创投机构对接</p><p class="text-[10px] text-slate-400 mt-1">BP 优化 + 精准匹配</p></div>
+                <div class="card p-3"><div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 mb-2"><i class="fa-solid fa-file-signature"></i></div><p class="text-xs font-bold text-slate-700">政策申报指导</p><p class="text-[10px] text-slate-400 mt-1">闽港双向补贴</p></div>
+                <div class="card p-3"><div class="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center text-hk-500 mb-2"><i class="fa-solid fa-gift"></i></div><p class="text-xs font-bold text-slate-700">峰会文创周边</p><p class="text-[10px] text-slate-400 mt-1">定制礼品 / 帆布袋</p></div>
+                <div class="card p-3"><div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-primary-600 mb-2"><i class="fa-solid fa-chalkboard-user"></i></div><p class="text-xs font-bold text-slate-700">卷王出海训练营</p><p class="text-[10px] text-slate-400 mt-1">品牌 IP 活动报名</p></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ================= 6. 我的 ================= -->
+    <main id="profile" class="page-container bg-slate-50" aria-label="个人中心">
+        <div class="px-6 pt-8 pb-6 bg-white rounded-b-[32px] shadow-sm mb-6">
+            <div class="flex items-center gap-5">
+                <div class="w-20 h-20 rounded-full bg-slate-100 overflow-hidden border-4 border-white shadow-md">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=User&backgroundColor=b6e3f4" alt="用户头像" class="w-full h-full">
+                </div>
+                <div class="flex-1">
+                    <h2 class="text-xl font-bold text-slate-900">张先生</h2>
+                    <div class="flex items-center gap-2 mt-2">
+                        <span class="text-[10px] bg-slate-100 text-slate-500 px-2.5 py-1 rounded-md font-medium">普通会员</span>
+                        <span class="text-[10px] text-slate-400">ID: 8829301</span>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-3 gap-4 mt-6 text-center divide-x divide-slate-100">
+                <div><p class="text-lg font-bold text-slate-800">0</p><p class="text-[11px] text-slate-400 mt-1">我的订单</p></div>
+                <div><p class="text-lg font-bold text-slate-800">0</p><p class="text-[11px] text-slate-400 mt-1">优惠券</p></div>
+                <div><p class="text-lg font-bold text-slate-800">0</p><p class="text-[11px] text-slate-400 mt-1">积分</p></div>
+            </div>
+        </div>
+        <div class="px-5 space-y-3">
+            <button class="card w-full p-4 flex justify-between items-center" data-action="navigate" data-target="park">
+                <div class="flex items-center gap-4">
+                    <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-primary-500"><i class="fa-solid fa-file-contract text-sm"></i></div>
+                    <span class="text-sm font-medium text-slate-700">入驻申请记录</span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+            </button>
+            <button class="card w-full p-4 flex justify-between items-center" data-action="navigate" data-target="park">
+                <div class="flex items-center gap-4">
+                    <div class="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center text-secondary-500"><i class="fa-solid fa-building-circle-check text-sm"></i></div>
+                    <span class="text-sm font-medium text-slate-700">平台入驻</span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+            </button>
+            <button class="card w-full p-4 flex justify-between items-center"><div class="flex items-center gap-4"><div class="w-8 h-8 rounded-lg bg-hk-50 flex items-center justify-center text-hk-500"><i class="fa-solid fa-id-card text-sm"></i></div><span class="text-sm font-medium text-slate-700">会员权益中心</span></div><i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i></button>
+            <button class="card w-full p-4 flex justify-between items-center"><div class="flex items-center gap-4"><div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-500"><i class="fa-solid fa-headset text-sm"></i></div><span class="text-sm font-medium text-slate-700">联系客服</span></div><i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i></button>
+        </div>
+    </main>
+
+    <!-- ================= 7. 企业详情页 ================= -->
+    <main id="company-detail" class="page-container bg-white" aria-label="企业详情">
+        <div class="back-btn" data-action="navigate" data-target="park">
+            <i class="fa-solid fa-arrow-left text-slate-700"></i>
+        </div>
+        <div class="relative">
+            <img id="detail-img" src="" alt="企业封面" class="detail-header-img">
+            <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-white to-transparent"></div>
+        </div>
+        <div class="px-6 -mt-10 relative z-10">
+            <div class="bg-white rounded-2xl shadow-lg p-5 mb-6 border border-slate-100">
+                <div class="flex justify-between items-start mb-2">
+                    <h1 id="detail-name" class="text-xl font-bold text-slate-900 leading-tight">企业名称</h1>
+                    <span id="detail-badge" class="badge badge-industry">行业</span>
+                </div>
+                <div class="flex items-center gap-3 text-[11px] text-slate-500 mb-4">
+                    <span class="flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> <span id="detail-location">地点</span></span>
+                    <span class="flex items-center gap-1"><i class="fa-solid fa-calendar"></i> <span id="detail-date">入驻时间</span></span>
+                </div>
+                <button class="w-full py-2.5 btn-primary rounded-xl text-sm font-bold shadow-md active:scale-95 transition-transform">
+                    <i class="fa-solid fa-handshake mr-2"></i>联系合作
+                </button>
+            </div>
+            <div class="mb-6">
+                <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-align-left text-primary-500"></i> 企业简介
+                </h3>
+                <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                    <p id="detail-desc" class="text-sm text-slate-600 leading-relaxed whitespace-pre-line">加载中...</p>
+                </div>
+            </div>
+            <div class="mb-6">
+                <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-box-open text-primary-500"></i> 核心产品与服务
+                </h3>
+                <div id="detail-products" class="space-y-2"></div>
+            </div>
+            <div class="mb-8">
+                <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-medal text-primary-500"></i> 荣誉资质
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                    <span class="badge badge-vip">高新技术企业</span>
+                    <span class="badge badge-hk">闽港合作示范单位</span>
+                    <span class="badge badge-summit">数字中国峰会参展商</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部导航栏 -->
+    <nav class="tab-bar" role="navigation">
+        <button class="tab-item active" data-target="home"><i class="fa-solid fa-house"></i><span>首页</span></button>
+        <button class="tab-item" data-target="ai-assistant"><i class="fa-solid fa-robot"></i><span>AI 助手</span></button>
+        <button class="tab-item" data-target="federation"><i class="fa-solid fa-building"></i><span>联合会</span></button>
+        <button class="tab-item" data-target="mall"><i class="fa-solid fa-flag"></i><span>商城</span></button>
+        <button class="tab-item" data-target="profile"><i class="fa-solid fa-bag-shopping"></i><span>我的</span></button>
+    </nav>
+
+    <!-- 联合会入驻意向弹窗 -->
+    <div id="intention-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-slate-900">🤝 平台入驻意向</h3>
+                <button id="close-modal" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition">
+                    <i class="fa-solid fa-times text-sm"></i>
+                </button>
+            </div>
+            <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-4 text-white mb-4">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fa-solid fa-crown text-yellow-400 text-xl"></i>
+                    <span class="text-sm font-bold">平台入驻 · 专属通道</span>
+                </div>
+                <p class="text-xs text-slate-300">链接各大高校 · 对接顶级创投机构 · 享受政策扶持</p>
+            </div>
+            <div class="space-y-4">
+                <div><label class="text-xs font-semibold text-slate-700 block mb-1">企业/个人名称</label><input type="text" placeholder="请输入名称" class="w-full p-3 border border-slate-200 rounded-xl text-sm"></div>
+                <div><label class="text-xs font-semibold text-slate-700 block mb-1">联系人</label><input type="text" placeholder="姓名" class="w-full p-3 border border-slate-200 rounded-xl text-sm"></div>
+                <div><label class="text-xs font-semibold text-slate-700 block mb-1">联系电话</label><input type="tel" placeholder="手机号码" class="w-full p-3 border border-slate-200 rounded-xl text-sm"></div>
+                <div><label class="text-xs font-semibold text-slate-700 block mb-1">意向类型</label><select class="w-full p-3 border border-slate-200 rounded-xl text-sm bg-white"><option>个人会员入会</option><option>企业会员入会</option><option>园区入驻咨询</option><option>投融资对接</option><option>产学研合作</option></select></div>
+                <button class="w-full py-3 btn-hk rounded-xl text-sm font-bold mt-2">提交意向 <i class="fa-solid fa-paper-plane ml-1"></i></button>
+                <p class="text-[10px] text-slate-400 text-center mt-3">提交后，秘书处将在2个工作日内联系您</p>
+            </div>
+        </div>
     </div>
-    <div class="div_pure_words">
-      <div class="div_pure_words_bg">
-        <div class="div_pure_words_height"></div>
-      </div>
-      <div class="div_pw_typed">
-        <span id="span_pw_typed"></span>
-      </div>
-    </div>
-    <div id="div_btn_container">
-      <div id="div_btn_inner">
 
-        <div class="div_music_tips"></div>
-        <div class="div_btn" id="div_music" onclick="music_switch()">
-          <!-- 音乐按钮部分 -->
-          <img id="img_music" src="images/music_note_big.png"
-            style="-webkit-animation: music_play_rotate 1s linear infinite;" />
-          <!-- 您的浏览器不支持播放音乐 -->
-          <audio id="audio_music" autoplay="autoplay" loop="loop">
-            <source type="audio/mpeg" />
-          </audio>
+    <!-- 浮层 -->
+    <div id="video-splash" class="video-splash">
+        <video id="splash-video" class="splash-video" muted playsinline>
+            <source src="https://images.rescld.cn/mingangpark/2e89073ed72e80671165b204c78a7ba0.mp4" type="video/mp4">
+        </video>
+        <div class="splash-mini-card">
+            <span>✨ 联合会 · 转开财富大门</span>
+            <span class="separator"></span>
+            <span id="splash-countdown">6s</span>
+            <button id="skip-splash" class="skip-btn">跳过 <i class="fa-solid fa-forward"></i></button>
         </div>
-        <div class="div_record_tips"></div>
-        <div class="div_btn" id="div_record" onclick="record_switch()">
-          <audio id="audio_record" loop="loop">
-            <source type="audio/mpeg" />
-          </audio>
-        </div>
-
-      </div>
-
     </div>
+</div>
 
-  </div>
-
-
-  <script>
-    //判断客户端设备，选择写入meta
-    function init_viewport() {
-      if (navigator.userAgent.indexOf("Android") != -1) {
-        var version = parseFloat(RegExp.$1);
-        if (version > 2.3) {
-          var width =
-            window.outerWidth == 0 ? window.screen.width : window.outerWidth;
-          var phoneScale = parseInt(width) / 500;
-          document.write(
-            '<meta name="viewport" content="width=500, minimum-scale = ' +
-            phoneScale +
-            ", maximum-scale = " +
-            phoneScale +
-            ', target-densitydpi=device-dpi">'
-          );
-        } else {
-          document.write(
-            '<meta name="viewport" content="width=500, target-densitydpi=device-dpi, user-scalable=0">'
-          );
-        }
-      } else if (navigator.userAgent.indexOf("iPhone") != -1) {
-        var phoneScale = parseInt(window.screen.width) / 500;
-        document.write(
-          '<meta name="viewport" content="width=500, min-height=750, initial-scale=' +
-          phoneScale +
-          ", maximum-scale=" +
-          phoneScale +
-          ', user-scalable=0" /> '
-        ); //0.75   0.82
-      } else {
-        document.write(
-          '<meta name="viewport" content="width=500, height=750, initial-scale=0.64" /> '
-        ); //0.75  0.82
-      }
+<script>
+(function() {
+    // 时间更新
+    function updateTime() {
+        const clock = document.getElementById('clock');
+        if (clock) clock.textContent = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
     }
-    init_viewport();
+    setInterval(updateTime, 1000);
+    updateTime();
 
-    var theme = "pure_words";
-    console.log("theme ->" + theme);
-    var theme_content = {
-      pure_words_content:
-        "遇见你，是我所有美好故事的开始，看见你的第一眼，上帝就在我耳边说了四个字，在劫难逃!\n你的过去我来不及参与，你的未来我一定奉陪到底！\n我爱你！<um style='color: #F44336;'>💕</um>",
-      typed_bool: "typed_y",
-      cursor_char: "cursor_heart",
-      bg_style_pure_words: "bg_opacity",
-      bg_img: "images/3.jpg",
-      simple_page_content: "",
-      video_page_content: "",
-    };
-    console.log(theme_content);
+    // 轮播图逻辑
+    const track = document.getElementById('carousel-track');
+    const slides = document.querySelectorAll('.carousel-slide');
+    const indicators = document.querySelectorAll('.indicator');
+    let currentIndex = 0, totalSlides = slides.length, startX = 0, currentX = 0, isDragging = false, autoTimer = null;
 
-    var music_json = {
-      music_select: "m_online",
-      m_online_id: "7",
-      m_online_url: "images/1.mp3",
-      m_upload_name: "null",
-      m_upload_url: "null",
-    };
-    console.log(music_json);
-    var record_json = {
-      record_bool: "r_false",
-      r_wechat_time: "null",
-      r_wechat_url: "null",
-      r_wechat_amr: "null",
-    };
-    console.log(record_json);
+    function updateCarousel(index, animate = true) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        currentIndex = index;
+        if (!animate) track.style.transition = 'none';
+        else track.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+        indicators.forEach((ind, idx) => ind.classList.toggle('active', idx === currentIndex));
+        setTimeout(() => { if (animate) track.style.transition = ''; }, 50);
+    }
+    function nextSlide() { updateCarousel((currentIndex + 1) % totalSlides); }
+    function startAutoPlay() { if (autoTimer) clearInterval(autoTimer); autoTimer = setInterval(nextSlide, 5000); }
+    function stopAutoPlay() { clearInterval(autoTimer); autoTimer = null; }
 
-    var main_title = "我喜欢你❤️";
-
-    // console.log(main_title);
-    if (main_title == "" || main_title == "null") {
-      //允许标题为空
-      document.title = "慢慢喜欢你";
+    if (track && slides.length) {
+        track.addEventListener('touchstart', (e) => { stopAutoPlay(); startX = e.touches[0].clientX; currentX = startX; isDragging = true; track.style.transition = 'none'; }, { passive: true });
+        track.addEventListener('touchmove', (e) => { if (!isDragging) return; currentX = e.touches[0].clientX; track.style.transform = `translateX(calc(-${currentIndex*100}% + ${currentX-startX}px))`; }, { passive: true });
+        track.addEventListener('touchend', () => { if (!isDragging) return; isDragging = false; const diff = currentX - startX; if (Math.abs(diff) > 50) updateCarousel(diff > 0 ? currentIndex - 1 : currentIndex + 1); else updateCarousel(currentIndex); startAutoPlay(); });
+        indicators.forEach((ind, idx) => { ind.addEventListener('click', () => { stopAutoPlay(); updateCarousel(idx); startAutoPlay(); }); });
+        updateCarousel(0); startAutoPlay();
+        const carouselContainer = document.getElementById('banner-carousel');
+        if (carouselContainer) { carouselContainer.addEventListener('mouseenter', stopAutoPlay); carouselContainer.addEventListener('mouseleave', startAutoPlay); }
     }
 
-    var window_height = $(window).height();
-    console.log("window_height ->" + window_height);
-    var pure_words_content = theme_content["pure_words_content"];
-    var str_cursorChar;
-    var typed_bool;
-    var interval_pw_height;
-    var height_div_pw = $(".div_pure_words_height").height();
-    function init_pure_words() {
-      $(".div_pure_words_height").html(pure_words_content + "22222"); //初始化复制内容，撑开文档高度
-      // 初始化设置div的bg图片 初始化设置div的bg图片
-      if (
-        typeof theme_content["bg_style_pure_words"] != "undefined" &&
-        theme_content["bg_style_pure_words"] == "bg_opacity"
-      ) {
-        if (
-          typeof theme_content["bg_img"] != "undefined" &&
-          theme_content["bg_img"] != ""
-        ) {
-          $(".div_pure_words_bg").css({
-            "background-image": "url(" + theme_content["bg_img"] + ")",
-          });
-        }
-      }
-      //以下是打字效果的js
-      if (
-        typeof theme_content["cursor_char"] != "undefined" &&
-        theme_content["cursor_char"] != ""
-      ) {
-        switch (
-        theme_content["cursor_char"] //设置打字光标的样式
-        ) {
-          case "cursor_heart":
-            str_cursorChar = '<um style="color: #F44336;">❤</um>';
-            break;
-          case "cursor_sub":
-            str_cursorChar = "_";
-            break;
-          case "cursor_music":
-            str_cursorChar = "♫";
-            break;
-          case "cursor_star":
-            str_cursorChar = "★";
-            break;
-          case "cursor_sun":
-            str_cursorChar = "☀";
-            break;
-          default:
-            str_cursorChar = "|";
-        }
-      } else {
-        //处理全新作品，默认显示打字效果
-        str_cursorChar = "❤";
-      }
-      //判断用户有没有选择打字效果
-      if (
-        typeof theme_content["typed_bool"] != "undefined" &&
-        theme_content["typed_bool"] != ""
-      ) {
-        typed_bool = theme_content["typed_bool"] == "typed_y" ? true : false;
-      } else {
-        typed_bool = false; //默认显示打字效果
-      }
-      display_pure_words();
-      $(".div_pure_words").fadeIn();
-      interval_pw_height = setInterval(function () {
-        console.log(
-          "div_pure_words_height -> " + $(".div_pure_words_height").height()
-        );
-        var least_height_div_pw = $(".div_pure_words_height").height();
-        if (least_height_div_pw > height_div_pw) {
-          height_div_pw = least_height_div_pw;
-        } else {
-          clearInterval(interval_pw_height);
-          $(".div_pure_words_height").height(least_height_div_pw + 100);
-          if ($(".div_pure_words_height").height() < window_height) {
-            $(".div_pure_words_height").height(window_height); //不能小于窗口的高度
-            console.log("let us be high as window");
-          }
-        }
-      }, 100);
+    // 页面切换
+    const pages = document.querySelectorAll('.page-container');
+    const tabs = document.querySelectorAll('.tab-item');
+    function switchPage(targetId) {
+        pages.forEach(p => p.classList.toggle('active', p.id === targetId));
+        tabs.forEach(t => t.classList.toggle('active', t.dataset.target === targetId));
+        if (targetId === 'ai-assistant') setTimeout(() => document.getElementById('ai-input')?.focus(), 300);
     }
 
-    function display_pure_words() {
-      if (typed_bool) {
-        var typed_pure_words = new Typed("#span_pw_typed", {
-          strings: [pure_words_content],
-          //输入内容, 支持html标签
-          typeSpeed: 120,
-          //打字速度
-          cursorChar: str_cursorChar,
-          //替换光标的样式
-          contentType: "html",
-          //值为html时，将打印的文本标签直接解析html标签
-          onComplete: function (abc) {
-            // console.log(abc);
-            console.log("finished typing words");
-            // console.log($('#span_pw_typed').height()-$(".div_pure_words_height").height());
-          },
+    // 企业数据
+    const companyData = {
+        'hk-ai-tech': { name: '香港易健康科技有限公司', industry: '人工智能', location: '福州新区 · 闽港园 A 栋', date: '2025.11 入驻', image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', desc: '专注于AI医疗的科创企业', products: ['AI 医学影像分析系统', '工业缺陷检测平台'] },
+        'fz-bio-tech': { name: '福州 XX 生物科技', industry: '生物医药', location: '福州新区 · 闽港园 B 栋', date: '2025.08 入驻', image: 'https://images.unsplash.com/photo-1579165466741-7f35a4755657?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', desc: '生物医药研发企业', products: ['肿瘤早筛试剂盒', '新型抗体药物研发'] }
+    };
+    function showCompanyDetail(companyId) {
+        const data = companyData[companyId];
+        if (!data) return;
+        document.getElementById('detail-name').textContent = data.name;
+        document.getElementById('detail-badge').textContent = data.industry;
+        document.getElementById('detail-location').textContent = data.location;
+        document.getElementById('detail-date').textContent = data.date;
+        document.getElementById('detail-img').src = data.image;
+        document.getElementById('detail-desc').textContent = data.desc;
+        const productsContainer = document.getElementById('detail-products');
+        if (productsContainer) { productsContainer.innerHTML = ''; data.products.forEach(prod => { const div = document.createElement('div'); div.className = 'flex items-center gap-3 p-3 bg-white border border-slate-100 rounded-xl shadow-sm'; div.innerHTML = `<div class="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center text-primary-600"><i class="fa-solid fa-cube"></i></div><span class="text-sm">${prod}</span>`; productsContainer.appendChild(div); }); }
+        switchPage('company-detail');
+    }
+
+    // 联合会会员数据
+    const members = [
+        // 企业会员
+        { name: "Magook", type: "enterprise", role: "企业会员", avatar: "M" },
+        { name: "软安科技有限公司", type: "enterprise", role: "企业会员", avatar: "软" },
+        { name: "香港鼎森科技有限公司", type: "enterprise", role: "企业会员", avatar: "鼎" },
+        { name: "淘金者家族办公室", type: "enterprise", role: "企业会员", avatar: "淘" },
+        { name: "常务理事单位示例1", type: "standing", role: "常务理事单位", avatar: "常", parentType: "enterprise" },
+        { name: "常务理事单位示例2", type: "standing", role: "常务理事单位", avatar: "理", parentType: "enterprise" },
+        { name: "珠免国际有限公司", type: "director", role: "理事单位", avatar: "珠", parentType: "enterprise" },
+        { name: "锡客厅（无锡）文化科技", type: "director", role: "理事单位", avatar: "锡", parentType: "enterprise" },
+        { name: "港科青年之家科技", type: "director", role: "理事单位", avatar: "港", parentType: "enterprise" },
+        { name: "明德勤资本", type: "director", role: "理事单位", avatar: "明", parentType: "enterprise" },
+        { name: "Futurei", type: "director", role: "理事单位", avatar: "F", parentType: "enterprise" },
+        { name: "黄鹏智声", type: "director", role: "理事单位", avatar: "黄", parentType: "enterprise" },
+        { name: "Mighty Fountain Capital", type: "permanent", role: "永久企业会员", avatar: "M", parentType: "enterprise" },
+        { name: "深圳黄鹏智能科技", type: "permanent", role: "永久企业会员", avatar: "鹏", parentType: "enterprise" },
+        // 在港央企
+        { name: "中国移动香港", type: "hk-corp", role: "在港央企", avatar: "中", parentType: "hk-corp" },
+        { name: "招商永隆银行", type: "hk-corp", role: "在港央企", avatar: "招", parentType: "hk-corp" },
+        { name: "华润创业", type: "hk-corp", role: "在港央企", avatar: "华", parentType: "hk-corp" },
+        // 个人会员
+        { name: "胡盛龙", type: "personal", role: "会长", avatar: "胡", parentType: "personal" },
+        { name: "许文元", type: "personal", role: "副会长", avatar: "许", parentType: "personal" },
+        { name: "杨瑞", type: "personal", role: "副会长", avatar: "杨", parentType: "personal" },
+        { name: "温庆元", type: "personal", role: "副秘书长", avatar: "温", parentType: "personal" },
+        { name: "陈昊", type: "ai-expert", role: "AI专员", avatar: "陈", parentType: "personal" },
+        { name: "刘志明", type: "personal", role: "荣誉顾问", avatar: "刘", parentType: "personal" },
+        { name: "汪扬", type: "honor", role: "荣誉顾问", avatar: "汪", parentType: "personal" },
+        { name: "陈冠华", type: "honor", role: "荣誉顾问", avatar: "冠", parentType: "personal" },
+        { name: "赵丽娟", type: "honor", role: "荣誉顾问", avatar: "赵", parentType: "personal" },
+        { name: "黄炳逢", type: "honor", role: "荣誉顾问", avatar: "黄", parentType: "personal" }
+    ];
+
+    // 二级分类配置（根据一级分类动态显示）
+    const secondaryConfig = {
+        enterprise: [
+            { key: "all", name: "全部", icon: "fa-layer-group", filter: null },
+            { key: "standing", name: "常务理事单位", icon: "fa-crown", filter: "standing" },
+            { key: "director", name: "理事单位", icon: "fa-handshake", filter: "director" },
+            { key: "permanent", name: "永久企业会员", icon: "fa-gem", filter: "permanent" },
+            { key: "enterprise", name: "企业会员", icon: "fa-chart-line", filter: "enterprise" }
+        ],
+        "hk-corp": [
+            { key: "all", name: "全部", icon: "fa-layer-group", filter: null },
+            { key: "hk-corp", name: "在港央企", icon: "fa-building", filter: "hk-corp" }
+        ],
+        personal: [
+            { key: "all", name: "全部", icon: "fa-layer-group", filter: null },
+            { key: "personal", name: "会长", icon: "fa-user-tie", filter: "personal" },
+            { key: "vice", name: "副会长", icon: "fa-user", filter: "vice" },
+            { key: "honor", name: "荣誉顾问", icon: "fa-medal", filter: "honor" },
+            { key: "secretary", name: "副秘书长", icon: "fa-file-signature", filter: "secretary" },
+            { key: "ai-expert", name: "AI专员", icon: "fa-brain", filter: "ai-expert" }
+        ]
+    };
+
+    // 统计各分类数量
+    function getCountByType(type, parentType = null) {
+        if (type === "all") return members.filter(m => m.parentType === parentType).length;
+        if (type === "vice") return members.filter(m => m.role === "副会长" && m.parentType === "personal").length;
+        if (type === "secretary") return members.filter(m => m.role === "副秘书长" && m.parentType === "personal").length;
+        return members.filter(m => m.type === type && m.parentType === parentType).length;
+    }
+
+    let currentPrimary = "enterprise";
+    let currentSecondary = "all";
+
+    // 渲染二级分类
+    function renderSecondaryFilters() {
+        const secondaryGroup = document.getElementById('secondary-group');
+        if (!secondaryGroup) return;
+        const config = secondaryConfig[currentPrimary];
+        secondaryGroup.innerHTML = config.map(item => {
+            let count = 0;
+            if (item.filter === null) count = getCountByType("all", currentPrimary);
+            else if (item.key === "vice") count = getCountByType("vice", currentPrimary);
+            else if (item.key === "secretary") count = getCountByType("secretary", currentPrimary);
+            else count = getCountByType(item.filter, currentPrimary);
+            return `<div class="secondary-filter-chip ${currentSecondary === item.key ? 'active' : ''}" data-secondary="${item.key}" data-filter="${item.filter || item.key}"><i class="fa-solid ${item.icon}"></i> ${item.name} <span class="count-badge">${count}</span></div>`;
+        }).join('');
+        
+        // 绑定二级分类点击事件
+        document.querySelectorAll('.secondary-filter-chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                document.querySelectorAll('.secondary-filter-chip').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                currentSecondary = this.dataset.secondary;
+                const filterValue = this.dataset.filter;
+                renderMembers(currentPrimary, filterValue === 'all' ? null : filterValue);
+            });
         });
-      } else {
-        //如果不需要打字效果就直接显示
-        $("#span_pw_typed").html(pure_words_content).fadeIn();
-      }
-      init_attachment();
     }
-    var start_content = {
-      chase_title:
-        "做我女朋友好不好<um style='color: #F44336;'>！</um>",
-      chase_text:
-        "承蒙你的出现，够我喜欢好多年，我希望，以后你能用我的名字拒绝所有人<um style='color: #F44336;'>💕</um>",
-      chase_benefit: [
-        "你是我拔掉氧气罐都想吻的人",
-        "你是我跑完8000米还想拥抱的人",
-        "你是我自罚三杯都不肯开口的秘密",
-        "你是我赴汤蹈火都不肯放下的执着",
-        "你是我电量只剩1%也想回信息的人",
-        "你是我穷极一生不想醒来的梦",
-      ],
-      bg_style: "bg_custom",
-      bg_img: "images/2.jpg",
-      img_bool: "img_true",
-      img_src: "images/1.gif",
-    }; //可能为null
-    console.log(start_content);
-    var start_id;
-    $(function () {
-      //此事件为触发互动创意
-      start_id = "onlyyou"; //可能为null
-      init_start(start_id);
+
+    // 渲染会员列表
+    function renderMembers(primaryType, secondaryFilter = null) {
+        const container = document.getElementById('member-container');
+        if (!container) return;
+        let filtered = members.filter(m => m.parentType === primaryType);
+        if (secondaryFilter && secondaryFilter !== 'all') {
+            if (secondaryFilter === 'vice') filtered = filtered.filter(m => m.role === "副会长");
+            else if (secondaryFilter === 'secretary') filtered = filtered.filter(m => m.role === "副秘书长");
+            else filtered = filtered.filter(m => m.type === secondaryFilter);
+        }
+        container.innerHTML = `<div class="grid grid-cols-2 gap-4">${filtered.map(m => `
+            <div class="member-card p-4"><div class="flex items-start gap-3"><div class="member-avatar">${m.avatar.charAt(0)}</div><div class="flex-1"><p class="text-sm font-bold text-slate-800 truncate">${m.name}</p><p class="text-[10px] text-slate-500">${m.role}</p></div><button class="share-btn text-slate-400" onclick="event.stopPropagation(); alert('分享 ${m.name}')"><i class="fa-solid fa-share-alt"></i></button></div></div>
+        `).join('')}</div>${filtered.length === 0 ? '<p class="text-center text-slate-400 py-8">暂无会员</p>' : ''}`;
+    }
+
+    // 绑定一级分类点击事件
+    const primaryChips = document.querySelectorAll('.primary-filter-chip');
+    primaryChips.forEach(chip => {
+        chip.addEventListener('click', function() {
+            primaryChips.forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
+            currentPrimary = this.dataset.primary;
+            currentSecondary = "all";
+            renderSecondaryFilters();
+            renderMembers(currentPrimary, null);
+        });
     });
-    function init_start(start_id) {
-      console.log("init_start ->" + start_id);
-      switch (start_id) {
-        case "loveformat":
-          $(".div_loveformat").show();
-          init_loveformat();
-          break;
-        case "hearttree":
-          $("#div_hearttree").show();
-          init_hearttree();
-          break;
-        case "courage":
-          $("#div_courage").show();
-          init_courage();
-          break;
-        case "birthdaycake":
-          $("#div_dbcake").show();
-          init_birthdaycake();
-          break;
-        case "intersect":
-          $("#div_intersect").show();
-          init_intersect();
-          break;
-        case "onlyyou":
-          $("#div_onlyyou").show();
-          init_onlyyou();
-          break;
-        default:
-          init_theme();
-      }
-    }
-    //开始动画主体部分
-    function init_theme() {
-      console.log("init_theme");
-      $("#div_start_bg").fadeOut();
-      init_pure_words();
-    }
-    var attachment = "null"; //可能为null
-    var attached_content = {
-      bool_save: false,
-    }; //可能为null
-    console.log(attached_content);
 
-    function init_attachment() {
-      //开始attachment
-      console.log("init_attachment ->" + attachment);
-      switch (attachment) {
-        case "timer":
-          init_at_timer();
-          break;
-        default:
-          return;
-      }
+    // 左右滑动支持
+    const secondaryScroll = document.getElementById('secondary-scroll');
+    if (secondaryScroll) {
+        let isDown = false, startXScroll, scrollLeft;
+        secondaryScroll.addEventListener('mousedown', (e) => { isDown = true; startXScroll = e.pageX - secondaryScroll.offsetLeft; scrollLeft = secondaryScroll.scrollLeft; });
+        secondaryScroll.addEventListener('mouseleave', () => { isDown = false; });
+        secondaryScroll.addEventListener('mouseup', () => { isDown = false; });
+        secondaryScroll.addEventListener('mousemove', (e) => { if (!isDown) return; e.preventDefault(); const x = e.pageX - secondaryScroll.offsetLeft; const walk = (x - startXScroll) * 2; secondaryScroll.scrollLeft = scrollLeft - walk; });
+        secondaryScroll.addEventListener('touchstart', (e) => { isDown = true; startXScroll = e.touches[0].pageX - secondaryScroll.offsetLeft; scrollLeft = secondaryScroll.scrollLeft; });
+        secondaryScroll.addEventListener('touchmove', (e) => { if (!isDown) return; const x = e.touches[0].pageX - secondaryScroll.offsetLeft; const walk = (x - startXScroll) * 2; secondaryScroll.scrollLeft = scrollLeft - walk; });
+        secondaryScroll.addEventListener('touchend', () => { isDown = false; });
     }
-  </script>
-  <!-- JQuery -->
-  <script src="js/typed.min.js"></script>
-  <script src="js/start_onlyyou.js"></script>
-  <script src="js/jweixin-1.2.0.js"></script>
-  <script src="js/theme_common.js"></script>
+
+    // 初始化
+    renderSecondaryFilters();
+    renderMembers("enterprise", null);
+
+    // 浮层逻辑
+    const videoSplash = document.getElementById('video-splash');
+    const splashVideo = document.getElementById('splash-video');
+    const skipBtn = document.getElementById('skip-splash');
+    let hasShownSplash = false;
+    function showVideoSplash(callback) {
+        if (!videoSplash) return;
+        videoSplash.style.display = 'flex';
+        videoSplash.classList.add('show');
+        if (splashVideo) splashVideo.play().catch(() => {});
+        let countdown = 6;
+        const countdownSpan = document.getElementById('splash-countdown');
+        const interval = setInterval(() => { countdown--; if (countdownSpan) countdownSpan.innerText = countdown + 's'; }, 1000);
+        let finished = false;
+        const finish = () => { if (finished) return; finished = true; clearInterval(interval); if (splashVideo) splashVideo.pause(); videoSplash.classList.remove('show'); setTimeout(() => videoSplash.style.display = 'none', 300); if (callback) callback(); };
+        if (splashVideo) splashVideo.addEventListener('ended', finish, { once: true });
+        setTimeout(finish, 6000);
+        if (skipBtn) skipBtn.addEventListener('click', finish, { once: true });
+    }
+
+    // 弹窗逻辑
+    const modal = document.getElementById('intention-modal');
+    const closeModal = document.getElementById('close-modal');
+    function showModal() { if (modal) modal.classList.add('show'); }
+    function hideModal() { if (modal) modal.classList.remove('show'); }
+    if (closeModal) closeModal.addEventListener('click', hideModal);
+    if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) hideModal(); });
+    document.getElementById('submit-intention-btn')?.addEventListener('click', (e) => { e.preventDefault(); showModal(); });
+
+    // 全局点击事件
+    document.querySelector('.device-frame').addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-action="navigate"], .tab-item, [data-action="chat"], [data-action="show-company"]');
+        if (!btn) return;
+        if (btn.classList.contains('tab-item') && btn.dataset.target === 'federation') {
+            e.preventDefault();
+            if (!hasShownSplash) { hasShownSplash = true; showVideoSplash(() => switchPage('federation')); }
+            else switchPage('federation');
+            return;
+        }
+        if (btn.dataset.action === 'navigate') {
+            e.preventDefault();
+            const target = btn.dataset.target;
+            if (target === 'federation' && !hasShownSplash) { hasShownSplash = true; showVideoSplash(() => switchPage('federation')); }
+            else switchPage(target);
+        } else if (btn.dataset.action === 'chat') {
+            e.preventDefault();
+            document.getElementById('ai-input').value = btn.dataset.question;
+            switchPage('ai-assistant');
+            setTimeout(() => document.getElementById('chat-form').dispatchEvent(new Event('submit', { cancelable: true })), 300);
+        } else if (btn.dataset.action === 'show-company') {
+            e.preventDefault();
+            showCompanyDetail(btn.dataset.id);
+        } else if (btn.classList.contains('tab-item')) {
+            e.preventDefault();
+            const target = btn.dataset.target;
+            if (target === 'federation' && !hasShownSplash) { hasShownSplash = true; showVideoSplash(() => switchPage('federation')); }
+            else switchPage(target);
+        }
+    });
+
+    // 聊天表单
+    const chatForm = document.getElementById('chat-form');
+    const aiInput = document.getElementById('ai-input');
+    const chatContent = document.getElementById('chat-content');
+    if (chatForm) {
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const text = aiInput.value.trim();
+            if (!text) return;
+            aiInput.value = '';
+            const userBubble = document.createElement('div');
+            userBubble.className = 'flex gap-3 items-start justify-end mb-6';
+            userBubble.innerHTML = `<div class="chat-bubble p-4 max-w-[85%] bg-primary-600 text-white"><p class="text-sm">${text}</p></div><div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center"><i class="fa-solid fa-user"></i></div>`;
+            chatContent.appendChild(userBubble);
+            const loadingBubble = document.createElement('div');
+            loadingBubble.className = 'flex gap-3 items-start mb-6';
+            loadingBubble.innerHTML = `<div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center"><i class="fa-solid fa-robot"></i></div><div class="chat-bubble p-4"><div class="flex gap-1"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div></div>`;
+            chatContent.appendChild(loadingBubble);
+            setTimeout(() => {
+                loadingBubble.remove();
+                const replyBubble = document.createElement('div');
+                replyBubble.className = 'flex gap-3 items-start mb-6';
+                let replyText = text.includes("入会") ? "加入联合会：点击底部【联合会】标签，选择会员类型提交即可。" : "感谢您的咨询，我们会尽快回复。";
+                replyBubble.innerHTML = `<div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center"><i class="fa-solid fa-robot"></i></div><div class="chat-bubble p-4"><p class="text-sm">${replyText}</p></div>`;
+                chatContent.appendChild(replyBubble);
+                document.getElementById('ai-assistant').scrollTo({ top: document.getElementById('ai-assistant').scrollHeight, behavior: 'smooth' });
+            }, 1000);
+        });
+    }
+
+    // 视频分类筛选
+    const categoryTabs = document.querySelectorAll('.category-tab');
+    const videoCards = document.querySelectorAll('.video-card');
+    categoryTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            categoryTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            const cat = this.dataset.category;
+            videoCards.forEach(card => card.style.display = (cat === 'all' || card.dataset.category === cat) ? 'block' : 'none');
+        });
+    });
+})();
+</script>
 </body>
-
 </html>
