@@ -534,11 +534,12 @@
         .member-card {
             background: white;
             border-radius: 20px;
-            overflow: hidden;  /* 保持 hidden 不变 */
+            overflow: visible;  /* 保持 hidden 不变 */
             border: 1px solid rgba(226, 232, 240, 0.6);
             transition: all 0.25s ease;
             box-shadow: 0 2px 8px rgba(0,0,0,0.02);
         }
+        
         .member-card:active { transform: scale(0.98); }
         .member-avatar {
             width: 48px;
@@ -1947,12 +1948,19 @@
             else filtered = filtered.filter(m => m.type === secondaryFilter);
         }
         const cardsHtml = filtered.map(m => {
+            // 个人会员：不截断，允许换行完整显示
+            // 企业会员/在港央企：截断显示省略号
+            const isPersonal = m.parentType === 'personal';
+            const nameClass = isPersonal 
+                ? 'text-sm font-bold text-slate-800 whitespace-normal break-words' 
+                : 'text-sm font-bold text-slate-800 truncate';
+            
             if (m.parentType === 'hk-corp' && m.spriteIndex !== undefined) {
                 const spritePositions = ['0px 0px', '0px -55px', '0px -110px', '0px -165px'];
-                return `<div class="member-card p-3"><div class="flex items-center gap-2"><div class="member-avatar sprite-avatar flex-shrink-0" style="background-position: ${spritePositions[m.spriteIndex]};"></div><div class="flex-1 min-w-0"><p class="text-sm font-bold text-slate-800 truncate">${m.name}</p><p class="text-[10px] text-slate-500 whitespace-normal">${m.role}</p></div><button class="share-btn text-slate-400 flex-shrink-0" onclick="event.stopPropagation(); alert('分享 ${m.name}')"><i class="fa-solid fa-share-alt"></i></button></div></div>`;
+                return `<div class="member-card p-3"><div class="flex items-center gap-2"><div class="member-avatar sprite-avatar flex-shrink-0" style="background-position: ${spritePositions[m.spriteIndex]};"></div><div class="flex-1 min-w-0"><p class="${nameClass}">${m.name}</p><p class="text-[10px] text-slate-500 whitespace-normal">${m.role}</p></div><button class="share-btn text-slate-400 flex-shrink-0" onclick="event.stopPropagation(); alert('分享 ${m.name}')"><i class="fa-solid fa-share-alt"></i></button></div></div>`;
             }
             const avatarHtml = m.avatarImg ? `<img src="${m.avatarImg}" alt="${m.name}" class="w-full h-full object-cover">` : `<span class="text-white text-lg font-bold">${m.avatar ? m.avatar.charAt(0) : '会'}</span>`;
-            return `<div class="member-card p-3"><div class="flex items-center gap-2"><div class="member-avatar flex-shrink-0">${avatarHtml}</div><div class="flex-1 min-w-0"><p class="text-sm font-bold text-slate-800 truncate">${m.name}</p><p class="text-[10px] text-slate-500 whitespace-normal">${m.role}</p></div><button class="share-btn text-slate-400 flex-shrink-0" onclick="event.stopPropagation(); alert('分享 ${m.name}')"><i class="fa-solid fa-share-alt"></i></button></div></div>`;
+            return `<div class="member-card p-3"><div class="flex items-center gap-2"><div class="member-avatar flex-shrink-0">${avatarHtml}</div><div class="flex-1 min-w-0"><p class="${nameClass}">${m.name}</p><p class="text-[10px] text-slate-500 whitespace-normal">${m.role}</p></div><button class="share-btn text-slate-400 flex-shrink-0" onclick="event.stopPropagation(); alert('分享 ${m.name}')"><i class="fa-solid fa-share-alt"></i></button></div></div>`;
         }).join('');
         container.innerHTML = `<div class="grid grid-cols-2 gap-3">${cardsHtml}</div>${filtered.length === 0 ? '<p class="text-center text-slate-400 py-8">暂无会员</p>' : ''}`;
     }
