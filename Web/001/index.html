@@ -1956,7 +1956,7 @@
                 : 'text-sm font-bold text-slate-800 truncate';
             
             if (m.parentType === 'hk-corp' && m.spriteIndex !== undefined) {
-                const spritePositions = ['0px 0px', '0px -55px', '0px -110px', '0px -165px'];
+                const spritePositions = ['0px 0px', '0px -55px', '0px -130px', '0px -165px'];
                 return `<div class="member-card p-3"><div class="flex items-center gap-2"><div class="member-avatar sprite-avatar flex-shrink-0" style="background-position: ${spritePositions[m.spriteIndex]};"></div><div class="flex-1 min-w-0"><p class="${nameClass}">${m.name}</p><p class="text-[10px] text-slate-500 whitespace-normal">${m.role}</p></div><button class="share-btn text-slate-400 flex-shrink-0" onclick="event.stopPropagation(); alert('分享 ${m.name}')"><i class="fa-solid fa-share-alt"></i></button></div></div>`;
             }
             const avatarHtml = m.avatarImg ? `<img src="${m.avatarImg}" alt="${m.name}" class="w-full h-full object-cover">` : `<span class="text-white text-lg font-bold">${m.avatar ? m.avatar.charAt(0) : '会'}</span>`;
