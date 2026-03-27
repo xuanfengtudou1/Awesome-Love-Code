@@ -539,6 +539,19 @@
             transition: all 0.25s ease;
             box-shadow: 0 2px 8px rgba(0,0,0,0.02);
         }
+        .member-card .flex-1 {
+            flex: 1;
+            min-width: 0;  /* 允许flex子项收缩 */
+        }
+
+        /* 企业会员名字：截断显示省略号 */
+        .member-card .text-sm.font-bold.truncate {
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            max-width: 150px !important;
+            display: block !important;
+        }
         
         .member-card:active { transform: scale(0.98); }
         .member-avatar {
