@@ -1313,7 +1313,7 @@
     <!-- ================= 3. 产业园专区 ================= -->
     <main id="park" class="page-container bg-slate-50" aria-label="产业园专区">
         <div class="sticky top-0 bg-white/95 backdrop-blur-md z-40 border-b border-slate-100 px-5 py-4">
-            <h2 class="text-lg font-bold text-slate-900">闽港科创产业园</h2>
+            <h2 class="text-lg font-bold text-slate-900">xxxx产业园</h2>
             <p class="text-[11px] text-slate-500">福州新区管委会 · 联动运营</p>
         </div>
         <div class="px-5 py-6 space-y-6">
@@ -1538,12 +1538,36 @@
                 <div class="mall-indicator"></div>
             </div>
         </div>
+        <!-- 合作品牌专供商 -->
+        <div class="px-4 mt-6">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-xs font-semibold text-slate-600"><i class="fa-regular fa-building mr-1"></i> 合作品牌专供商</span>
+                <button id="applyBrandBtn" class="text-[9px] text-primary-500 font-medium hover:text-primary-600 transition active:scale-95">
+                    申请入驻 <i class="fa-solid fa-arrow-right text-[8px]"></i>
+                </button>
+            </div>
+            <div class="brand-scroll-container overflow-x-auto" id="brandScroll">
+                <div class="brand-list">
+                    <div class="brand-scroll-item"><i class="fa-solid fa-heartbeat text-red-500 text-sm"></i><span>瑞慈体检</span></div>
+                    <div class="brand-scroll-item"><i class="fa-solid fa-heartbeat text-red-500 text-sm"></i><span>易健康体检</span></div>
+                    <div class="brand-scroll-item"><i class="fa-regular fa-gem text-emerald-500 text-sm"></i><span>卓悦</span></div>
+                    <div class="brand-scroll-item"><i class="fa-solid fa-champagne-glasses text-amber-500 text-sm"></i><span>BONJOUR</span></div>
+                    <div class="brand-scroll-item"><i class="fa-solid fa-mobile-screen text-blue-600 text-sm"></i><span>vivo</span></div>
+                    <div class="brand-scroll-item"><i class="fa-solid fa-hand-holding-heart text-emerald-600 text-sm"></i><span>iKang爱康</span></div>
+                    <div class="brand-scroll-item"><i class="fa-solid fa-spa text-purple-500 text-sm"></i><span>珠海爱靓</span></div>
+                    <div class="brand-scroll-item"><i class="fa-solid fa-hospital-user text-cyan-600 text-sm"></i><span>DRHH</span></div>
+                    <div class="brand-scroll-item"><i class="fa-solid fa-leaf text-green-600 text-sm"></i><span>科技青年优选</span></div>
+                </div>
+            </div>
+        </div>
 
+        
         <!-- 推荐服务 -->
         <div class="recommended-section">
             <h2 class="section-title"><i class="fa-solid fa-fire text-red-500"></i>热门推荐</h2>
             <div class="grid grid-cols-2 gap-4" id="hot-products-list"></div>
         </div>
+        
 
         <!-- 商品分类快捷栏 -->
         <div class="px-4 mt-4">
@@ -2297,6 +2321,25 @@
         }
     });
 
+    // 合作品牌专供商 - 申请入驻按钮点击事件
+    const applyBrandBtn = document.getElementById('applyBrandBtn');
+    if (applyBrandBtn) {
+        applyBrandBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            // 先切换到产业园专区页面
+            switchPage('park');
+            // 延迟一小段时间，确保页面切换完成后再触发弹窗
+            setTimeout(() => {
+                const intentionBtn = document.getElementById('submit-intention-btn');
+                if (intentionBtn) {
+                    intentionBtn.click();
+                } else {
+                    // 如果按钮不存在，直接显示弹窗
+                    showModal();
+                }
+            }, 300);
+        });
+    }
     // ================= 初始化 =================
     enableDragScroll(document.getElementById('categoryScroll'));
     enableDragScroll(document.getElementById('brandScroll'));
