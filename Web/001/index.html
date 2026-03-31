@@ -1085,10 +1085,40 @@
         }
 
         .fullscreen-close:hover,
+
         .fullscreen-close:active {
             background: rgba(255,255,255,0.2);
             transform: scale(1.05);
         }
+
+        /* 全屏播放器返回按钮 */
+        .fullscreen-back {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 44px;
+            height: 44px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 10002;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .fullscreen-back:hover,
+        .fullscreen-back:active {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.05);
+        }
+
+
 
         .fullscreen-controls {
             position: absolute;
@@ -2055,6 +2085,9 @@
     </div>
     <!-- 全屏视频播放器 -->
     <div id="fullscreen-video" class="fullscreen-video-container">
+        <div class="fullscreen-back" id="fullscreen-back">
+            <i class="fa-solid fa-arrow-left"></i>
+        </div>
         <div class="fullscreen-close" id="fullscreen-close">
             <i class="fa-solid fa-xmark"></i>
         </div>
@@ -2070,7 +2103,6 @@
         <div class="fullscreen-progress" id="fullscreen-progress">
             <div class="fullscreen-progress-bar" id="fullscreen-progress-bar"></div>
         </div>
-    </div>
     </div>
 </div>
 
@@ -2382,7 +2414,9 @@
     }
     
     // 绑定全屏播放器事件
+    const fullscreenBack = document.getElementById('fullscreen-back');
     if (fullscreenClose) fullscreenClose.addEventListener('click', closeFullscreen);
+    if (fullscreenBack) fullscreenBack.addEventListener('click', closeFullscreen);  // 新增
     if (fullscreenExit) fullscreenExit.addEventListener('click', closeFullscreen);
     if (fullscreenPlayPause) fullscreenPlayPause.addEventListener('click', toggleFullscreenPlay);
     if (fullscreenProgress) fullscreenProgress.addEventListener('click', seekTo);
