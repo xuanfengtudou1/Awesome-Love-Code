@@ -1099,6 +1099,11 @@
 
         /* 全屏播放器返回按钮 - 手机自适应 */
         .fullscreen-back {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        }
+        .fullscreen-back {
             position: absolute;
             top: max(env(safe-area-inset-top, 20px), 20px);
             left: max(env(safe-area-inset-left, 20px), 20px);
