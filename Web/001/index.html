@@ -376,6 +376,7 @@
             border-radius: 16px;
             overflow: hidden;
             border: 1px solid rgba(226, 232, 240, 0.6);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;  /* 新增 */
         }
         .video-card:active { transform: scale(0.98); }
         .video-thumb {
@@ -383,6 +384,19 @@
             aspect-ratio: 16 / 9;
             background-color: #e2e8f0;
             position: relative;
+        }
+        
+        /* 新增的优化样式 */
+        .video-status {
+            backdrop-filter: blur(4px);
+            font-weight: 500;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        /* 播放按钮容器 */
+        .video-card .absolute.bottom-2.right-2 {
+            transition: opacity 0.2s ease;
         }
         .play-icon {
             position: absolute;
@@ -1282,14 +1296,14 @@
                                         <source src="https://ksupload.bookan.com.cn/material/10/304691/2/-1/1774924661806.mp4" type="video/mp4">
                                         您的浏览器不支持 video 标签。
                                     </video>
-                                    <!-- 播放按钮遮罩层 -->
-                                    <div class="absolute inset-0 flex items-center justify-center bg-black/40 transition-all duration-300 group-hover:bg-black/50 video-overlay">
-                                        <div class="play-btn-wrapper w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:bg-white">
-                                            <i class="play-icon-indicator fa-solid fa-play text-primary-600 text-xl ml-0.5"></i>
+                                    <!-- 简洁播放按钮 - 悬浮右下角 -->
+                                    <div class="absolute bottom-2 right-2 transition-all duration-200 opacity-70 group-hover:opacity-100">
+                                        <div class="w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center shadow-md">
+                                            <i class="play-icon-indicator fa-solid fa-play text-white text-xs ml-0.5"></i>
                                         </div>
                                     </div>
-                                    <!-- 视频状态提示 -->
-                                    <div class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2 py-1 rounded-full opacity-0 transition-opacity duration-300 video-status">
+                                    <!-- 视频状态提示（3秒后自动隐藏） -->
+                                    <div class="absolute bottom-2 left-2 bg-black/50 backdrop-blur-sm text-white text-[9px] px-2 py-0.5 rounded-full opacity-0 transition-opacity duration-300 video-status pointer-events-none">
                                         <i class="fa-regular fa-circle-play text-[8px] mr-1"></i>
                                         <span>点击播放</span>
                                     </div>
@@ -1308,12 +1322,12 @@
                                     <video class="w-full h-full object-cover" preload="metadata" muted playsinline loop>
                                         <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
                                     </video>
-                                    <div class="absolute inset-0 flex items-center justify-center bg-black/40 transition-all duration-300 group-hover:bg-black/50 video-overlay">
-                                        <div class="play-btn-wrapper w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:bg-white">
-                                            <i class="play-icon-indicator fa-solid fa-play text-primary-600 text-xl ml-0.5"></i>
+                                    <div class="absolute bottom-2 right-2 transition-all duration-200 opacity-70 group-hover:opacity-100">
+                                        <div class="w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center shadow-md">
+                                            <i class="play-icon-indicator fa-solid fa-play text-white text-xs ml-0.5"></i>
                                         </div>
                                     </div>
-                                    <div class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2 py-1 rounded-full opacity-0 transition-opacity duration-300 video-status">
+                                    <div class="absolute bottom-2 left-2 bg-black/50 backdrop-blur-sm text-white text-[9px] px-2 py-0.5 rounded-full opacity-0 transition-opacity duration-300 video-status pointer-events-none">
                                         <i class="fa-regular fa-circle-play text-[8px] mr-1"></i>
                                         <span>点击播放</span>
                                     </div>
@@ -1332,12 +1346,12 @@
                                     <video class="w-full h-full object-cover" preload="metadata" muted playsinline loop>
                                         <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
                                     </video>
-                                    <div class="absolute inset-0 flex items-center justify-center bg-black/40 transition-all duration-300 group-hover:bg-black/50 video-overlay">
-                                        <div class="play-btn-wrapper w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:bg-white">
-                                            <i class="play-icon-indicator fa-solid fa-play text-primary-600 text-xl ml-0.5"></i>
+                                    <div class="absolute bottom-2 right-2 transition-all duration-200 opacity-70 group-hover:opacity-100">
+                                        <div class="w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center shadow-md">
+                                            <i class="play-icon-indicator fa-solid fa-play text-white text-xs ml-0.5"></i>
                                         </div>
                                     </div>
-                                    <div class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2 py-1 rounded-full opacity-0 transition-opacity duration-300 video-status">
+                                    <div class="absolute bottom-2 left-2 bg-black/50 backdrop-blur-sm text-white text-[9px] px-2 py-0.5 rounded-full opacity-0 transition-opacity duration-300 video-status pointer-events-none">
                                         <i class="fa-regular fa-circle-play text-[8px] mr-1"></i>
                                         <span>点击播放</span>
                                     </div>
@@ -1356,12 +1370,12 @@
                                     <video class="w-full h-full object-cover" preload="metadata" muted playsinline loop>
                                         <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
                                     </video>
-                                    <div class="absolute inset-0 flex items-center justify-center bg-black/40 transition-all duration-300 group-hover:bg-black/50 video-overlay">
-                                        <div class="play-btn-wrapper w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:bg-white">
-                                            <i class="play-icon-indicator fa-solid fa-play text-primary-600 text-xl ml-0.5"></i>
+                                    <div class="absolute bottom-2 right-2 transition-all duration-200 opacity-70 group-hover:opacity-100">
+                                        <div class="w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center shadow-md">
+                                            <i class="play-icon-indicator fa-solid fa-play text-white text-xs ml-0.5"></i>
                                         </div>
                                     </div>
-                                    <div class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2 py-1 rounded-full opacity-0 transition-opacity duration-300 video-status">
+                                    <div class="absolute bottom-2 left-2 bg-black/50 backdrop-blur-sm text-white text-[9px] px-2 py-0.5 rounded-full opacity-0 transition-opacity duration-300 video-status pointer-events-none">
                                         <i class="fa-regular fa-circle-play text-[8px] mr-1"></i>
                                         <span>点击播放</span>
                                     </div>
@@ -1380,12 +1394,12 @@
                                     <video class="w-full h-full object-cover" preload="metadata" muted playsinline loop>
                                         <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
                                     </video>
-                                    <div class="absolute inset-0 flex items-center justify-center bg-black/40 transition-all duration-300 group-hover:bg-black/50 video-overlay">
-                                        <div class="play-btn-wrapper w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:bg-white">
-                                            <i class="play-icon-indicator fa-solid fa-play text-primary-600 text-xl ml-0.5"></i>
+                                    <div class="absolute bottom-2 right-2 transition-all duration-200 opacity-70 group-hover:opacity-100">
+                                        <div class="w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center shadow-md">
+                                            <i class="play-icon-indicator fa-solid fa-play text-white text-xs ml-0.5"></i>
                                         </div>
                                     </div>
-                                    <div class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2 py-1 rounded-full opacity-0 transition-opacity duration-300 video-status">
+                                    <div class="absolute bottom-2 left-2 bg-black/50 backdrop-blur-sm text-white text-[9px] px-2 py-0.5 rounded-full opacity-0 transition-opacity duration-300 video-status pointer-events-none">
                                         <i class="fa-regular fa-circle-play text-[8px] mr-1"></i>
                                         <span>点击播放</span>
                                     </div>
@@ -1404,12 +1418,12 @@
                                     <video class="w-full h-full object-cover" preload="metadata" muted playsinline loop>
                                         <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
                                     </video>
-                                    <div class="absolute inset-0 flex items-center justify-center bg-black/40 transition-all duration-300 group-hover:bg-black/50 video-overlay">
-                                        <div class="play-btn-wrapper w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:bg-white">
-                                            <i class="play-icon-indicator fa-solid fa-play text-primary-600 text-xl ml-0.5"></i>
+                                    <div class="absolute bottom-2 right-2 transition-all duration-200 opacity-70 group-hover:opacity-100">
+                                        <div class="w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center shadow-md">
+                                            <i class="play-icon-indicator fa-solid fa-play text-white text-xs ml-0.5"></i>
                                         </div>
                                     </div>
-                                    <div class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2 py-1 rounded-full opacity-0 transition-opacity duration-300 video-status">
+                                    <div class="absolute bottom-2 left-2 bg-black/50 backdrop-blur-sm text-white text-[9px] px-2 py-0.5 rounded-full opacity-0 transition-opacity duration-300 video-status pointer-events-none">
                                         <i class="fa-regular fa-circle-play text-[8px] mr-1"></i>
                                         <span>点击播放</span>
                                     </div>
@@ -1428,12 +1442,12 @@
                                     <video class="w-full h-full object-cover" preload="metadata" muted playsinline loop>
                                         <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
                                     </video>
-                                    <div class="absolute inset-0 flex items-center justify-center bg-black/40 transition-all duration-300 group-hover:bg-black/50 video-overlay">
-                                        <div class="play-btn-wrapper w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:bg-white">
-                                            <i class="play-icon-indicator fa-solid fa-play text-primary-600 text-xl ml-0.5"></i>
+                                    <div class="absolute bottom-2 right-2 transition-all duration-200 opacity-70 group-hover:opacity-100">
+                                        <div class="w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center shadow-md">
+                                            <i class="play-icon-indicator fa-solid fa-play text-white text-xs ml-0.5"></i>
                                         </div>
                                     </div>
-                                    <div class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2 py-1 rounded-full opacity-0 transition-opacity duration-300 video-status">
+                                    <div class="absolute bottom-2 left-2 bg-black/50 backdrop-blur-sm text-white text-[9px] px-2 py-0.5 rounded-full opacity-0 transition-opacity duration-300 video-status pointer-events-none">
                                         <i class="fa-regular fa-circle-play text-[8px] mr-1"></i>
                                         <span>点击播放</span>
                                     </div>
@@ -1452,12 +1466,12 @@
                                     <video class="w-full h-full object-cover" preload="metadata" muted playsinline loop>
                                         <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
                                     </video>
-                                    <div class="absolute inset-0 flex items-center justify-center bg-black/40 transition-all duration-300 group-hover:bg-black/50 video-overlay">
-                                        <div class="play-btn-wrapper w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:bg-white">
-                                            <i class="play-icon-indicator fa-solid fa-play text-primary-600 text-xl ml-0.5"></i>
+                                    <div class="absolute bottom-2 right-2 transition-all duration-200 opacity-70 group-hover:opacity-100">
+                                        <div class="w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center shadow-md">
+                                            <i class="play-icon-indicator fa-solid fa-play text-white text-xs ml-0.5"></i>
                                         </div>
                                     </div>
-                                    <div class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2 py-1 rounded-full opacity-0 transition-opacity duration-300 video-status">
+                                    <div class="absolute bottom-2 left-2 bg-black/50 backdrop-blur-sm text-white text-[9px] px-2 py-0.5 rounded-full opacity-0 transition-opacity duration-300 video-status pointer-events-none">
                                         <i class="fa-regular fa-circle-play text-[8px] mr-1"></i>
                                         <span>点击播放</span>
                                     </div>
@@ -1469,8 +1483,8 @@
                                     </p>
                                 </div>
                             </div>
-                            </div>
-                        <div class="mt-4 text-center">
+                        </div>
+                         <div class="mt-4 text-center">
                             <button class="text-xs text-primary-600 font-medium bg-primary-50 px-5 py-2 rounded-full shadow-sm inline-flex items-center gap-1 hover:bg-primary-100 transition-all duration-200 active:scale-95">
                                 查看更多视频 <i class="fa-solid fa-arrow-right"></i>
                             </button>
@@ -2393,27 +2407,22 @@
         });
     }
 
-    // ================= 视频卡片交互：点击全屏播放 =================
+    // ================= 视频卡片交互：点击全屏播放（无遮罩版） =================
     document.querySelectorAll('.video-card').forEach(card => {
         const video = card.querySelector('video');
-        const overlay = card.querySelector('.video-overlay');
         const playIcon = card.querySelector('.play-icon-indicator');
         const statusBadge = card.querySelector('.video-status');
         
         if (!video) return;
         
-        // 初始化：显示播放提示
+        // 初始化：显示播放提示（2秒后自动隐藏）
         if (statusBadge) {
+            statusBadge.style.opacity = '1';
             setTimeout(() => {
-                if (video.paused) {
-                    statusBadge.style.opacity = '1';
-                    setTimeout(() => {
-                        if (video.paused) {
-                            statusBadge.style.opacity = '0';
-                        }
-                    }, 2000);
+                if (video.paused && statusBadge) {
+                    statusBadge.style.opacity = '0';
                 }
-            }, 500);
+            }, 2000);
         }
         
         // 鼠标悬停时显示播放提示
@@ -2433,14 +2442,12 @@
         card.addEventListener('click', (e) => {
             e.stopPropagation();
             
-            // 暂停其他所有视频
+            // 暂停其他所有视频并重置图标
             document.querySelectorAll('.video-card video').forEach(v => {
                 if (v !== video && !v.paused) {
                     v.pause();
                     const otherCard = v.closest('.video-card');
-                    const otherOverlay = otherCard?.querySelector('.video-overlay');
                     const otherIcon = otherCard?.querySelector('.play-icon-indicator');
-                    if (otherOverlay) otherOverlay.style.opacity = '1';
                     if (otherIcon) {
                         otherIcon.classList.remove('fa-pause');
                         otherIcon.classList.add('fa-play');
