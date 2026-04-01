@@ -1358,7 +1358,7 @@
                     
                     <!-- 视频网格（优化播放体验 - 整卡可点击，已添加视频封面） -->
                     <div class="px-5">
-                        <div class="grid grid-cols-2 gap-3" id="video-container">
+                    <div class="grid grid-cols-2 gap-3" id="video-container">
                             <!-- 视频1：闽港产业园 -->
                             <div class="video-card rounded-xl overflow-hidden bg-black shadow-md cursor-pointer group transition-all duration-200 hover:shadow-lg" data-category="park">
                                 <div class="relative aspect-video bg-black">
@@ -2442,48 +2442,57 @@
             }
         }
     }
-
-    // 关闭全屏播放器 —— 【修复核心】
-    function closeFullscreen() {
-        if (!fullscreenContainer) return;
-        
-        // 1. 先暂停全屏播放器
-        fullscreenPlayer.pause();
-        
-        const currentTime = fullscreenPlayer.currentTime;
-        
-        // 2. 恢复原视频状态（但不自动播放）
-        if (currentVideoCard) {
-            const originalVideo = currentVideoCard.querySelector('video');
-            if (originalVideo) {
-                originalVideo.currentTime = currentTime;
-                // 【关键】确保原视频保持暂停状态
-                originalVideo.pause();
-                
-                // 重置播放图标为「播放」
-                const originalIcon = currentVideoCard.querySelector('.play-icon-indicator');
-                const originalStatus = currentVideoCard.querySelector('.video-status');
-                if (originalIcon) {
-                    originalIcon.classList.remove('fa-pause');
-                    originalIcon.classList.add('fa-play');
-                }
-                if (originalStatus) {
-                    originalStatus.style.opacity = '0';
-                }
+// 关闭全屏播放器 —— 修复：退出时重置视频封面
+function closeFullscreen() {
+    if (!fullscreenContainer) return;
+    
+    // 1. 先暂停全屏播放器
+    fullscreenPlayer.pause();
+    
+    // 2. 恢复原视频状态并重置封面
+    if (currentVideoCard) {
+        const originalVideo = currentVideoCard.querySelector('video');
+        if (originalVideo) {
+            // 保存当前播放位置
+            const savedTime = originalVideo.currentTime;
+            
+            // 重新加载视频 - 这会触发 poster 显示
+            originalVideo.load();
+            
+            // 重新加载后，如果之前有播放进度，恢复进度
+            if (savedTime > 0) {
+                originalVideo.currentTime = savedTime;
+            }
+            
+            originalVideo.pause();
+            
+            // 重置播放图标
+            const originalIcon = currentVideoCard.querySelector('.play-icon-indicator');
+            const originalStatus = currentVideoCard.querySelector('.video-status');
+            if (originalIcon) {
+                originalIcon.classList.remove('fa-pause');
+                originalIcon.classList.add('fa-play');
+            }
+            if (originalStatus) {
+                originalStatus.querySelector('span').textContent = '点击播放';
+                originalStatus.style.opacity = '1';
+                setTimeout(() => {
+                    if (originalVideo.paused && originalStatus) originalStatus.style.opacity = '0';
+                }, 1500);
             }
         }
-        
-        // 3. 隐藏全屏
-        fullscreenContainer.classList.remove('active');
-        
-        // 4. 清空视频源，彻底停止播放
-        setTimeout(() => {
-            fullscreenPlayer.src = '';
-            fullscreenPlayer.load();
-            currentVideoCard = null;
-        }, 300);
     }
-
+    
+    // 3. 隐藏全屏
+    fullscreenContainer.classList.remove('active');
+    
+    // 4. 清空视频源，彻底停止播放
+    setTimeout(() => {
+        fullscreenPlayer.src = '';
+        fullscreenPlayer.load();
+        currentVideoCard = null;
+    }, 300);
+}
     // 全屏播放/暂停
     function toggleFullscreenPlay() {
         const playPauseIcon = fullscreenPlayPause.querySelector('i');
