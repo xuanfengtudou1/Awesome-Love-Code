@@ -376,13 +376,33 @@
             border-radius: 16px;
             overflow: hidden;
             border: 1px solid rgba(226, 232, 240, 0.6);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;           /* 新增：鼠标变成手型 */
+            position: relative;        /* 新增：用于波纹效果定位 */
         }
         .video-card:active { transform: scale(0.98); }
+        
         .video-thumb {
             width: 100%;
             aspect-ratio: 16 / 9;
             background-color: #e2e8f0;
             position: relative;
+        }
+        
+        /* 中央播放提示样式 */
+        .video-status {
+            backdrop-filter: blur(8px);
+            font-weight: 500;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        /* 右下角播放图标样式 */
+        .video-card .absolute.bottom-2.right-2 {
+            transition: opacity 0.2s ease;
+            pointer-events: none;  /* 确保不阻挡点击 */
         }
         .play-icon {
             position: absolute;
@@ -1019,6 +1039,183 @@
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
+
+        /* 全屏视频播放器 */
+        .fullscreen-video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 10001;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .fullscreen-video-container.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .fullscreen-video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000;
+        }
+
+        .fullscreen-close {
+            position: absolute;
+            top: calc(env(safe-area-inset-top, 20px) + 10px);
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 10002;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .fullscreen-close:hover,
+        .fullscreen-close:active {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* 全屏播放器返回按钮 - 手机自适应 */
+        .fullscreen-back {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        }
+        .fullscreen-back {
+            position: absolute;
+            top: max(env(safe-area-inset-top, 20px), 20px);
+            left: max(env(safe-area-inset-left, 20px), 20px);
+            width: 44px;
+            height: 44px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 10002;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .fullscreen-back:active {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(0.95);
+        }
+
+        /* 全屏播放器关闭按钮 - 手机自适应 */
+        .fullscreen-close {
+            position: absolute;
+            top: max(env(safe-area-inset-top, 20px), 20px);
+            right: max(env(safe-area-inset-right, 20px), 20px);
+            width: 44px;
+            height: 44px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 10002;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .fullscreen-close:active {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(0.95);
+        }
+
+
+
+        .fullscreen-controls {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 15px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .fullscreen-video-container:hover .fullscreen-controls,
+        .fullscreen-controls:hover {
+            opacity: 1;
+        }
+
+        .fullscreen-control-btn {
+            width: 48px;
+            height: 48px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .fullscreen-control-btn:active {
+            transform: scale(0.95);
+            background: rgba(255,255,255,0.4);
+        }
+
+        .fullscreen-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            cursor: pointer;
+        }
+
+        .fullscreen-progress-bar {
+            width: 0%;
+            height: 100%;
+            background: #2563eb;
+            transition: width 0.1s linear;
+        }
     </style>
 </head>
 <body>
@@ -1147,8 +1344,8 @@
                                     <button class="category-tab" data-category="more">其他</button>
                                 </div>
                             </div>
-                            <!-- 右侧渐变提示 -->
-                            <div style="position: absolute; right: 0; top: 0; bottom: 0; width: 50px; background: linear-gradient(90deg, transparent, #ffffff 80%); pointer-events: none; border-radius: 0 20px 20px 0;"></div>
+                            <!-- 右侧渐变提示 有点丑看情况打开 -->
+                            <!-- <div style="position: absolute; right: 0; top: 0; bottom: 0; width: 50px; background: linear-gradient(90deg, transparent, #ffffff 80%); pointer-events: none; border-radius: 0 20px 20px 0;"></div> -->
                         </div>
                         <!-- 滑动提示 -->
                         <div class="mt-1">
@@ -1159,72 +1356,234 @@
                         </div>
                     </div>
                     
-                    <!-- 视频网格 -->
+                    <!-- 视频网格（优化播放体验 - 整卡可点击） -->
                     <div class="px-5">
                         <div class="grid grid-cols-2 gap-3" id="video-container">
-                            <div class="video-card cursor-pointer" data-category="park">
-                                <div class="video-thumb">
-                                    <img src="https://images.unsplash.com/photo-1588702547923-7093a6c3ba33?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover">
-                                    <div class="play-icon"><i class="fa-solid fa-play"></i></div>
+                            <!-- 视频1：闽港产业园 -->
+                            <div class="video-card rounded-xl overflow-hidden bg-black shadow-md cursor-pointer group transition-all duration-200 hover:shadow-lg" data-category="park">
+                                <div class="relative aspect-video bg-black">
+                                    <video class="w-full h-full object-cover cursor-pointer" preload="metadata" muted playsinline loop>
+                                        <source src="https://ksupload.bookan.com.cn/material/10/304691/2/-1/1774924661806.mp4" type="video/mp4">
+                                        您的浏览器不支持 video 标签。
+                                    </video>
+                                    <!-- 播放按钮 - 视觉提示（不阻挡点击） -->
+                                    <div class="absolute bottom-2 right-2 transition-all duration-200 opacity-70 group-hover:opacity-100 pointer-events-none">
+                                        <div class="w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center shadow-md">
+                                            <i class="play-icon-indicator fa-solid fa-play text-white text-xs ml-0.5"></i>
+                                        </div>
+                                    </div>
+                                    <!-- 视频状态提示 - 显示在中央，更醒目 -->
+                                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                        <div class="bg-black/50 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full opacity-0 transition-opacity duration-300 video-status">
+                                            <i class="fa-regular fa-circle-play text-xs mr-1"></i>
+                                            <span>点击播放</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="p-2"><p class="text-xs font-bold text-slate-800 truncate">福州新区产业园宣传片</p><p class="text-[9px] text-slate-400 mt-1">园区 · 2026</p></div>
+                                <div class="p-2 bg-white">
+                                    <p class="text-xs font-bold text-slate-800 truncate">未来香港2025</p>
+                                    <p class="text-[9px] text-slate-400 mt-1 flex items-center gap-1">
+                                        <i class="fa-regular fa-clock"></i> 闽港产业园 · 2026
+                                    </p>
+                                </div>
                             </div>
-                            <div class="video-card cursor-pointer" data-category="hk-corp">
-                                <div class="video-thumb">
-                                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover">
-                                    <div class="play-icon"><i class="fa-solid fa-play"></i></div>
+
+                            <!-- 视频2：在港企业 -->
+                            <div class="video-card rounded-xl overflow-hidden bg-black shadow-md cursor-pointer group transition-all duration-200 hover:shadow-lg" data-category="hk-corp">
+                                <div class="relative aspect-video bg-black">
+                                    <video class="w-full h-full object-cover cursor-pointer" preload="metadata" muted playsinline loop>
+                                        <source src="https://ksupload.bookan.com.cn/material/10/304691/2/-1/1775008444592.mp4" type="video/mp4">
+                                    </video>
+                                    <div class="absolute bottom-2 right-2 transition-all duration-200 opacity-70 group-hover:opacity-100 pointer-events-none">
+                                        <div class="w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center shadow-md">
+                                            <i class="play-icon-indicator fa-solid fa-play text-white text-xs ml-0.5"></i>
+                                        </div>
+                                    </div>
+                                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                        <div class="bg-black/50 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full opacity-0 transition-opacity duration-300 video-status">
+                                            <i class="fa-regular fa-circle-play text-xs mr-1"></i>
+                                            <span>点击播放</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="p-2"><p class="text-xs font-bold text-slate-800 truncate">香港青年内地科创行</p><p class="text-[9px] text-slate-400 mt-1">港区 · 探访闽港园</p></div>
+                                <div class="p-2 bg-white">
+                                    <p class="text-xs font-bold text-slate-800 truncate">香港AI企业加速跑</p>
+                                    <p class="text-[9px] text-slate-400 mt-1 flex items-center gap-1">
+                                        <i class="fa-regular fa-clock"></i> 在港企业 · 2026
+                                    </p>
+                                </div>
                             </div>
-                            <div class="video-card cursor-pointer" data-category="federation">
-                                <div class="video-thumb">
-                                    <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover">
-                                    <div class="play-icon"><i class="fa-solid fa-play"></i></div>
+
+                            <!-- 视频3：联合会 -->
+                            <div class="video-card rounded-xl overflow-hidden bg-black shadow-md cursor-pointer group transition-all duration-200 hover:shadow-lg" data-category="federation">
+                                <div class="relative aspect-video bg-black">
+                                    <video class="w-full h-full object-cover cursor-pointer" preload="metadata" muted playsinline loop>
+                                        <source src="https://ksupload.bookan.com.cn/material/10/304691/2/-1/1775008164688.mp4" type="video/mp4">
+                                    </video>
+                                    <div class="absolute bottom-2 right-2 transition-all duration-200 opacity-70 group-hover:opacity-100 pointer-events-none">
+                                        <div class="w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center shadow-md">
+                                            <i class="play-icon-indicator fa-solid fa-play text-white text-xs ml-0.5"></i>
+                                        </div>
+                                    </div>
+                                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                        <div class="bg-black/50 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full opacity-0 transition-opacity duration-300 video-status">
+                                            <i class="fa-regular fa-circle-play text-xs mr-1"></i>
+                                            <span>点击播放</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="p-2"><p class="text-xs font-bold text-slate-800 truncate">数字中国峰会·闽港对接</p><p class="text-[9px] text-slate-400 mt-1">峰会 · 2026</p></div>
+                                <div class="p-2 bg-white">
+                                    <p class="text-xs font-bold text-slate-800 truncate">联合会福建发展推介会·闽港对接</p>
+                                    <p class="text-[9px] text-slate-400 mt-1 flex items-center gap-1">
+                                        <i class="fa-regular fa-calendar"></i> 联合会 · 2026
+                                    </p>
+                                </div>
+
+                                
                             </div>
-                            <div class="video-card cursor-pointer" data-category="hk-policy">
-                                <div class="video-thumb">
-                                    <img src="https://images.unsplash.com/photo-1560523160-754a9e25c68f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover">
-                                    <div class="play-icon"><i class="fa-solid fa-play"></i></div>
+
+                            <!-- 视频4：香港政策 -->
+                            <div class="video-card rounded-xl overflow-hidden bg-black shadow-md cursor-pointer group transition-all duration-200 hover:shadow-lg" data-category="hk-policy">
+                                <div class="relative aspect-video bg-black">
+                                    <video class="w-full h-full object-cover cursor-pointer" preload="metadata" muted playsinline loop>
+                                        <source src="https://ksupload.bookan.com.cn/material/10/304691/2/-1/1775008655765.MP4" type="video/mp4">
+                                    </video>
+                                    <div class="absolute bottom-2 right-2 transition-all duration-200 opacity-70 group-hover:opacity-100 pointer-events-none">
+                                        <div class="w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center shadow-md">
+                                            <i class="play-icon-indicator fa-solid fa-play text-white text-xs ml-0.5"></i>
+                                        </div>
+                                    </div>
+                                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                        <div class="bg-black/50 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full opacity-0 transition-opacity duration-300 video-status">
+                                            <i class="fa-regular fa-circle-play text-xs mr-1"></i>
+                                            <span>点击播放</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="p-2"><p class="text-xs font-bold text-slate-800 truncate">入园政策解读会</p><p class="text-[9px] text-slate-400 mt-1">更多 · 福州新区专场</p></div>
+                                <div class="p-2 bg-white">
+                                    <p class="text-xs font-bold text-slate-800 truncate">香港打造全球创新发源地</p>
+                                    <p class="text-[9px] text-slate-400 mt-1 flex items-center gap-1">
+                                        <i class="fa-regular fa-file-lines"></i> 香港政策 · 2026
+                                    </p>
+                                </div>
                             </div>
-                            <div class="video-card cursor-pointer" data-category="park">
-                                <div class="video-thumb">
-                                    <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover">
-                                    <div class="play-icon"><i class="fa-solid fa-play"></i></div>
+
+                            <!-- 视频5：香港：走向世界的超级连接器 -->
+                            <div class="video-card rounded-xl overflow-hidden bg-black shadow-md cursor-pointer group transition-all duration-200 hover:shadow-lg" data-category="park">
+                                <div class="relative aspect-video bg-black">
+                                    <video class="w-full h-full object-cover cursor-pointer" preload="metadata" muted playsinline loop>
+                                        <source src="https://ksupload.bookan.com.cn/material/10/304691/2/-1/1775009205530.mp4" type="video/mp4">
+                                    </video>
+                                    <div class="absolute bottom-2 right-2 transition-all duration-200 opacity-70 group-hover:opacity-100 pointer-events-none">
+                                        <div class="w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center shadow-md">
+                                            <i class="play-icon-indicator fa-solid fa-play text-white text-xs ml-0.5"></i>
+                                        </div>
+                                    </div>
+                                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                        <div class="bg-black/50 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full opacity-0 transition-opacity duration-300 video-status">
+                                            <i class="fa-regular fa-circle-play text-xs mr-1"></i>
+                                            <span>点击播放</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="p-2"><p class="text-xs font-bold text-slate-800 truncate">闽港园入驻企业访谈</p><p class="text-[9px] text-slate-400 mt-1">园区 · 易健康科技</p></div>
+                                <div class="p-2 bg-white">
+                                    <p class="text-xs font-bold text-slate-800 truncate">香港：走向世界的超级连接器</p>
+                                    <p class="text-[9px] text-slate-400 mt-1 flex items-center gap-1">
+                                        <i class="fa-regular fa-building"></i> 闽港产业园 · 2026
+                                    </p>
+                                </div>
                             </div>
-                            <div class="video-card cursor-pointer" data-category="federation">
-                                <div class="video-thumb">
-                                    <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover">
-                                    <div class="play-icon"><i class="fa-solid fa-play"></i></div>
+
+                            <!-- 视频6：联合会助力AI国际舞台 -->
+                            <div class="video-card rounded-xl overflow-hidden bg-black shadow-md cursor-pointer group transition-all duration-200 hover:shadow-lg" data-category="federation">
+                                <div class="relative aspect-video bg-black">
+                                    <video class="w-full h-full object-cover cursor-pointer" preload="metadata" muted playsinline loop>
+                                        <source src="https://ksupload.bookan.com.cn/material/10/304691/2/-1/1775009380808.mp4" type="video/mp4">
+                                    </video>
+                                    <div class="absolute bottom-2 right-2 transition-all duration-200 opacity-70 group-hover:opacity-100 pointer-events-none">
+                                        <div class="w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center shadow-md">
+                                            <i class="play-icon-indicator fa-solid fa-play text-white text-xs ml-0.5"></i>
+                                        </div>
+                                    </div>
+                                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                        <div class="bg-black/50 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full opacity-0 transition-opacity duration-300 video-status">
+                                            <i class="fa-regular fa-circle-play text-xs mr-1"></i>
+                                            <span>点击播放</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="p-2"><p class="text-xs font-bold text-slate-800 truncate">香港科创大赛回顾</p><p class="text-[9px] text-slate-400 mt-1">港区 · 2025</p></div>
+                                <div class="p-2 bg-white">
+                                    <p class="text-xs font-bold text-slate-800 truncate">联合会助力AI国际舞台</p>
+                                    <p class="text-[9px] text-slate-400 mt-1 flex items-center gap-1">
+                                        <i class="fa-regular fa-trophy"></i> 联合会 · 2026
+                                    </p>
+                                </div>
                             </div>
-                            <div class="video-card cursor-pointer" data-category="talent">
-                                <div class="video-thumb">
-                                    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover">
-                                    <div class="play-icon"><i class="fa-solid fa-play"></i></div>
+
+                            <!-- 视频7：人才解读 -->
+                            <div class="video-card rounded-xl overflow-hidden bg-black shadow-md cursor-pointer group transition-all duration-200 hover:shadow-lg" data-category="talent">
+                                <div class="relative aspect-video bg-black">
+                                    <video class="w-full h-full object-cover cursor-pointer" preload="metadata" muted playsinline loop>
+                                        <source src="https://ksupload.bookan.com.cn/material/10/304691/2/-1/1775008842288.mp4" type="video/mp4">
+                                    </video>
+                                    <div class="absolute bottom-2 right-2 transition-all duration-200 opacity-70 group-hover:opacity-100 pointer-events-none">
+                                        <div class="w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center shadow-md">
+                                            <i class="play-icon-indicator fa-solid fa-play text-white text-xs ml-0.5"></i>
+                                        </div>
+                                    </div>
+                                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                        <div class="bg-black/50 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full opacity-0 transition-opacity duration-300 video-status">
+                                            <i class="fa-regular fa-circle-play text-xs mr-1"></i>
+                                            <span>点击播放</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="p-2"><p class="text-xs font-bold text-slate-800 truncate">峰会开幕式精彩集锦</p><p class="text-[9px] text-slate-400 mt-1">峰会 · 主论坛</p></div>
+                                <div class="p-2 bg-white">
+                                    <p class="text-xs font-bold text-slate-800 truncate">香港科技青联代表团福州参会</p>
+                                    <p class="text-[9px] text-slate-400 mt-1 flex items-center gap-1">
+                                        <i class="fa-regular fa-star"></i> 人才解读 · 2026
+                                    </p>
+                                </div>
                             </div>
-                            <div class="video-card cursor-pointer" data-category="more">
-                                <div class="video-thumb">
-                                    <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover">
-                                    <div class="play-icon"><i class="fa-solid fa-play"></i></div>
+
+                            <!-- 视频8：其他 -->
+                            <div class="video-card rounded-xl overflow-hidden bg-black shadow-md cursor-pointer group transition-all duration-200 hover:shadow-lg" data-category="more">
+                                <div class="relative aspect-video bg-black">
+                                    <video class="w-full h-full object-cover cursor-pointer" preload="metadata" muted playsinline loop>
+                                        <source src="https://ksupload.bookan.com.cn/material/10/304691/2/-1/1775008943088.mp4" type="video/mp4">
+                                    </video>
+                                    <div class="absolute bottom-2 right-2 transition-all duration-200 opacity-70 group-hover:opacity-100 pointer-events-none">
+                                        <div class="w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center shadow-md">
+                                            <i class="play-icon-indicator fa-solid fa-play text-white text-xs ml-0.5"></i>
+                                        </div>
+                                    </div>
+                                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                        <div class="bg-black/50 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full opacity-0 transition-opacity duration-300 video-status">
+                                            <i class="fa-regular fa-circle-play text-xs mr-1"></i>
+                                            <span>点击播放</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="p-2"><p class="text-xs font-bold text-slate-800 truncate">科创企业融资指南</p><p class="text-[9px] text-slate-400 mt-1">更多 · 创投对接</p></div>
+                                <div class="p-2 bg-white">
+                                    <p class="text-xs font-bold text-slate-800 truncate">全球创业者峰会2025</p>
+                                    <p class="text-[9px] text-slate-400 mt-1 flex items-center gap-1">
+                                        <i class="fa-regular fa-handshake"></i> 更多 · 2025
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                        <div class="mt-4 text-center">
-                            <button class="text-xs text-primary-600 font-medium bg-primary-50 px-5 py-2 rounded-full shadow-sm inline-flex items-center gap-1">查看更多视频 <i class="fa-solid fa-arrow-right"></i></button>
+                         <div class="mt-4 text-center">
+                            <button class="text-xs text-primary-600 font-medium bg-primary-50 px-5 py-2 rounded-full shadow-sm inline-flex items-center gap-1 hover:bg-primary-100 transition-all duration-200 active:scale-95">
+                                查看更多视频 <i class="fa-solid fa-arrow-right"></i>
+                            </button>
                         </div>
-                    </div>
-                </div>
-            </main>
+                    </div>  <!-- 关闭视频网格的 div.px-5 -->
+                </div>  <!-- 关闭视频专区的 div.pb-6 -->
+            </main>  <!-- 关闭首页 main#home -->
+
+
+
+
     <!-- ================= 2. AI 助手 ================= -->
     <main id="ai-assistant" class="page-container bg-slate-50" aria-label="AI 智能助手">
         <div class="absolute top-0 left-0 w-full h-80 bg-gradient-to-b from-indigo-50 via-purple-50/30 to-transparent -z-10 pointer-events-none"></div>
@@ -1586,7 +1945,8 @@
                         <button class="category-chip" data-cat="genetic">基因检测</button>
                     </div>
                 </div>
-                <div class="gradient-hint"></div>
+                <!-- 右侧渐变提示 有点丑看情况打开 -->
+                <!-- <div class="gradient-hint"></div> -->
             </div>
             <div class="drag-tip"><i class="fa-regular fa-hand-back-point-left"></i><span>左右滑动查看更多分类</span></div>
         </div>
@@ -1778,6 +2138,29 @@
     <div id="video-splash" class="video-splash">
         <video id="splash-video" class="splash-video" muted playsinline><source src="https://images.rescld.cn/mingangpark/2e89073ed72e80671165b204c78a7ba0.mp4" type="video/mp4"></video>
         <div class="splash-mini-card"><span>✨ 联合会 · 转开财富大门</span><span class="separator"></span><span id="splash-countdown">6s</span><button id="skip-splash" class="skip-btn">跳过 <i class="fa-solid fa-forward"></i></button></div>
+    
+        
+    </div>
+    <!-- 全屏视频播放器 -->
+    <div id="fullscreen-video" class="fullscreen-video-container">
+        <div class="fullscreen-back" id="fullscreen-back">
+            <i class="fa-solid fa-arrow-left"></i>
+        </div>
+        <div class="fullscreen-close" id="fullscreen-close">
+            <i class="fa-solid fa-xmark"></i>
+        </div>
+        <video id="fullscreen-player" class="fullscreen-video" controlslist="nodownload" preload="metadata"></video>
+        <div class="fullscreen-controls">
+            <button class="fullscreen-control-btn" id="fullscreen-playpause">
+                <i class="fa-solid fa-play"></i>
+            </button>
+            <button class="fullscreen-control-btn" id="fullscreen-exit">
+                <i class="fa-solid fa-compress"></i>
+            </button>
+        </div>
+        <div class="fullscreen-progress" id="fullscreen-progress">
+            <div class="fullscreen-progress-bar" id="fullscreen-progress-bar"></div>
+        </div>
     </div>
 </div>
 
@@ -1978,6 +2361,245 @@
     renderSecondaryFilters();
     renderMembers("enterprise", null);
 
+    // ================= 全屏视频播放功能 =================
+    const fullscreenContainer = document.getElementById('fullscreen-video');
+    const fullscreenPlayer = document.getElementById('fullscreen-player');
+    const fullscreenClose = document.getElementById('fullscreen-close');
+    const fullscreenPlayPause = document.getElementById('fullscreen-playpause');
+    const fullscreenExit = document.getElementById('fullscreen-exit');
+    const fullscreenProgress = document.getElementById('fullscreen-progress');
+    const fullscreenProgressBar = document.getElementById('fullscreen-progress-bar');
+    const fullscreenBack = document.getElementById('fullscreen-back');
+
+    let currentVideoCard = null;
+
+    // 打开全屏播放器
+    function openFullscreen(videoElement, cardElement) {
+        if (!videoElement || !fullscreenPlayer) return;
+        
+        currentVideoCard = cardElement;
+        const videoSrc = videoElement.querySelector('source')?.src || videoElement.src;
+        
+        if (videoSrc) {
+            const currentTime = videoElement.currentTime;
+            const isPlaying = !videoElement.paused;
+            
+            fullscreenPlayer.src = videoSrc;
+            fullscreenPlayer.currentTime = currentTime;
+            fullscreenPlayer.load();
+            
+            fullscreenContainer.classList.add('active');
+            
+            fullscreenPlayer.play().catch(err => console.log('播放失败:', err));
+            
+            const playPauseIcon = fullscreenPlayPause.querySelector('i');
+            playPauseIcon.classList.remove('fa-play');
+            playPauseIcon.classList.add('fa-pause');
+            
+            // 暂停原视频
+            if (isPlaying) {
+                videoElement.pause();
+            }
+        }
+    }
+
+    // 关闭全屏播放器 —— 【修复核心】
+    function closeFullscreen() {
+        if (!fullscreenContainer) return;
+        
+        // 1. 先暂停全屏播放器
+        fullscreenPlayer.pause();
+        
+        const currentTime = fullscreenPlayer.currentTime;
+        
+        // 2. 恢复原视频状态（但不自动播放）
+        if (currentVideoCard) {
+            const originalVideo = currentVideoCard.querySelector('video');
+            if (originalVideo) {
+                originalVideo.currentTime = currentTime;
+                // 【关键】确保原视频保持暂停状态
+                originalVideo.pause();
+                
+                // 重置播放图标为「播放」
+                const originalIcon = currentVideoCard.querySelector('.play-icon-indicator');
+                const originalStatus = currentVideoCard.querySelector('.video-status');
+                if (originalIcon) {
+                    originalIcon.classList.remove('fa-pause');
+                    originalIcon.classList.add('fa-play');
+                }
+                if (originalStatus) {
+                    originalStatus.style.opacity = '0';
+                }
+            }
+        }
+        
+        // 3. 隐藏全屏
+        fullscreenContainer.classList.remove('active');
+        
+        // 4. 清空视频源，彻底停止播放
+        setTimeout(() => {
+            fullscreenPlayer.src = '';
+            fullscreenPlayer.load();
+            currentVideoCard = null;
+        }, 300);
+    }
+
+    // 全屏播放/暂停
+    function toggleFullscreenPlay() {
+        const playPauseIcon = fullscreenPlayPause.querySelector('i');
+        if (fullscreenPlayer.paused) {
+            fullscreenPlayer.play();
+            playPauseIcon.classList.remove('fa-play');
+            playPauseIcon.classList.add('fa-pause');
+        } else {
+            fullscreenPlayer.pause();
+            playPauseIcon.classList.remove('fa-pause');
+            playPauseIcon.classList.add('fa-play');
+        }
+    }
+
+    // 更新进度条
+    function updateProgress() {
+        if (fullscreenPlayer.duration && !isNaN(fullscreenPlayer.duration)) {
+            const percent = (fullscreenPlayer.currentTime / fullscreenPlayer.duration) * 100;
+            fullscreenProgressBar.style.width = percent + '%';
+        }
+    }
+
+    // 点击进度条跳转
+    function seekTo(e) {
+        const rect = fullscreenProgress.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const percent = clickX / rect.width;
+        if (fullscreenPlayer.duration) {
+            fullscreenPlayer.currentTime = percent * fullscreenPlayer.duration;
+        }
+    }
+
+    // 绑定全屏播放器事件
+    if (fullscreenClose) fullscreenClose.addEventListener('click', closeFullscreen);
+    if (fullscreenBack) fullscreenBack.addEventListener('click', closeFullscreen);
+    if (fullscreenExit) fullscreenExit.addEventListener('click', closeFullscreen);
+    if (fullscreenPlayPause) fullscreenPlayPause.addEventListener('click', toggleFullscreenPlay);
+    if (fullscreenProgress) fullscreenProgress.addEventListener('click', seekTo);
+    if (fullscreenPlayer) {
+        fullscreenPlayer.addEventListener('timeupdate', updateProgress);
+        fullscreenPlayer.addEventListener('ended', () => {
+            const playPauseIcon = fullscreenPlayPause.querySelector('i');
+            playPauseIcon.classList.remove('fa-pause');
+            playPauseIcon.classList.add('fa-play');
+        });
+        fullscreenPlayer.addEventListener('play', () => {
+            const playPauseIcon = fullscreenPlayPause.querySelector('i');
+            playPauseIcon.classList.remove('fa-play');
+            playPauseIcon.classList.add('fa-pause');
+        });
+        fullscreenPlayer.addEventListener('pause', () => {
+            const playPauseIcon = fullscreenPlayPause.querySelector('i');
+            if (fullscreenPlayer.currentTime < fullscreenPlayer.duration) {
+                playPauseIcon.classList.remove('fa-pause');
+                playPauseIcon.classList.add('fa-play');
+            }
+        });
+    }
+
+    // ================= 视频卡片交互：点击任意位置全屏播放 =================
+    document.querySelectorAll('.video-card').forEach(card => {
+        const video = card.querySelector('video');
+        const playIcon = card.querySelector('.play-icon-indicator');
+        const statusBadge = card.querySelector('.video-status');
+        
+        if (!video) return;
+        
+        // 初始化：显示播放提示（2秒后自动隐藏）
+        if (statusBadge) {
+            statusBadge.style.opacity = '1';
+            setTimeout(() => {
+                if (video.paused && statusBadge) {
+                    statusBadge.style.opacity = '0';
+                }
+            }, 2000);
+        }
+        
+        // 鼠标悬停时显示播放提示
+        card.addEventListener('mouseenter', () => {
+            if (video.paused && statusBadge) {
+                statusBadge.style.opacity = '1';
+            }
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            if (video.paused && statusBadge) {
+                statusBadge.style.opacity = '0';
+            }
+        });
+        
+        // 统一的点击处理函数
+        function handleVideoClick(e) {
+            // 阻止事件冒泡
+            e.stopPropagation();
+            
+            // 添加点击波纹效果（只在卡片区域显示）
+            const ripple = document.createElement('span');
+            const rect = card.getBoundingClientRect();
+            ripple.style.position = 'absolute';
+            ripple.style.top = (e.clientY - rect.top) + 'px';
+            ripple.style.left = (e.clientX - rect.left) + 'px';
+            ripple.style.width = '10px';
+            ripple.style.height = '10px';
+            ripple.style.background = 'rgba(255,255,255,0.5)';
+            ripple.style.borderRadius = '50%';
+            ripple.style.transform = 'scale(1)';
+            ripple.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+            ripple.style.pointerEvents = 'none';
+            ripple.style.zIndex = '10';
+            card.style.position = 'relative';
+            card.style.overflow = 'hidden';
+            card.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.style.transform = 'scale(30)';
+                ripple.style.opacity = '0';
+            }, 10);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 300);
+            
+            // 暂停其他所有视频并重置图标
+            document.querySelectorAll('.video-card video').forEach(v => {
+                if (v !== video && !v.paused) {
+                    v.pause();
+                    const otherCard = v.closest('.video-card');
+                    const otherIcon = otherCard?.querySelector('.play-icon-indicator');
+                    const otherStatus = otherCard?.querySelector('.video-status');
+                    if (otherIcon) {
+                        otherIcon.classList.remove('fa-pause');
+                        otherIcon.classList.add('fa-play');
+                    }
+                    if (otherStatus) {
+                        otherStatus.querySelector('span').textContent = '点击播放';
+                        otherStatus.style.opacity = '1';
+                        setTimeout(() => {
+                            if (v.paused && otherStatus) otherStatus.style.opacity = '0';
+                        }, 1500);
+                    }
+                }
+            });
+            
+            // 打开全屏播放器
+            openFullscreen(video, card);
+        }
+        
+        // 卡片点击事件
+        card.addEventListener('click', handleVideoClick);
+        
+        // 视频元素点击事件 - 同样触发全屏播放
+        video.addEventListener('click', handleVideoClick);
+        
+        // 视频播放时，如果用户点击视频区域，不暂停，而是继续全屏
+        video.style.cursor = 'pointer';
+    });
     // ================= 商城商品网格功能 =================
     function renderHotProducts() {
         const hotProducts = products.filter(p => p.hot).slice(0, 4);
@@ -2152,28 +2774,11 @@
     document.getElementById('mall-detail-ai-help')?.addEventListener('click', () => showToast('AI客服正在连线中...'));
     document.getElementById('mall-detail-share')?.addEventListener('click', () => showToast('分享链接已复制'));
 
-    // 视频分类筛选 
+    // 视频分类筛选（直接使用 data-category 属性）
     const categoryTabs = document.querySelectorAll('.category-tab');
     const videoCards = document.querySelectorAll('.video-card');
 
-    // 先为视频卡片添加正确的分类属性
-    videoCards.forEach(card => {
-        const title = card.querySelector('.text-xs.font-bold')?.innerText || '';
-        if (title.includes('联合会') || title.includes('香港科技青年')) {
-            card.dataset.category = 'federation';
-        } else if (title.includes('产业园') || title.includes('闽港园')) {
-            card.dataset.category = 'park';
-        } else if (title.includes('在港') || title.includes('央企')) {
-            card.dataset.category = 'hk-corp';
-        } else if (title.includes('政策')) {
-            card.dataset.category = 'hk-policy';
-        } else if (title.includes('人才') || title.includes('解读')) {
-            card.dataset.category = 'talent';
-        } else {
-            card.dataset.category = 'more';
-        }
-    });
-
+    // 视频卡片已经直接设置了 data-category 属性，无需再从标题推断
     categoryTabs.forEach(tab => {
         tab.addEventListener('click', function() {
             categoryTabs.forEach(t => t.classList.remove('active'));
@@ -2184,6 +2789,8 @@
             });
         });
     });
+
+   
     // 为分类滚动容器添加拖拽滚动支持
     function enableDragScroll(element) {
         if (!element) return;
